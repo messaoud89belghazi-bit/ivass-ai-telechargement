@@ -1,4 +1,4 @@
 {
- "contribServer": "",
+ "contribServer": "https://ivass-ai-contributions.ivass-messaoud.workers.dev",
  "syncServer": "https://ivass-ai-sync.ivass-messaoud.workers.dev"
 }
