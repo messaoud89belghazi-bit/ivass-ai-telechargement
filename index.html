@@ -8,43 +8,50 @@
 <meta property="og:title" content="Ivass AI Mobile">
 <meta property="og:description" content="L'assistant IA sur votre téléphone, relié à votre PC. Gratuit.">
 <meta property="og:image" content="icon.png">
-<meta name="theme-color" content="#0d0f14">
+<meta name="theme-color" content="#08090b">
 <link rel="icon" href="icon.png">
 <style>
-:root { --bg:#0d0f14; --panel:#171b24; --panel2:#1e2330; --border:#2a3040; --text:#e7e9ee; --muted:#8b93a7; --a:#8b5cf6; --b:#ff8a3d; --ok:#34d399; }
+:root { --bg:#08090b; --panel:#14161b; --panel2:#1b1e25; --border:#262a33; --text:#eceef2; --muted:#8d939f; --ok:#5ee0a8; --chrome:linear-gradient(180deg,#fbfcfd 0%,#d5d9e0 38%,#9198a5 52%,#c9ced6 70%,#eef0f3 100%); }
+@font-face { font-family:'Cinzel'; src:url('fonts/cinzel-latin-400-normal.woff2') format('woff2'); }
 * { box-sizing:border-box; }
 html,body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-a { color:#b79cff; }
+a { color:#d4d8df; }
 .wrap { max-width:980px; margin:0 auto; padding:0 18px; }
-.hero { background:radial-gradient(120% 80% at 50% 0%, rgba(139,92,246,.28), transparent 62%); padding:56px 0 34px; text-align:center; }
+.hero { background:radial-gradient(80% 60% at 50% 20%, rgba(200,206,216,.14), transparent 62%); padding:46px 0 34px; text-align:center; }
+.emb { width:min(56vw,250px); filter:drop-shadow(0 26px 30px rgba(0,0,0,.7)); animation:fl 6s ease-in-out infinite; }
+@keyframes fl { 50% { transform:translateY(-8px) rotate(-1deg); } }
+.wm { width:min(62vw,300px); display:block; margin:0 auto; }
+.rule { height:1px; width:min(78vw,380px); margin:14px auto; background:linear-gradient(90deg,transparent,rgba(220,224,232,.55),transparent); }
+.tagline { font-family:'Cinzel',serif; letter-spacing:.32em; font-size:12px; color:var(--muted); margin:0 0 20px; text-transform:uppercase; }
 .logo { width:104px; height:104px; border-radius:28px; box-shadow:0 14px 60px rgba(139,92,246,.5); }
 h1 { font-size:clamp(34px,7vw,54px); margin:18px 0 6px; letter-spacing:-.8px; line-height:1.1; }
 .grad { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .lead { color:var(--muted); font-size:18px; max-width:620px; margin:0 auto 26px; }
-.dl { display:inline-flex; align-items:center; gap:12px; padding:17px 28px; border-radius:16px; background:linear-gradient(135deg,var(--a),#6d4ae0); color:#fff; font-weight:700; font-size:19px; text-decoration:none; box-shadow:0 10px 40px rgba(139,92,246,.45); }
+.dl { display:inline-flex; align-items:center; gap:12px; padding:17px 30px; border-radius:16px; background:var(--chrome); color:#0a0b0d; font-weight:700; font-size:19px; text-decoration:none; box-shadow:0 10px 36px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.8); }
 .dl:active { transform:scale(.98); }
 .small { color:var(--muted); font-size:14px; margin-top:12px; }
 .qr { display:none; margin:22px auto 0; background:#fff; padding:10px; border-radius:14px; width:170px; }
 .qr img { width:150px; display:block; }
 @media (min-width:800px) { .qr { display:block; } }
 section { padding:34px 0; }
-h2 { font-size:26px; margin:0 0 18px; }
+h2 { font-size:22px; margin:0 0 18px; font-family:'Cinzel',serif; font-weight:400; letter-spacing:.08em; }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; }
 .card { background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:18px; }
 .card b { display:block; font-size:17px; margin-bottom:4px; }
 .card p { margin:0; color:var(--muted); font-size:15px; }
 ol.steps { counter-reset:s; list-style:none; padding:0; margin:0; display:grid; gap:12px; }
 ol.steps li { counter-increment:s; background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:14px 16px 14px 60px; position:relative; }
-ol.steps li::before { content:counter(s); position:absolute; left:16px; top:14px; width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--a),var(--b)); color:#fff; font-weight:700; display:grid; place-items:center; }
-.note { background:rgba(52,211,153,.08); border:1px solid rgba(52,211,153,.3); border-radius:14px; padding:14px 16px; color:#c6f6e4; }
+ol.steps li::before { content:counter(s); position:absolute; left:16px; top:14px; width:30px; height:30px; border-radius:50%; background:var(--chrome); color:#0a0b0d; font-weight:700; display:grid; place-items:center; }
+.note { background:rgba(255,255,255,.04); border:1px solid rgba(220,224,232,.25); border-radius:14px; padding:14px 16px; color:#d9dde4; }
 footer { border-top:1px solid var(--border); padding:26px 0 40px; color:var(--muted); font-size:14px; text-align:center; }
 </style>
 </head>
 <body>
 <header class="hero">
   <div class="wrap">
-    <img src="icon.png" alt="Ivass AI" class="logo">
-    <h1>Ivass <span class="grad">AI</span> Mobile</h1>
+    <img src="emblem.png" alt="" class="emb">
+    <div class="rule"></div><img src="wordmark.png" alt="IVASS" class="wm"><div class="rule"></div>
+    <p class="tagline">Intelligence artificielle · Mobile</p>
     <p class="lead">Votre assistant IA sur Android : Claude, Gemini, ChatGPT, Groq… avec bascule automatique, réflexion profonde, mémoire personnelle et liaison chiffrée avec Ivass AI sur PC.</p>
     <a class="dl" id="dl" href="Ivass-AI-Mobile.apk" download>⬇ Télécharger l’application</a>
     <div class="small">Gratuit · Android 7 ou plus récent · environ 1 Mo · <span id="ver">dernière version</span></div>
