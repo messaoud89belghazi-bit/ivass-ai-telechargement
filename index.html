@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ivass AI Mobile — Télécharger</title>
+<meta name="description" content="Ivass AI Mobile : l'assistant IA multi-IA sur votre téléphone Android, relié à Ivass AI sur PC. Gratuit.">
+<meta property="og:title" content="Ivass AI Mobile">
+<meta property="og:description" content="L'assistant IA sur votre téléphone, relié à votre PC. Gratuit.">
+<meta property="og:image" content="icon.png">
+<meta name="theme-color" content="#0d0f14">
+<link rel="icon" href="icon.png">
+<style>
+:root { --bg:#0d0f14; --panel:#171b24; --panel2:#1e2330; --border:#2a3040; --text:#e7e9ee; --muted:#8b93a7; --a:#8b5cf6; --b:#ff8a3d; --ok:#34d399; }
+* { box-sizing:border-box; }
+html,body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+a { color:#b79cff; }
+.wrap { max-width:980px; margin:0 auto; padding:0 18px; }
+.hero { background:radial-gradient(120% 80% at 50% 0%, rgba(139,92,246,.28), transparent 62%); padding:56px 0 34px; text-align:center; }
+.logo { width:104px; height:104px; border-radius:28px; box-shadow:0 14px 60px rgba(139,92,246,.5); }
+h1 { font-size:clamp(34px,7vw,54px); margin:18px 0 6px; letter-spacing:-.8px; line-height:1.1; }
+.grad { background:linear-gradient(90deg,var(--a),var(--b)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.lead { color:var(--muted); font-size:18px; max-width:620px; margin:0 auto 26px; }
+.dl { display:inline-flex; align-items:center; gap:12px; padding:17px 28px; border-radius:16px; background:linear-gradient(135deg,var(--a),#6d4ae0); color:#fff; font-weight:700; font-size:19px; text-decoration:none; box-shadow:0 10px 40px rgba(139,92,246,.45); }
+.dl:active { transform:scale(.98); }
+.small { color:var(--muted); font-size:14px; margin-top:12px; }
+.qr { display:none; margin:22px auto 0; background:#fff; padding:10px; border-radius:14px; width:170px; }
+.qr img { width:150px; display:block; }
+@media (min-width:800px) { .qr { display:block; } }
+section { padding:34px 0; }
+h2 { font-size:26px; margin:0 0 18px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; }
+.card { background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:18px; }
+.card b { display:block; font-size:17px; margin-bottom:4px; }
+.card p { margin:0; color:var(--muted); font-size:15px; }
+ol.steps { counter-reset:s; list-style:none; padding:0; margin:0; display:grid; gap:12px; }
+ol.steps li { counter-increment:s; background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:14px 16px 14px 60px; position:relative; }
+ol.steps li::before { content:counter(s); position:absolute; left:16px; top:14px; width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--a),var(--b)); color:#fff; font-weight:700; display:grid; place-items:center; }
+.note { background:rgba(52,211,153,.08); border:1px solid rgba(52,211,153,.3); border-radius:14px; padding:14px 16px; color:#c6f6e4; }
+footer { border-top:1px solid var(--border); padding:26px 0 40px; color:var(--muted); font-size:14px; text-align:center; }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <img src="icon.png" alt="Ivass AI" class="logo">
+    <h1>Ivass <span class="grad">AI</span> Mobile</h1>
+    <p class="lead">Votre assistant IA sur Android : Claude, Gemini, ChatGPT, Groq… avec bascule automatique, réflexion profonde, mémoire personnelle et liaison chiffrée avec Ivass AI sur PC.</p>
+    <a class="dl" id="dl" href="https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases/latest/download/Ivass-AI-Mobile.apk">⬇ Télécharger l’application</a>
+    <div class="small">Gratuit · Android 7 ou plus récent · environ 1 Mo · <span id="ver">dernière version</span></div>
+    <div class="qr"><img src="qr.png" alt="QR code vers cette page"><div class="small" style="color:#333;margin:4px 0 0">Scannez avec votre téléphone</div></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section>
+    <h2>Ce que fait Ivass AI</h2>
+    <div class="grid">
+      <div class="card"><b>⚡ Toutes les IA</b><p>Claude, Gemini, ChatGPT, Groq, Mistral, OpenRouter… Si une IA est en panne, la suivante reprend la réponse là où elle s’est arrêtée.</p></div>
+      <div class="card"><b>🧠 Réflexion profonde</b><p>Brouillon, relecture experte, puis réponse corrigée, pour les questions qui comptent.</p></div>
+      <div class="card"><b>📚 Mémoire</b><p>Vos notes et méthodes servent de mémoire à l’IA. Sans réseau, la bibliothèque répond quand même.</p></div>
+      <div class="card"><b>🖥️ Relié à votre PC</b><p>Avec Ivass AI pour PC : discussions et clés partagées, chiffrées de bout en bout. Votre PC peut même répondre à votre téléphone.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Installer en 1 minute</h2>
+    <ol class="steps">
+      <li>Sur votre téléphone, touchez <b>« Télécharger l’application »</b> ci-dessus.</li>
+      <li>Ouvrez le fichier <b>Ivass-AI-Mobile.apk</b> téléchargé (notification ou dossier Téléchargements).</li>
+      <li>Si Android le demande, autorisez <b>« Installer des applications inconnues »</b> pour votre navigateur, puis touchez <b>Installer</b>.</li>
+      <li>Ouvrez Ivass AI, acceptez les conditions, puis ajoutez une clé d’IA. Une clé <b>Google Gemini</b> est gratuite : <a href="https://aistudio.google.com/app/apikey">aistudio.google.com</a> → « Create API key ».</li>
+    </ol>
+    <p class="small">Android peut afficher un avertissement car l’application ne vient pas du Play Store : c’est normal. Les mises à jour s’installent par-dessus, sans perdre vos données.</p>
+  </section>
+
+  <section>
+    <h2>Vos données</h2>
+    <div class="note">Vos clés API restent chiffrées sur votre téléphone. La synchronisation avec le PC est chiffrée de bout en bout : le serveur ne peut rien lire. Le programme d’amélioration est <b>facultatif</b> : rien n’est envoyé sans votre accord, tout est nettoyé et chiffré avant l’envoi, et vous pouvez tout faire effacer à tout moment.</div>
+    <p class="small"><a href="conditions/">Conditions d’utilisation et politique de confidentialité</a></p>
+  </section>
+</main>
+
+<footer>Ivass AI — © Messaoud BELGHAZI</footer>
+<script>
+fetch('https://api.github.com/repos/messaoud89belghazi-bit/ivass-ai-telechargement/releases/latest')
+  .then(function (r) { return r.ok ? r.json() : null; })
+  .then(function (j) { if (j && j.name) document.getElementById('ver').textContent = j.name.replace('Ivass AI Mobile ', 'version '); })
+  .catch(function () {});
+</script>
+</body>
+</html>
