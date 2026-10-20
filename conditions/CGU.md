@@ -1,18 +1,18 @@
 # Conditions générales d'utilisation d'Ivass AI
 
-*Version 1 — en vigueur au 19 octobre 2026*
+*Version 2 — en vigueur au 20 octobre 2026*
 
 ## 1. Objet
 
-Ivass AI est un logiciel de bureau gratuit d'assistance par intelligence artificielle (programmation, rédaction, recherche, création graphique). Il est développé par **Messaoud BELGHAZI** (ci-après « l'éditeur »).
+Ivass AI est un logiciel gratuit d'assistance par intelligence artificielle (programmation, rédaction, recherche, création graphique). Il est développé par **Messaoud BELGHAZI** (ci-après « l'éditeur »).
 
 Ces conditions encadrent l'utilisation d'Ivass AI et des services en ligne qui l'accompagnent : les mises à jour et le programme facultatif d'amélioration. Vous les acceptez en installant le logiciel, puis au premier lancement. Si vous ne les acceptez pas, n'utilisez pas Ivass AI.
 
 ## 2. Licence du logiciel
 
-Le code source d'Ivass AI est un logiciel libre publié sous la licence **GNU Affero General Public License v3.0 (AGPL-3.0)**. Vous pouvez l'utiliser, l'étudier, le modifier et le redistribuer selon cette licence (fichier `LICENSE`).
+Ivass AI est un logiciel **gratuit et propriétaire** : son code n'est pas publié. Vous pouvez l'installer et l'utiliser gratuitement, sur autant d'appareils que vous le souhaitez, et partager son lien officiel de téléchargement. Il est interdit de le vendre, de le modifier, de le décompiler ou de le redistribuer sous un autre nom (fichier `LICENSE`).
 
-**Les présentes conditions ne restreignent en rien les droits que vous donne l'AGPL-3.0.** Elles portent seulement sur les services de l'éditeur, sur le nom « Ivass » et sur une utilisation responsable.
+Ivass AI contient des composants libres de tiers, chacun soumis à sa propre licence.
 
 ## 3. Le nom « Ivass »
 

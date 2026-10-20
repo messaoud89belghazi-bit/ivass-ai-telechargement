@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/sitemap.xml
