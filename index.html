@@ -46,7 +46,7 @@ footer { border-top:1px solid var(--border); padding:26px 0 40px; color:var(--mu
     <img src="icon.png" alt="Ivass AI" class="logo">
     <h1>Ivass <span class="grad">AI</span> Mobile</h1>
     <p class="lead">Votre assistant IA sur Android : Claude, Gemini, ChatGPT, Groq… avec bascule automatique, réflexion profonde, mémoire personnelle et liaison chiffrée avec Ivass AI sur PC.</p>
-    <a class="dl" id="dl" href="https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases/latest/download/Ivass-AI-Mobile.apk">⬇ Télécharger l’application</a>
+    <a class="dl" id="dl" href="Ivass-AI-Mobile.apk" download>⬇ Télécharger l’application</a>
     <div class="small">Gratuit · Android 7 ou plus récent · environ 1 Mo · <span id="ver">dernière version</span></div>
     <div class="qr"><img src="qr.png" alt="QR code vers cette page"><div class="small" style="color:#333;margin:4px 0 0">Scannez avec votre téléphone</div></div>
   </div>
@@ -83,9 +83,9 @@ footer { border-top:1px solid var(--border); padding:26px 0 40px; color:var(--mu
 
 <footer>Ivass AI — © Messaoud BELGHAZI</footer>
 <script>
-fetch('https://api.github.com/repos/messaoud89belghazi-bit/ivass-ai-telechargement/releases/latest')
+fetch('version.json', { cache: 'no-store' })
   .then(function (r) { return r.ok ? r.json() : null; })
-  .then(function (j) { if (j && j.name) document.getElementById('ver').textContent = j.name.replace('Ivass AI Mobile ', 'version '); })
+  .then(function (j) { if (j && j.version) document.getElementById('ver').textContent = 'version ' + j.version + ' du ' + j.date.split('-').reverse().join('/'); })
   .catch(function () {});
 </script>
 </body>
