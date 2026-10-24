@@ -311,3 +311,21 @@ html, body { overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
 .pwa-banner b { display: block; }
 .pwa-banner small { display: block; color: var(--muted); line-height: 1.4; margin-top: 2px; }
 .pwa-banner small b { display: inline; color: var(--text); }
+
+/* ===== 📦 Livrables : fichiers, images et vidéos créés par Ivass ===== */
+.lvr-card { display: flex; gap: 12px; align-items: flex-start; margin: 10px 0; padding: 12px; border-radius: 14px; border: 1px solid var(--border); background: var(--panel2); }
+.lvr-ico { font-size: 30px; line-height: 1; flex: none; padding-top: 2px; }
+.lvr-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+.lvr-main > b { word-break: break-all; }
+.lvr-st { color: var(--muted); font-size: 13px; line-height: 1.4; }
+.lvr-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; align-items: center; }
+.lvr-b { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); color: var(--text); font-size: 14px; font-weight: 600; }
+.lvr-b.on { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.lvr-b:active { transform: translateY(1px); }
+.lvr-wait { color: var(--muted); font-size: 13.5px; animation: lvrPulse 1.4s ease-in-out infinite; }
+.lvr-err { color: var(--danger); font-size: 13.5px; }
+.lvr-src { max-height: 280px; overflow: auto; margin: 8px 0 0; padding: 10px; border-radius: 10px; background: var(--code); font-size: 12px; white-space: pre-wrap; word-break: break-word; }
+.lvr-img { margin: 10px 0; }
+.lvr-img img { display: block; width: 100%; max-width: 520px; border-radius: 14px; border: 1px solid var(--border); }
+.lvr-video { width: 100%; margin-top: 8px; border-radius: 12px; background: #000; }
+@keyframes lvrPulse { 50% { opacity: .55; } }

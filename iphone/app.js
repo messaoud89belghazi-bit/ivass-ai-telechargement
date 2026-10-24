@@ -21,6 +21,10 @@
   const saveLib = () => N.write('library.json', S.lib);
   const getKey = (id) => N.secretGet('key:' + id) || '';
   const core = window.IvassCore({ http: N.http, Platforms: window.Platforms, getKey });
+  const LV = window.IvassLivrables;
+  const lvCtx = { providers: () => S.settings.providers, getKey, save: () => saveConvs(), redraw: () => renderChat(true) };
+  if (LV) LV.init(lvCtx);
+  const mdMsg = (m, streaming, redraw) => { const h = md(m.content); if (!LV) return h; try { return LV.decorate(h, m, streaming, redraw || lvCtx.redraw); } catch (_) { return h; } };
   const contrib = window.IvassContrib.Contrib({
     load: () => N.read('contrib.json'), save: (st) => N.write('contrib.json', st),
     dist: () => ({ serverUrl: S.config.contribServer || '', publicKey: S.config.contribKey || '' }),
@@ -137,15 +141,17 @@
   function newConv() { S.cur = null; renderChat(); closeDrawer(); $('#input').focus(); }
   function openConv(id) { S.cur = id; renderChat(); closeDrawer(); }
 
-  function renderChat() {
+  function renderChat(keepScroll) {
     const c = conv(S.cur);
     const box = $('#messages');
+    if (keepScroll === true && S.busy) return; // une réponse s'affiche : on redessinera à la fin
+    const top = box.scrollTop;
     box.innerHTML = '';
     $('#convTitle').textContent = c ? c.title : 'Nouvelle discussion';
     $('#convSub').textContent = activeLabel();
     $('#empty').classList.toggle('hidden', !!(c && c.messages.length));
     if (c) c.messages.forEach((m, i) => { const el = msgEl(m, i, c); el.classList.add('still'); box.appendChild(el); });
-    box.scrollTop = box.scrollHeight;
+    box.scrollTop = keepScroll === true ? top : box.scrollHeight;
     renderConvList();
   }
   function activeLabel() {
@@ -160,9 +166,11 @@
     else {
       d.innerHTML = `<div class="who"><img src="icon.png" alt="">Ivass AI</div>` +
         (m.notice ? `<div class="notice">${esc(m.notice)}</div>` : '') +
-        `<div class="bubble">${m.setup ? setupHTML() : m.error ? `<div class="err">${esc(m.error)}</div>` : md(m.content)}</div>` +
+        `<div class="bubble">${m.setup ? setupHTML() : m.error ? `<div class="err">${esc(m.error)}</div>` : mdMsg(m, false)}</div>` +
         `<div class="meta"><span>${esc(m.model || '')}</span>${m.content && !m.setup ? `<button data-act="up" style="${m.vote === 1 ? 'opacity:1;color:var(--ok)' : ''}">👍</button><button data-act="down" style="${m.vote === -1 ? 'opacity:1;color:var(--danger)' : ''}">👎</button>` : ''}<button data-act="copy">📋</button><button data-act="share">↗</button><button data-act="save" title="Garder dans la bibliothèque">📚</button>` +
         (c && i === c.messages.length - 1 ? `<button data-act="regen" title="Régénérer">↻</button>` : '') + `</div>`;
+      if (LV && m.liv) LV.warm(m);
+      if (LV) d.querySelector('.bubble').addEventListener('click', (e) => { if (e.target.closest('[data-lv]')) LV.onClick(e, m, lvCtx); });
       if (m.setup) d.querySelector('.bubble').onclick = (e) => {
         const a = e.target.dataset.go; if (!a) return;
         if (a === 'settings') openSettings(true);
@@ -245,7 +253,7 @@
   }
   paintModes();
 
-  const CHIPS = ['Explique-moi un sujet simplement', 'Rédige un e-mail professionnel', 'Aide-moi à corriger ce code', 'Fais un plan pour mon projet', 'Résume un texte'];
+  const CHIPS = ['Crée-moi un CV en Word', 'Fais un tableau de budget Excel', 'Crée un logo pour mon entreprise', 'Rédige un e-mail professionnel', 'Explique-moi un sujet simplement', 'Fais un plan pour mon projet'];
   $('#chips').innerHTML = CHIPS.map((c) => `<button class="chip">${esc(c)}</button>`).join('');
   $('#chips').onclick = (e) => { if (e.target.classList.contains('chip')) { input.value = e.target.textContent + ' : '; grow(); input.focus(); } };
 
@@ -305,7 +313,7 @@
       requestAnimationFrame(() => {
         pending = false;
         const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 120;
-        bubble.innerHTML = md(m.content);
+        bubble.innerHTML = mdMsg(m, true, () => {});
         if (atBottom) box.scrollTop = box.scrollHeight;
       });
     };
@@ -316,7 +324,7 @@
     const opts = {
       providers: S.settings.providers,
       messages: c.messages.filter((x) => !x.setup).slice(-30).map((x) => ({ role: x.role, content: x.content })).filter((x) => x.content),
-      system: core.systemPrompt({ extra: S.settings.instructions, context: ctx, mode }),
+      system: core.systemPrompt({ extra: S.settings.instructions, context: ctx, mode }) + (LV ? '\n\n' + LV.RULES : ''),
       signal: ctrl.signal,
       onText: (t) => { m.content += t; paint(); },
       onStatus: (s) => {
@@ -355,6 +363,7 @@
     c.updated = Date.now(); saveConvs();
     renderChat();
     autoSync();
+    if (LV && m.content && !m.error && !ctrl.signal.aborted) LV.afterFinish(m, lvCtx).catch(() => {});
     try {
       let rec = false;
       if (m.content && !m.error && m.model !== 'bibliothèque') rec = contrib.record('travaux', { question: last, answer: m.content, provider: m.provider, model: m.model, mode, ms: Date.now() - m.ts, ref: c.id }) || rec;
