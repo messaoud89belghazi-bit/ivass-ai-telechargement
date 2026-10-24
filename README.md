@@ -15,7 +15,7 @@
 | 🤖 **Android 7 ou plus récent** | [Ivass-AI-Mobile.apk](Ivass-AI-Mobile.apk) — version 1.3.18 |
 | 📱 **iPhone** (iOS 16.4 ou plus récent) | [Ouvrir dans Safari](https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/iphone/), puis Partager → « Sur l’écran d’accueil » |
 
-Les applications se mettent ensuite à jour toutes seules.
+Les applications se mettent ensuite à jour toutes seules. Toutes les versions : [Releases](https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases).
 
 ## ✨ Ce que fait Ivass AI
 
