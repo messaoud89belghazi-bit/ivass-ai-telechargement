@@ -1,0 +1,8 @@
+{
+ "syncServer": "https://ivass-ai-sync.ivass-messaoud.workers.dev",
+ "contribServer": "",
+ "contribKey": "/Di+uQSrImmBYOdU7GtqZVzeqBuggHavc1BMIpDoySs=",
+ "remoteConfig": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/app-config.json",
+ "updateUrl": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/version.json",
+ "pageUrl": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/"
+}
