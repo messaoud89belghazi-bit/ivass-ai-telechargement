@@ -1,0 +1,56 @@
+# Publie Ivass AI dans la section « Releases » de ce dépôt public (logiciel compilé uniquement, pas le code source).
+# Se lance tout seul quand une nouvelle version est mise en ligne (version.json ou pc/latest.yml), ou à la main (Actions → Run workflow).
+name: Publier Ivass AI (Releases)
+
+on:
+  push:
+    branches: [main]
+    paths: ['version.json', 'pc/latest.yml', '.github/release-notes.md', '.github/workflows/release.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Versions et fichiers
+        id: v
+        shell: bash
+        run: |
+          set -euo pipefail
+          PC=$(sed -n 's/^version: *//p' pc/latest.yml | tr -d '\r ')
+          MOB=$(node -p "require('./version.json').version")
+          EXE="pc/Ivass-AI-Setup-$PC.exe"
+          test -f "$EXE" || { echo "Installateur PC introuvable : $EXE"; exit 1; }
+          test -f Ivass-AI-Mobile.apk || { echo "APK introuvable"; exit 1; }
+          echo "pc=$PC" >> "$GITHUB_OUTPUT"; echo "mob=$MOB" >> "$GITHUB_OUTPUT"; echo "exe=$EXE" >> "$GITHUB_OUTPUT"
+          sed -e "s/{PC}/$PC/g" -e "s/{MOB}/$MOB/g" .github/release-notes.md > notes.md
+          echo "PC $PC · Android $MOB"
+
+      - name: Publication
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PC: ${{ steps.v.outputs.pc }}
+          MOB: ${{ steps.v.outputs.mob }}
+          EXE: ${{ steps.v.outputs.exe }}
+        run: |
+          set -euo pipefail
+          TAG="v$PC"
+          TITLE="Ivass AI — PC $PC · Android $MOB · iPhone"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "$TITLE" --notes-file notes.md --latest
+            # l'APK Android peut changer sans nouvelle version PC : on remplace les fichiers
+            gh release upload "$TAG" "$EXE" Ivass-AI-Mobile.apk --clobber
+          else
+            gh release create "$TAG" "$EXE" Ivass-AI-Mobile.apk --target "$GITHUB_SHA" --title "$TITLE" --notes-file notes.md --latest
+          fi
+          gh release view "$TAG" --json url,assets --jq '.url, (.assets[] | "\(.name) \(.size)")'
