@@ -64,6 +64,7 @@ a { color:#1d5c94; }
 .tagline { font-family:'Cinzel',serif; letter-spacing:.3em; font-size:12px; color:#9aa0ab; margin:0 0 18px; text-transform:uppercase; }
 h1 { font-size:clamp(20px,4vw,26px); font-weight:500; margin:0 auto 22px; max-width:640px; color:#d9dde4; line-height:1.45; }
 .dls { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+.dl-pc { display:inline-flex; align-items:center; gap:10px; padding:12px 22px; border-radius:14px; background:linear-gradient(180deg,#4a4f59,#1d2026 50%,#3a3f48); color:#f4f5f7; font-weight:700; text-decoration:none; margin:0 8px 10px 0; }
 .dl.alt { background:transparent; color:#eef0f4; border:1.5px solid rgba(255,255,255,.55); box-shadow:none; }
 .dl { display:inline-flex; align-items:center; gap:12px; padding:16px 30px; border-radius:16px; background:var(--chrome); color:#0a0b0d; font-weight:700; font-size:19px; text-decoration:none; box-shadow:0 10px 36px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.8); }
 .small { color:#9aa0ab; font-size:14px; margin-top:12px; }
@@ -97,8 +98,9 @@ footer { border-top:1px solid var(--line); margin-top:40px; padding:26px 0 40px;
     <div class="dls">
       <a class="dl" id="dl" href="Ivass-AI-Mobile.apk" download>⬇ Télécharger pour Android</a>
       <a class="dl alt" id="dlIos" href="iphone/">📱 Ouvrir sur iPhone</a>
+      <a class="dl alt" id="dlPc" href="#pc">💻 Télécharger pour PC</a>
     </div>
-    <div class="small">Gratuit · Android 7 ou plus récent · iPhone (iOS 16.4 ou plus récent) · <span id="ver">dernière version</span> · mises à jour automatiques</div>
+    <div class="small">Gratuit · Android 7+ · iPhone (iOS 16.4+) · PC Windows 10/11 · <span id="ver">dernière version</span> · mises à jour automatiques</div>
     <div class="qr"><img src="qr.png" alt="QR code pour télécharger IVASS AI"><div class="small" style="color:#333;margin:4px 0 0">Scannez avec votre téléphone</div></div>
   </div>
 </header>
@@ -136,6 +138,18 @@ footer { border-top:1px solid var(--line); margin-top:40px; padding:26px 0 40px;
       <li>Ouvrez IVASS AI depuis sa nouvelle icône, acceptez les conditions, puis ajoutez une clé d’IA (Gemini est gratuite).</li>
     </ol>
     <p class="muted">Sur iPhone, IVASS AI s’installe depuis Safari, sans passer par l’App Store : rien à télécharger, elle s’ouvre en plein écran, marche sans réseau avec votre bibliothèque et se met à jour toute seule.</p>
+  </section>
+
+  <section id="pc">
+    <h2>Installer sur PC (Windows)</h2>
+    <p><a class="dl-pc" href="pc/Ivass-AI-Setup-3.11.0.exe" download>⬇ Télécharger Ivass AI pour Windows</a> <span class="muted">version 3.11.0 · 83 Mo · Windows 10 et 11 (64 bits)</span></p>
+    <ol class="steps">
+      <li>Téléchargez <b>Ivass-AI-Setup-3.11.0.exe</b>, puis ouvrez-le.</li>
+      <li>Si Windows affiche <b>« Windows a protégé votre ordinateur »</b>, cliquez sur <b>Informations complémentaires</b>, puis <b>Exécuter quand même</b>. Ce message apparaît pour les logiciels récents qui ne sont pas encore connus de Microsoft.</li>
+      <li>Acceptez les conditions, choisissez le dossier d’installation, puis cliquez sur <b>Installer</b>. Une icône IVASS AI est créée sur le Bureau.</li>
+      <li>Au premier lancement, ajoutez une clé d’IA (⚙ Paramètres &amp; clés API). Une clé <b>Google Gemini</b> est gratuite.</li>
+    </ol>
+    <p class="muted">Le logiciel PC se met à jour tout seul. Pour relier votre téléphone : Paramètres → 📱 Téléphone → « Créer un code », puis tapez ce même code dans l’application mobile.</p>
   </section>
 
   <section>
