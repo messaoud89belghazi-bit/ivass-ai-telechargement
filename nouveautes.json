@@ -1,6 +1,13 @@
 {
  "nouveautes": [
   {
+   "titre": "Nouveau : ⚡ Bibliothèque d’abord, hors ligne fiable",
+   "texte": "Ivass AI 3.15 : sans Internet, Ivass répond avec l’IA de votre PC (Ollama) ou depuis votre bibliothèque ; plus d’attente sans fin au retour du réseau ; les questions déjà traitées reçoivent une réponse instantanée sans dépenser de tokens ; lecture des PDF, Word, Excel et PowerPoint joints.",
+   "lien": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/",
+   "version": "3.15.0",
+   "quand": 1792972104526
+  },
+  {
    "titre": "Nouveau : 🎁 partagez votre savoir, 📰 lettre d’information",
    "texte": "Ivass AI 3.14 : créez un pack de votre bibliothèque pour vos proches (sans vos discussions ni votre historique), abonnez-vous si vous le souhaitez à la lettre d’information, et retrouvez ici toutes les nouveautés.",
    "lien": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/",
