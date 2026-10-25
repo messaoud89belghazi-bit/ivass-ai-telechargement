@@ -1,8 +1,8 @@
-version: 3.12.0
+version: 3.13.0
 files:
-  - url: Ivass-AI-Setup-3.12.0.exe
-    sha512: Z3V4kAOhqhaifFvWwTUzOHbBsQsmiyNYyrmev0roClh7l4yUB41q3R7/QxaJXuDf0btWj3habpR1zWtrVraQOw==
-    size: 90525305
-path: Ivass-AI-Setup-3.12.0.exe
-sha512: Z3V4kAOhqhaifFvWwTUzOHbBsQsmiyNYyrmev0roClh7l4yUB41q3R7/QxaJXuDf0btWj3habpR1zWtrVraQOw==
-releaseDate: '2026-10-24T14:01:03.084Z'
+  - url: Ivass-AI-Setup-3.13.0.exe
+    sha512: 71RO3D7SmBma067WaBWfH4Gcg8WscF3TP9tLpyLQ6pst33NlW2xQSlmByoua1OsT0HGMjKd50BrY7vkGtoaTDw==
+    size: 90552453
+path: Ivass-AI-Setup-3.13.0.exe
+sha512: 71RO3D7SmBma067WaBWfH4Gcg8WscF3TP9tLpyLQ6pst33NlW2xQSlmByoua1OsT0HGMjKd50BrY7vkGtoaTDw==
+releaseDate: '2026-10-25T21:43:17.202Z'

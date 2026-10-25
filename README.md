@@ -11,7 +11,7 @@
 
 | Appareil | Téléchargement |
 |---|---|
-| 💻 **PC Windows 10 / 11** (64 bits) | [Ivass-AI-Setup-3.12.0.exe](pc/Ivass-AI-Setup-3.12.0.exe) — version 3.12.0 |
+| 💻 **PC Windows 10 / 11** (64 bits) | [Ivass-AI-Setup-3.13.0.exe](pc/Ivass-AI-Setup-3.13.0.exe) — version 3.13.0 |
 | 🤖 **Android 7 ou plus récent** | [Ivass-AI-Mobile.apk](Ivass-AI-Mobile.apk) — version 1.3.18 |
 | 📱 **iPhone** (iOS 16.4 ou plus récent) | [Ouvrir dans Safari](https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/iphone/), puis Partager → « Sur l’écran d’accueil » |
 
@@ -19,6 +19,7 @@ Les applications se mettent ensuite à jour toutes seules. Toutes les versions :
 
 ## ✨ Ce que fait Ivass AI
 
+- 🔗 **Rattacher** : GitHub, Notion, Hugging Face, Wikipédia, arXiv, Todoist, Trello, Airtable, dossiers du PC… et n’importe quel **serveur MCP**. Le **Radar de connaissances** détecte ce qu’Ivass connaît mal et l’apprend depuis GitHub et les sources ouvertes.
 - 📦 **De vrais fichiers, pas du code** : CV, facture, rapport, budget, présentation… Ivass crée directement le fichier **Word, PDF, Excel, PowerPoint ou CSV**, ainsi que vos **images** et **vidéos**, prêts à ouvrir et à partager.
 - 🤖 **Toutes les IA réunies** : Claude, Gemini, ChatGPT, Groq, Mistral… Si une IA est en panne, la suivante reprend la réponse.
 - 🧠 **Réflexion profonde** : brouillon, relecture experte, puis réponse corrigée.
