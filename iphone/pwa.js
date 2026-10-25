@@ -2,7 +2,7 @@
  * Ne fait rien dans l'application Android (window.IvassNative existe alors). */
 (function () {
   'use strict';
-  if (window.IvassNative) return;
+  if (window.IvassNative || window.__iosBoot) return; // applications Android et iPhone : rien à faire ici
   const N = window.Native || {};
   const LS = { get: (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (_) { /* plein */ } } };
   let reg = null;

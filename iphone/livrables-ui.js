@@ -190,8 +190,8 @@ Format non précisé : document → .docx ; tableau, budget → .xlsx ; présent
     return `<div class="lvr-card"><div class="lvr-ico">${icon}</div><div class="lvr-main"><b>${title}</b>${state ? `<span class="lvr-st">${state}</span>` : ''}${btns ? `<div class="lvr-btns">${btns}</div>` : ''}${extra || ''}</div></div>`;
   }
   const B = (k, a, label, primary) => `<button class="lvr-b${primary ? ' on' : ''}" data-lv="${a}" data-k="${k}">${label}</button>`;
-  const saveLabel = N.isAndroid ? '↗ Partager' : '⬇ Enregistrer';
-  const whereTxt = (i) => (N.isAndroid ? `Enregistré dans ${esc(i.where || 'Téléchargements › Ivass AI')}` : 'Prêt : « Enregistrer » le met dans Fichiers');
+  const saveLabel = N.hasFiles ? '↗ Partager' : '⬇ Enregistrer';
+  const whereTxt = (i) => (N.hasFiles ? `Enregistré dans ${esc(i.where || N.files.where())}` : 'Prêt : « Enregistrer » le met dans Fichiers');
 
   function decorate(html, m, streaming, redraw) {
     const items = C.extract(m.content);
@@ -223,8 +223,8 @@ Format non précisé : document → .docx ; tableau, budget → .xlsx ; présent
       } else {
         if (ph[k]) h = card('🎥', 'Tournage de la vidéo…', `<span class="lvr-wait">${esc(ph[k])}</span>`, B(k, 'stop', 'Arrêter'));
         else if (info && !info.error) {
-          const v = !N.isAndroid && vids.get(info.name);
-          if (!N.isAndroid && !vids.has(info.name)) { vids.set(info.name, ''); N.files.get(info.name, 'video/mp4').then((r) => { if (r) { vids.set(info.name, URL.createObjectURL(new Blob([N.bytesOf(r.b64)], { type: 'video/mp4' }))); redraw(); } }).catch(() => {}); }
+          const v = !N.hasFiles && vids.get(info.name);
+          if (!N.hasFiles && !vids.has(info.name)) { vids.set(info.name, ''); N.files.get(info.name, 'video/mp4').then((r) => { if (r) { vids.set(info.name, URL.createObjectURL(new Blob([N.bytesOf(r.b64)], { type: 'video/mp4' }))); redraw(); } }).catch(() => {}); }
           h = card('🎥', esc(info.name), `Vidéo MP4 · ${size(info.size)}<br>${whereTxt(info)}`, B(k, 'open', '▶ Ouvrir', true) + B(k, 'save', saveLabel), v ? `<video class="lvr-video" src="${v}" controls playsinline></video>` : '');
         } else {
           const hasGemini = !!keysOf(ctxRef).gemini;
@@ -275,7 +275,7 @@ Format non précisé : document → .docx ; tableau, budget → .xlsx ; présent
     if (!jobs.length) return;
     const res = await Promise.all(jobs);
     const ok = res.filter((x) => x && !x.error && x.kind !== 'Image').length;
-    if (ok) N.toast(N.isAndroid ? `📦 ${ok} fichier${ok > 1 ? 's' : ''} dans Téléchargements › Ivass AI` : `📦 ${ok} fichier${ok > 1 ? 's' : ''} prêt${ok > 1 ? 's' : ''}`);
+    if (ok) N.toast(N.hasFiles ? `📦 ${ok} fichier${ok > 1 ? 's' : ''} dans ${N.files.where()}` : `📦 ${ok} fichier${ok > 1 ? 's' : ''} prêt${ok > 1 ? 's' : ''}`);
   }
 
   async function onClick(e, m, ctx) {

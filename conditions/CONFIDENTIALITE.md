@@ -79,6 +79,14 @@ Le serveur de réception est hébergé par **Cloudflare** (Cloudflare Workers et
 
 Les paquets restent sur le serveur **12 mois au plus**. Ils sont en général effacés dès que l'éditeur les a téléchargés. Leurs versions déchiffrées sont conservées sur l'ordinateur de l'éditeur **24 mois au plus**. Seuls les contenus intégrés à un pack de connaissances, nettoyés et relus, peuvent être gardés plus longtemps.
 
+### Lettre d’information (facultative)
+
+Si vous vous y inscrivez vous-même (Paramètres › 🤝 Contribution, ou Réglages sur téléphone), votre adresse e-mail et, si vous le souhaitez, votre prénom partent **chiffrés** au créateur d’Ivass AI, uniquement pour vous envoyer les nouveautés et conseils d’Ivass AI. Ils ne sont jamais vendus ni partagés. Vous vous désinscrivez en un clic au même endroit ; « Effacer mes données sur le serveur » retire aussi votre inscription. Base légale : votre consentement.
+
+### Nouveautés et packs
+
+Les **📣 Nouveautés** sont lues sur la page publique d’Ivass AI et sur le serveur de contributions, sans rien envoyer de vous. Un **🎁 pack à partager** est un fichier créé sur votre PC à partir de votre bibliothèque (jamais vos discussions ni votre historique), nettoyé avant export ; c’est vous qui choisissez à qui l’envoyer.
+
 ## 4. Vos droits
 
 Vous disposez des droits d'accès, de rectification, d'effacement, d'opposition, de limitation et de portabilité, ainsi que du droit de retirer votre consentement. Dans Ivass AI, rubrique ⚙ Paramètres → Contribution & mises à jour, vous pouvez :

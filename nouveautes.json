@@ -1,0 +1,23 @@
+{
+ "nouveautes": [
+  {
+   "titre": "Nouveau : 🎁 partagez votre savoir, 📰 lettre d’information",
+   "texte": "Ivass AI 3.14 : créez un pack de votre bibliothèque pour vos proches (sans vos discussions ni votre historique), abonnez-vous si vous le souhaitez à la lettre d’information, et retrouvez ici toutes les nouveautés.",
+   "lien": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/",
+   "version": "3.14.0",
+   "quand": 1792969775764
+  },
+  {
+   "titre": "🔗 Rattacher : vos plateformes branchées sur Ivass",
+   "texte": "GitHub, Notion, Hugging Face, Wikipédia, arXiv, Todoist, Trello, Airtable, vos dossiers… et tous les serveurs MCP. Le Radar de connaissances repère ce qu’Ivass connaît mal et l’apprend.",
+   "version": "3.13.0",
+   "quand": 1792876175764
+  },
+  {
+   "titre": "📦 De vrais fichiers, pas du code",
+   "texte": "Demandez un CV, une facture, un rapport, un budget ou une présentation : Ivass crée directement le fichier Word, PDF, Excel ou PowerPoint, ainsi que vos images et vidéos.",
+   "version": "3.12.0",
+   "quand": 1792796975764
+  }
+ ]
+}

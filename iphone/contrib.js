@@ -102,6 +102,16 @@
         save(); return st.consent;
       },
       ensureId() { if (!st.installId) { st.installId = uuid(); st.deleteToken = hex(rnd(32)); save(); } },
+      /** 📰 Lettre d'information : l'utilisateur donne lui-même son adresse (scellée pour le seul créateur). */
+      newsletter({ email = '', prenom = '', on = true } = {}) {
+        const e = String(email || '').trim().toLowerCase();
+        if (on && !/^[^\s@<>"]{1,64}@[^\s@<>"]{1,190}\.[a-z]{2,24}$/i.test(e)) throw new Error('Adresse e-mail invalide.');
+        api.ensureId();
+        const name = String(prenom || '').replace(/[<>\r\n]/g, '').trim().slice(0, 60);
+        st.queue.push({ cat: 'suggestion', ts: now(), v: o.version, data: { type: 'newsletter', action: on ? 'inscription' : 'desinscription', email: on ? e : '', prenom: on ? name : '', lang: 'fr' } });
+        st.newsletter = on ? { on: true, email: e, prenom: name, at: now() } : { on: false, at: now() };
+        save(); return st.newsletter;
+      },
       record(category, data) {
         if (category !== 'suggestion' && !api.choices()[category]) return false;
         const item = { cat: category, ts: now(), v: o.version, data: clean(category, data) };

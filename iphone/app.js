@@ -464,7 +464,7 @@
   $('#menuBtn').onclick = openDrawer;
   $('#scrim').onclick = closeDrawer;
   $('#newBtn').onclick = newConv;
-  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, settings: () => openSettings(), sync: openSync, share: openShare })[b.dataset.open](); }; });
+  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, settings: () => openSettings(), sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
 
   // ---------------- Panneaux ----------------
   let panelRefresh = null;
@@ -508,6 +508,11 @@
         ${contribChecks('cs')}
         <p class="help" id="ctState"></p>
         <div class="row"><button class="btn sm danger" id="ctForget">Effacer mes envois</button></div></div>
+      <div class="card"><h3>📰 Lettre d’information <span class="muted" style="font-weight:400;font-size:13px">— facultatif</span></h3><p class="help">Recevez par e-mail les nouveautés et conseils d’Ivass AI. Votre adresse part chiffrée, lisible uniquement par le créateur d’Ivass AI, pour cet usage seulement : jamais vendue ni partagée.</p>
+        <div id="nlState" class="help"></div>
+        <input class="field" id="nlPrenom" placeholder="Prénom (facultatif)"><input class="field" id="nlEmail" type="email" placeholder="vous@exemple.fr" style="margin-top:6px">
+        <label class="check" style="margin:8px 0"><input type="checkbox" id="nlOk"><span>J’accepte de recevoir la lettre d’information d’Ivass AI. Je peux me désinscrire à tout moment.</span></label>
+        <div class="row"><button class="btn sm primary" id="nlOn">📰 M’inscrire</button><button class="btn sm hidden" id="nlOff">Me désinscrire</button></div></div>
       <div class="card"><h3>💬 Vos retours</h3><p class="help">Une idée, un problème ? Votre message part directement au créateur d’Ivass AI, nettoyé et chiffré (même si les envois automatiques sont désactivés).</p>
         <div class="row"><button class="btn sm" data-fb="idee">💡 Proposer une idée</button><button class="btn sm" data-fb="bug">🐞 Signaler un problème</button></div></div>
       <div class="card"><h3>🎨 Apparence</h3><div id="lookBox"></div></div>
@@ -558,6 +563,14 @@
       const ctState = () => { const st = contrib.state(); $('#ctState', r).textContent = !contrib.anyOn() ? 'Désactivé.' : `${st.sent || 0} élément(s) envoyé(s) · ${st.queue.length} en attente${st.lastError ? ' · ' + st.lastError : ''}${S.config.contribServer ? '' : ' · serveur pas encore configuré (les envois attendent)'}`; };
       ctState();
       $$('[data-cs]', r).forEach((i) => { i.onchange = () => { contrib.setConsent(readChecks(r, 'cs')); ctState(); }; });
+      const nlPaint = () => { const n = contrib.state().newsletter || {}; $('#nlState', r).innerHTML = n.on ? `✓ Inscrit(e) avec <b>${esc(n.email)}</b>` : 'Non inscrit(e).'; $('#nlOff', r).classList.toggle('hidden', !n.on); $('#nlOn', r).textContent = n.on ? '✎ Changer d’adresse' : '📰 M’inscrire'; if (n.on) { $('#nlEmail', r).value = n.email; $('#nlPrenom', r).value = n.prenom || ''; } };
+      nlPaint();
+      $('#nlOn', r).onclick = async () => {
+        if (!$('#nlOk', r).checked) return N.toast('Cochez la case d’accord pour vous inscrire.');
+        try { contrib.newsletter({ email: $('#nlEmail', r).value, prenom: $('#nlPrenom', r).value, on: true }); const f = await contrib.flush({ force: true }); N.toast(f.sent ? '📰 Inscription envoyée, merci !' : '📰 Inscription enregistrée : elle partira dès que possible.'); } catch (e) { N.toast(e.message); }
+        nlPaint();
+      };
+      $('#nlOff', r).onclick = async () => { contrib.newsletter({ on: false }); await contrib.flush({ force: true }); N.toast('Désinscription envoyée.'); $('#nlOk', r).checked = false; $('#nlEmail', r).value = ''; nlPaint(); };
       $$('[data-fb]', r).forEach((b) => { b.onclick = () => feedback(b.dataset.fb); });
       $('#ctForget', r).onclick = async () => {
         if (!await confirmBox('Effacer du serveur tout ce que ce téléphone a envoyé, et arrêter les envois ?', 'Effacer', true)) return;
@@ -739,6 +752,30 @@
       <p class="help" style="margin-top:12px;word-break:break-all">${esc(u)}</p>`, (r) => { r.querySelectorAll('[data-via]').forEach((b) => { b.onclick = () => via(b.dataset.via); }); });
   }
 
+  // ---------------- 📣 Nouveautés publiées par le créateur ----------------
+  let news = [];
+  async function fetchNews() {
+    const got = [];
+    const take = async (url) => { try { const r = await N.http({ url, timeout: 12000 }); if (r.ok) { const j = JSON.parse(r.body); got.push(...(j.nouveautes || j.items || [])); } } catch (_) { /* hors ligne */ } };
+    const page = (S.config.pageUrl || 'https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/').replace(/\/?$/, '/');
+    await Promise.all([S.config.contribServer ? take(S.config.contribServer.replace(/\/+$/, '') + '/v1/nouveautes') : null, take(page + 'nouveautes.json?t=' + Date.now())]);
+    const seen = new Set();
+    const list = got.filter((x) => x && x.titre && x.texte).map((x) => ({ titre: String(x.titre).slice(0, 140), texte: String(x.texte).slice(0, 2000), lien: /^https:\/\//.test(x.lien || '') ? x.lien : '', version: String(x.version || ''), quand: Number(x.quand) || Date.parse(x.date) || 0 }))
+      .filter((x) => { const k = x.titre + '|' + new Date(x.quand).toISOString().slice(0, 10); if (seen.has(k)) return false; seen.add(k); return true; }).sort((a, b) => b.quand - a.quand).slice(0, 30);
+    if (list.length) { news = list; N.write('nouveautes.json', list); } else news = N.read('nouveautes.json') || [];
+    const unread = news.filter((x) => x.quand > (S.settings.newsSeen || 0)).length;
+    const b = $('#newsBadge'); if (b) { b.textContent = unread; b.classList.toggle('hidden', !unread); }
+    return news;
+  }
+  async function openNews() {
+    await fetchNews();
+    const seen = S.settings.newsSeen || 0;
+    openPanel('📣 Nouveautés', news.length ? news.map((x) => `<div class="card"><h3>${esc(x.titre)}${x.quand > seen ? ' <span class="tag">nouveau</span>' : ''}</h3><p class="help">${new Date(x.quand).toLocaleDateString('fr-FR')}${x.version ? ' · version ' + esc(x.version) : ''}</p><p style="white-space:pre-wrap">${esc(x.texte)}</p>${x.lien ? `<a href="${esc(x.lien)}">En savoir plus ↗</a>` : ''}</div>`).join('') : '<p class="muted">Pas encore de nouveautés (ou pas de connexion).</p>');
+    S.settings.newsSeen = Date.now(); saveSettings();
+    const b = $('#newsBadge'); if (b) b.classList.add('hidden');
+  }
+  setTimeout(() => fetchNews().catch(() => {}), 5000);
+
   // ---------------- ✨ Mises à jour automatiques ----------------
   const vnum = (v) => String(v || '0').split(/[.-]/).map((x) => parseInt(x, 10) || 0);
   const newer = (a, b) => { const x = vnum(a), y = vnum(b); for (let i = 0; i < Math.max(x.length, y.length); i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); } return false; };
@@ -746,6 +783,8 @@
   async function checkUpdate(manual) {
     // Version iPhone / web : pas d'APK, la page se met à jour toute seule (service worker, voir pwa.js).
     if (N.isWeb) { if (manual) { if (window.IvassPWA) window.IvassPWA.checkNow(); N.toast(`Version ${N.version()} : Ivass AI se met à jour tout seul à chaque ouverture ✓`); } return null; }
+    // Application iPhone : les mises à jour arrivent par l'App Store / TestFlight.
+    if (N.isIOSApp) { if (manual) N.toast(`Version ${N.version()} : les mises à jour arrivent par l’App Store ✓`); return null; }
     if (!S.config.updateUrl) return null;
     try {
       const r = await N.http({ url: S.config.updateUrl + '?t=' + Date.now(), timeout: 15000 });

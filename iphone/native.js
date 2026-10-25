@@ -1,7 +1,29 @@
 /* Enveloppe du pont Android (IvassNative) en promesses. Sans Android (version iPhone / web), repli sur fetch + localStorage. */
 (function () {
   'use strict';
-  const N = window.IvassNative;
+  const A = window.IvassNative; // application Android
+  /* Application iPhone (Swift + WKWebView) : window.__iosBoot (clés du Trousseau, données, version) est posé par l'app
+     avant le chargement ; les appels natifs passent par webkit.messageHandlers.ivass (réponse en promesse). */
+  const IOSH = !A && window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.ivass;
+  const BOOT = IOSH && window.__iosBoot;
+  const I = BOOT ? { call: (method, args) => IOSH.postMessage({ method, args: args || {} }) } : null;
+  const fire = (method, args) => { try { const p = I.call(method, args); if (p && p.catch) p.catch(() => {}); } catch (_) { /* rien */ } };
+  // Même interface synchrone que le pont Android, pour tout le reste de l'application
+  const IOS = I && {
+    http: (id, spec) => I.call('http', { id, spec }).catch((e) => window.__nat.fail(id, String(e && e.message || e))),
+    abort: (id) => fire('abort', { id }),
+    secretGet: (name) => (BOOT.secrets || {})[name] || '',
+    secretSet: (name, value) => { BOOT.secrets = BOOT.secrets || {}; BOOT.secrets[name] = String(value || ''); fire('secretSet', { name, value: String(value || '') }); return true; },
+    fileRead: (name) => (BOOT.files || {})[name] || '',
+    fileWrite: (name, text) => { BOOT.files = BOOT.files || {}; BOOT.files[name] = text; fire('fileWrite', { name, text }); return true; },
+    share: (text) => fire('share', { text }),
+    copy: (text) => fire('copy', { text }),
+    openUrl: (url) => fire('openUrl', { url }),
+    toast: (m) => toastWeb(m),
+    appVersion: () => BOOT.version || '?',
+    setBars: (color, light) => fire('setBars', { color, light: !!light }),
+  };
+  const N = A || IOS;
   const pending = new Map();
   let seq = 0;
   window.__nat = {
@@ -75,6 +97,7 @@
   const files = {
     /** bytes : Uint8Array → { name, where, size } */
     async save(name, bytes, mime) {
+      if (I) { const r = await I.call('fileSave', { name, b64: b64of(bytes), mime: mime || 'application/octet-stream' }); if (r.error) throw new Error(r.error); return r; }
       if (N && N.fileSave) { const r = JSON.parse(N.fileSave(name, b64of(bytes), mime || 'application/octet-stream')); if (r.error) throw new Error(r.error); return r; }
       const n = await webUnique(name); const blob = new Blob([bytes], { type: mime || 'application/octet-stream' });
       mem.set(n, blob);
@@ -83,6 +106,10 @@
     },
     /** Télécharge une adresse https directement en fichier (vidéos). */
     download(url, headers, name, mime) {
+      if (I) {
+        const id = 'd' + (++seq) + '_' + Date.now();
+        return new Promise((resolve, reject) => { pending.set(id, { resolve: (r) => resolve(JSON.parse(r.body)), reject }); I.call('fileDownload', { id, spec: JSON.stringify({ url, headers: headers || {} }), name, mime: mime || 'application/octet-stream' }).catch((e) => window.__nat.fail(id, String(e && e.message || e))); });
+      }
       if (N && N.fileDownload) {
         const id = 'd' + (++seq) + '_' + Date.now();
         return new Promise((resolve, reject) => { pending.set(id, { resolve: (r) => resolve(JSON.parse(r.body)), reject }); N.fileDownload(id, JSON.stringify({ url, headers: headers || {} }), name, mime || 'application/octet-stream'); });
@@ -91,14 +118,18 @@
     },
     /** { mime, b64 } ou null (pour réafficher une image). */
     async get(name, mime) {
+      if (I) { const b = await I.call('fileReadB64', { name }); return b ? { mime, b64: b } : null; }
       if (N && N.fileReadB64) { const b = N.fileReadB64(name); return b ? { mime, b64: b } : null; }
       const blob = await webGet(name); if (!blob) return null;
       return { mime: blob.type || mime, b64: b64of(new Uint8Array(await blob.arrayBuffer())) };
     },
-    async exists(name) { if (N && N.fileExists) return N.fileExists(name); return !!(await webGet(name)); },
+    async exists(name) { if (I) return !!(await I.call('fileExists', { name })); if (N && N.fileExists) return N.fileExists(name); return !!(await webGet(name)); },
     /** Charge à l'avance (iPhone) pour que « Enregistrer » ouvre le menu de partage tout de suite. */
     warm(name) { if (!N) webGet(name); },
+    /** Où se trouvent les fichiers créés (texte affiché). */
+    where: () => (A ? 'Téléchargements › Ivass AI' : I ? 'Fichiers › Sur mon iPhone › Ivass AI' : 'Ivass AI'),
     async open(name, mime) {
+      if (I) return !!(await I.call('fileOpen', { name, mime }));
       if (N && N.fileOpen) return N.fileOpen(name, mime);
       const blob = await webGet(name); if (!blob) return false;
       const u = URL.createObjectURL(blob);
@@ -107,6 +138,7 @@
       return true;
     },
     async share(name, mime) {
+      if (I) return !!(await I.call('fileShare', { name, mime }));
       if (N && N.fileShare) return N.fileShare(name, mime);
       const blob = mem.get(name) || await webGet(name); if (!blob) return false;
       const f = new File([blob], name, { type: blob.type || mime });
@@ -141,11 +173,13 @@
   const standalone = !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
 
   window.Native = {
-    isAndroid: !!N,
+    isAndroid: !!A,
+    isIOSApp: !!I,
     isWeb: !N,
     isIOS: !N && isIOS,
+    hasFiles: !!N, // fichiers enregistrés sur l'appareil (Android : Téléchargements, iPhone : app Fichiers)
     standalone,
-    platform: N ? 'Android' : isIOS ? 'iPhone' : 'Web',
+    platform: A ? 'Android' : I ? 'iPhone (app)' : isIOS ? 'iPhone' : 'Web',
     http,
     secretGet: (name) => (N ? N.secretGet(name) : LS.get('secret:' + name)),
     secretSet: (name, value) => (N ? N.secretSet(name, value) : LS.set('secret:' + name, value)),

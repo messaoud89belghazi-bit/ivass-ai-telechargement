@@ -329,3 +329,4 @@ html, body { overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
 .lvr-img img { display: block; width: 100%; max-width: 520px; border-radius: 14px; border: 1px solid var(--border); }
 .lvr-video { width: 100%; margin-top: 8px; border-radius: 12px; background: #000; }
 @keyframes lvrPulse { 50% { opacity: .55; } }
+.news-badge { display: inline-block; min-width: 18px; padding: 0 6px; margin-left: 6px; border-radius: 99px; background: #ef4444; color: #fff; font-size: 12px; line-height: 18px; text-align: center; }
