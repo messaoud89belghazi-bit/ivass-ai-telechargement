@@ -11,7 +11,7 @@
 
 | Appareil | Téléchargement |
 |---|---|
-| 💻 **PC Windows 10 / 11** (64 bits) | [Ivass-AI-Setup-3.15.0.exe](pc/Ivass-AI-Setup-3.15.0.exe) — version 3.15.0 |
+| 💻 **PC Windows 10 / 11** (64 bits) | [Ivass-AI-Setup-3.15.1.exe](pc/Ivass-AI-Setup-3.15.1.exe) — version 3.15.1 |
 | 🤖 **Android 7 ou plus récent** | [Ivass-AI-Mobile.apk](Ivass-AI-Mobile.apk) — version 1.3.21 |
 | 📱 **iPhone** (iOS 16.4 ou plus récent) | [Ouvrir dans Safari](https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/iphone/), puis Partager → « Sur l’écran d’accueil » |
 
