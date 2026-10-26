@@ -1,11 +1,17 @@
 # Publie Ivass AI dans la section « Releases » de ce dépôt public (logiciel compilé uniquement, pas le code source).
-# Se lance tout seul quand une nouvelle version est mise en ligne (version.json ou pc/latest.yml), ou à la main (Actions → Run workflow).
+#
+# Installateur PC : il n'est plus rangé dans la branche main (91 Mo par version faisaient grossir le dépôt et
+# saturaient GitHub Pages). Il arrive par la branche temporaire « transit » : ce workflow le publie dans les Releases
+# (installateur, fichier .blockmap pour les mises à jour partielles, copie « Ivass-AI-Setup.exe » au nom fixe),
+# puis supprime la branche transit. pc/latest.yml (sur main) pointe ensuite vers le fichier des Releases.
+#
+# APK Android : quand version.json change sur main, l'APK est remplacé dans la Release de la version PC en cours.
 name: Publier Ivass AI (Releases)
 
 on:
   push:
-    branches: [main]
-    paths: ['version.json', 'pc/latest.yml', '.github/release-notes.md', '.github/workflows/release.yml']
+    branches: [main, transit]
+    paths: ['version.json', 'pc/**', '.github/release-notes.md', '.github/workflows/release.yml']
   workflow_dispatch:
 
 permissions:
@@ -28,29 +34,55 @@ jobs:
           set -euo pipefail
           PC=$(sed -n 's/^version: *//p' pc/latest.yml | tr -d '\r ')
           MOB=$(node -p "require('./version.json').version")
-          EXE="pc/Ivass-AI-Setup-$PC.exe"
-          test -f "$EXE" || { echo "Installateur PC introuvable : $EXE"; exit 1; }
-          test -f Ivass-AI-Mobile.apk || { echo "APK introuvable"; exit 1; }
-          echo "pc=$PC" >> "$GITHUB_OUTPUT"; echo "mob=$MOB" >> "$GITHUB_OUTPUT"; echo "exe=$EXE" >> "$GITHUB_OUTPUT"
+          echo "pc=$PC" >> "$GITHUB_OUTPUT"; echo "mob=$MOB" >> "$GITHUB_OUTPUT"
           sed -e "s/{PC}/$PC/g" -e "s/{MOB}/$MOB/g" .github/release-notes.md > notes.md
-          echo "PC $PC · Android $MOB"
+          echo "PC $PC · Android $MOB · branche ${GITHUB_REF_NAME}"
 
-      - name: Publication
+      - name: Installateur PC (branche transit)
+        if: github.ref_name == 'transit'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           PC: ${{ steps.v.outputs.pc }}
           MOB: ${{ steps.v.outputs.mob }}
-          EXE: ${{ steps.v.outputs.exe }}
         run: |
           set -euo pipefail
+          EXE="pc/Ivass-AI-Setup-$PC.exe"
+          test -f "$EXE" || { echo "Installateur PC introuvable : $EXE"; exit 1; }
+          # empreinte annoncée dans latest.yml = empreinte du fichier publié
+          WANT=$(sed -n 's/^sha512: *//p' pc/latest.yml | tr -d '\r ')
+          GOT=$(openssl dgst -sha512 -binary "$EXE" | base64 -w0)
+          [ "$WANT" = "$GOT" ] || { echo "Empreinte SHA-512 différente de latest.yml"; exit 1; }
+          cp "$EXE" Ivass-AI-Setup.exe
+          FILES=("$EXE" Ivass-AI-Setup.exe)
+          [ -f "$EXE.blockmap" ] && FILES+=("$EXE.blockmap")
+          [ -f Ivass-AI-Mobile.apk ] && FILES+=(Ivass-AI-Mobile.apk)
           TAG="v$PC"
           TITLE="Ivass AI — PC $PC · Android $MOB · iPhone"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release edit "$TAG" --title "$TITLE" --notes-file notes.md --latest
-            # l'APK Android peut changer sans nouvelle version PC : on remplace les fichiers
-            gh release upload "$TAG" "$EXE" Ivass-AI-Mobile.apk --clobber
+            gh release upload "$TAG" "${FILES[@]}" --clobber
           else
-            gh release create "$TAG" "$EXE" Ivass-AI-Mobile.apk --target "$GITHUB_SHA" --title "$TITLE" --notes-file notes.md --latest
+            gh release create "$TAG" "${FILES[@]}" --target main --title "$TITLE" --notes-file notes.md --latest
           fi
+          gh release view "$TAG" --json url,assets --jq '.url, (.assets[] | "\(.name) \(.size)")'
+
+      - name: Suppression de la branche transit
+        if: always() && github.ref_name == 'transit'
+        shell: bash
+        run: git push origin --delete transit || true
+
+      - name: APK Android (branche main)
+        if: github.ref_name == 'main'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PC: ${{ steps.v.outputs.pc }}
+          MOB: ${{ steps.v.outputs.mob }}
+        run: |
+          set -euo pipefail
+          TAG="v$PC"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then echo "Release $TAG pas encore créée : l'installateur PC n'est pas encore passé par la branche transit."; exit 0; fi
+          gh release edit "$TAG" --title "Ivass AI — PC $PC · Android $MOB · iPhone" --notes-file notes.md --latest
+          test -f Ivass-AI-Mobile.apk && gh release upload "$TAG" Ivass-AI-Mobile.apk --clobber
           gh release view "$TAG" --json url,assets --jq '.url, (.assets[] | "\(.name) \(.size)")'
