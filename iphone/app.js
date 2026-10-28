@@ -8,11 +8,12 @@
   const N = window.Native;
 
   // ---------------- Données ----------------
-  const DEF = { providers: [], mode: 'normal', useLib: true, instructions: '', theme: 'light', bg: 'degrade', size: 'normal', cgu: 0, sync: { server: '', auto: true, last: 0 } };
+  const DEF = { providers: [], mode: 'normal', useLib: true, answerLength: 'equilibre', encyclo: true, savoir: true, showRoute: false, instructions: '', theme: 'light', bg: 'degrade', size: 'normal', cgu: 0, sync: { server: '', auto: true, last: 0 } };
   const S = {
     settings: Object.assign({}, DEF, N.read('settings.json') || {}),
     convs: N.read('convs.json') || { list: [], deleted: {} },
     lib: N.read('library.json') || { list: [], deleted: {} },
+    savoir: N.read('savoir.json') || { hash: '', at: '', fetched: 0, entries: [] },
     cur: null, busy: null, config: {},
   };
   S.settings.sync = Object.assign({}, DEF.sync, S.settings.sync || {});
@@ -157,7 +158,8 @@
   function activeLabel() {
     if (S.settings.mode === 'pc') return '🖥️ Mon PC — Ivass AI répond depuis votre ordinateur';
     const p = [...S.settings.providers].filter((x) => x.enabled !== false).sort((a, b) => (a.priority || 5) - (b.priority || 5))[0];
-    return p ? `${p.name} · ${p.model}` : 'Aucune IA — ajoutez une clé dans Réglages';
+    if (!p) return 'Aucune IA — ajoutez une clé dans Réglages';
+    return S.settings.showRoute ? `${p.name} · ${p.model}` : '✨ Prêt à répondre';
   }
   function msgEl(m, i, c) {
     const d = document.createElement('div');
@@ -167,7 +169,9 @@
       d.innerHTML = `<div class="who"><img src="icon.png" alt="">Ivass AI</div>` +
         (m.notice ? `<div class="notice">${esc(m.notice)}</div>` : '') +
         `<div class="bubble">${m.setup ? setupHTML() : m.error ? `<div class="err">${esc(m.error)}</div>` : mdMsg(m, false)}</div>` +
-        `<div class="meta"><span>${esc(m.model || '')}</span>${m.content && !m.setup ? `<button data-act="up" style="${m.vote === 1 ? 'opacity:1;color:var(--ok)' : ''}">👍</button><button data-act="down" style="${m.vote === -1 ? 'opacity:1;color:var(--danger)' : ''}">👎</button>` : ''}<button data-act="copy">📋</button><button data-act="share">↗</button><button data-act="save" title="Garder dans la bibliothèque">📚</button>` +
+        sourcesHTML(m) + (m.content || m.error ? backstageHTML(m) : '') +
+        `<div class="meta">${S.settings.showRoute && m.model ? `<span>${esc(m.model)}</span>` : ''}${m.content && !m.setup ? `<button data-act="up" style="${m.vote === 1 ? 'opacity:1;color:var(--ok)' : ''}">👍</button><button data-act="down" style="${m.vote === -1 ? 'opacity:1;color:var(--danger)' : ''}">👎</button>` : ''}<button data-act="copy">📋</button><button data-act="share">↗</button><button data-act="save" title="Garder dans la bibliothèque">📚</button>` +
+        (m.content || m.error ? `<button data-act="bs" title="Coulisses : quelle IA a répondu, bascules, sources">ⓘ</button>` : '') +
         (c && i === c.messages.length - 1 ? `<button data-act="regen" title="Régénérer">↻</button>` : '') + `</div>`;
       if (LV && m.liv) LV.warm(m);
       if (LV) d.querySelector('.bubble').addEventListener('click', (e) => { if (e.target.closest('[data-lv]')) LV.onClick(e, m, lvCtx); });
@@ -189,9 +193,27 @@
         if (act === 'share') N.share(m.content);
         if (act === 'save') editEntry({ title: core.titleOf(c.messages[i - 1] ? c.messages[i - 1].content : c.title), text: m.content, kind: 'note' });
         if (act === 'regen') regenerate();
+        if (act === 'bs') { d.classList.toggle('show-bs'); e.target.classList.toggle('on'); }
       };
     }
     return d;
+  }
+
+  /** ⓘ Coulisses : quelle IA a répondu, combien de temps, les bascules… caché tant qu'on ne le demande pas. */
+  function backstageHTML(m) {
+    const rows = [];
+    const row = (k, v) => rows.push(`<div class="bs-row"><span>${k}</span><b>${v}</b></div>`);
+    if (m.provider || m.model) row('Réponse par', esc([m.provider, m.model].filter(Boolean).join(' · ')));
+    if (m.ms) row('Durée', `${(m.ms / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} s`);
+    if (m.libHits) row('Bibliothèque', `${m.libHits} passage(s)`);
+    if (m.enc && m.enc.length) row('Encyclopédies', esc([...new Set(m.enc.map((r) => `${r.icon || '🌍'} ${r.name}`))].join(' · ')));
+    for (const x of m.switches || []) row('Bascule', esc(x));
+    if (!rows.length) rows.push('<div class="bs-row"><span>Réponse directe, sans bascule.</span></div>');
+    return `<div class="backstage">${rows.join('')}</div>`;
+  }
+  function sourcesHTML(m) {
+    const enc = (m.enc || []).filter((r) => /^https:\/\//.test(r.url || ''));
+    return enc.length ? `<div class="enc-src">${enc.slice(0, 6).map((r, i) => `<a href="${esc(r.url)}" target="_blank" rel="noopener">[E${i + 1}] ${r.icon || '🌍'} ${esc(r.name)}</a>`).join('')}</div>` : '';
   }
 
   function renderConvList() {
@@ -318,19 +340,40 @@
       });
     };
     const last = c.messages[c.messages.length - 1].content;
-    let ctx = '';
-    if (S.settings.useLib && S.lib.list.length) ctx = window.IvassLib.contextFor(S.lib.list, last).text;
+    let ctx = '', libTop = 0;
+    if (S.settings.useLib && (S.lib.list.length || S.savoir.entries.length)) {
+      const lc = window.IvassLib.contextForMany([S.lib.list, S.settings.savoir !== false ? S.savoir.entries : []], last);
+      ctx = lc.text; libTop = lc.top; m.libHits = lc.hits.length;
+    }
     const mode = S.settings.mode;
+    // 🌍 Encyclopédies libres quand la bibliothèque ne connaît pas (encore) le sujet
+    const EN = window.IvassEncyclo;
+    if (EN && mode !== 'pc' && S.settings.encyclo !== false && navigator.onLine && EN.worth(last)) {
+      const volatileQ = EN.pick(last).some((id) => EN.SOURCES[id] && EN.SOURCES[id].volatile);
+      if (!ctx || libTop < 3 || volatileQ) {
+        try {
+          $('#phase').classList.remove('hidden'); $('#phase').textContent = '🌍 Recherche dans les encyclopédies libres…';
+          const r = await EN.lookup(last, { get: encGet, getText: encGetText, timeoutMs: 4500, limit: 4 });
+          if (r.docs.length) {
+            ctx = (ctx ? ctx + '\n\n' : '') + EN.contextText(r.docs);
+            m.enc = r.docs.map((d) => ({ title: d.title, url: d.url, name: d.name, icon: d.icon }));
+            learnFromEncyclo(r.docs);
+          }
+        } catch (_) { /* sans encyclopédie */ }
+        $('#phase').classList.add('hidden');
+      }
+    }
+    m.switches = [];
     const opts = {
       providers: S.settings.providers,
-      messages: c.messages.filter((x) => !x.setup).slice(-30).map((x) => ({ role: x.role, content: x.content })).filter((x) => x.content),
-      system: core.systemPrompt({ extra: S.settings.instructions, context: ctx, mode }) + (LV ? '\n\n' + LV.RULES : ''),
+      messages: trimHistory(c.messages.filter((x) => !x.setup).map((x) => ({ role: x.role, content: x.content })).filter((x) => x.content)),
+      system: core.systemPrompt({ extra: S.settings.instructions, context: ctx, mode }) + (LENGTH[S.settings.answerLength || 'equilibre'] ? '\n\n' + LENGTH[S.settings.answerLength || 'equilibre'] : '') + (LV ? '\n\n' + LV.RULES : ''),
       signal: ctrl.signal,
       onText: (t) => { m.content += t; paint(); },
       onStatus: (s) => {
-        $('#convSub').textContent = `${s.provider} · ${s.model}`;
-        if (s.failed) { failures.push({ provider: s.provider, model: s.model, message: s.failed });
-          notice.classList.remove('hidden'); notice.textContent = `⚠ ${s.provider} indisponible — bascule automatique…`; }
+        if (S.settings.showRoute) $('#convSub').textContent = `${s.provider} · ${s.model}`;
+        // les pannes et bascules ne s'affichent plus dans la réponse : elles vont dans ⓘ Coulisses
+        if (s.failed) { failures.push({ provider: s.provider, model: s.model, message: s.failed }); m.switches.push(`${s.provider} indisponible (${String(s.failed).split('\n')[0].slice(0, 120)})`); }
       },
       onPhase: (p) => { $('#phase').classList.toggle('hidden', !p); $('#phase').textContent = p ? (mode === 'pc' ? '' : '🧠 ') + p : ''; },
     };
@@ -346,7 +389,7 @@
       }
       if (!r) r = mode === 'deep' ? await core.deep(opts) : await core.chat(opts);
       m.content = r.text; m.model = r.model; m.provider = r.provider;
-      if (r.switches.length) m.notice = (m.notice ? m.notice + ' · ' : '') + `Bascule : ${r.switches.join(' → ')} → ${r.provider}`;
+      if (r.switches.length) m.switches.push(`${r.switches.join(' → ')} → ${r.provider}`);
       if (r.incomplete) m.notice = (m.notice ? m.notice + ' · ' : '') + 'réponse incomplète';
     } catch (e) {
       const offline = e.offline || !navigator.onLine || /Réseau :|Unable to resolve|failed to connect|timeout|UnknownHost|Failed to fetch/i.test(e.message);
@@ -358,7 +401,8 @@
       $('#sendBtn').classList.remove('stop'); $('#sendBtn').textContent = '➤';
       $('#phase').classList.add('hidden');
     }
-    m.mode = mode;
+    m.mode = mode; m.ms = Date.now() - m.ts;
+    if (!m.switches.length) delete m.switches;
     c.messages.push(m);
     c.updated = Date.now(); saveConvs();
     renderChat();
@@ -373,9 +417,72 @@
     } catch (_) { /* jamais bloquant */ }
   }
 
+  // ---------------- Longueur des réponses, historique borné, encyclopédies, Savoir Ivass ----------------
+  const LENGTH = {
+    court: 'LONGUEUR : réponds en 3 à 6 phrases au plus (ou une courte liste), sans introduction ni conclusion. Développe seulement si on te le demande.',
+    equilibre: 'LONGUEUR : va droit au but. Donne d’abord la réponse en une ou deux phrases, puis seulement les détails utiles. Pas de préambule, pas de reformulation de la question, pas de récapitulatif final.',
+    detaille: '',
+  };
+  /** L'IA reçoit les derniers échanges (60 000 caractères au plus) au lieu de toute la discussion : plus rapide, moins de tokens. */
+  function trimHistory(h, maxChars = 60000) {
+    const out = []; let total = 0;
+    for (let i = h.length - 1; i >= 0; i--) {
+      total += String(h[i].content || '').length;
+      if (total > maxChars && out.length >= 2) break;
+      out.unshift(h[i]);
+    }
+    while (out.length && out[0].role !== 'user') out.shift();
+    return out;
+  }
+  const encUA = { 'Api-User-Agent': 'IvassAI-Mobile (assistant personnel ; https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/)' };
+  const encCache = new Map();
+  async function encFetch(url) {
+    const hit = encCache.get(url);
+    if (hit && Date.now() - hit.at < 5 * 60e3) return hit.body;
+    const r = await N.http({ url, headers: encUA, timeout: 8000 });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    encCache.set(url, { at: Date.now(), body: r.body });
+    if (encCache.size > 150) encCache.delete(encCache.keys().next().value);
+    return r.body;
+  }
+  const encGet = async (u) => JSON.parse(await encFetch(u));
+  const encGetText = (u) => encFetch(u);
+  /** Ivass apprend : chaque source utile devient une fiche de la bibliothèque (jamais la météo ni les taux). */
+  function learnFromEncyclo(docs) {
+    let added = 0;
+    for (const d of docs) {
+      const en = window.IvassEncyclo.toEntry(d);
+      if (!en || S.lib.list.some((x) => x.title === en.title && (x.tags || []).includes('encyclopedie'))) continue;
+      S.lib.list.push({ id: uid(), title: en.title, text: en.content, kind: 'knowledge', tags: en.tags, created: Date.now(), updated: Date.now() });
+      added++;
+    }
+    if (added) saveLib();
+  }
+  /** 🌍 Savoir Ivass : le savoir publié par le créateur (nettoyé, sans vie privée), relu au plus toutes les 12 h. */
+  async function receiveSavoir(force) {
+    if (S.settings.savoir === false || !S.config.pageUrl) return;
+    if (!force && Date.now() - (S.savoir.fetched || 0) < 12 * 3600e3) return;
+    const base = S.config.pageUrl.replace(/\/*$/, '/') + 'savoir/';
+    const get = async (u) => { const r = await N.http({ url: u, timeout: 20000 }); if (r.status === 404) return null; if (!r.ok) throw new Error('HTTP ' + r.status); return JSON.parse(r.body); };
+    const index = await get(base + 'index.json?t=' + Date.now());
+    S.savoir.fetched = Date.now();
+    if (!index || index.format !== 'ivass-savoir' || !Array.isArray(index.parts)) { N.write('savoir.json', S.savoir); return; }
+    if (index.hash === S.savoir.hash && !force) { N.write('savoir.json', S.savoir); return; }
+    const entries = [];
+    for (const p of index.parts.slice(0, 200)) {
+      const part = await get(base + encodeURIComponent(p.file) + '?h=' + p.hash);
+      for (const e of (part && part.entries) || []) {
+        if (!e || !/^sv-[0-9a-f]{16}$/.test(e.id || '')) continue;
+        entries.push({ id: e.id, title: String(e.title || '').slice(0, 200), text: String(e.content || '').slice(0, 60000), kind: 'savoir', tags: (e.tags || []).slice(0, 10).map(String), updated: e.at || 0 });
+      }
+    }
+    S.savoir = { hash: index.hash, at: index.at || '', fetched: Date.now(), entries };
+    N.write('savoir.json', S.savoir);
+  }
+
   // ---------------- Hors connexion : la bibliothèque répond ----------------
   function offlineAnswer(q) {
-    const hits = S.lib.list.length ? window.IvassLib.search(S.lib.list, q, 3) : [];
+    const hits = window.IvassLib.contextForMany([S.lib.list, S.settings.savoir !== false ? S.savoir.entries : []], q, 4000).hits.slice(0, 3);
     if (!hits.length) return '📴 **Pas de connexion Internet** et rien dans votre bibliothèque sur ce sujet.\n\nVotre question est gardée dans la discussion : touchez ↻ dès que le réseau revient.';
     return '📴 **Pas de connexion Internet.** Voici ce que dit votre bibliothèque :\n\n' +
       hits.map((h) => `### ${h.title}\n${h.text.length > 1200 ? h.text.slice(0, 1200) + '…' : h.text}`).join('\n\n') +
@@ -501,6 +608,13 @@
           <div style="display:grid;gap:8px;margin-top:10px"><input class="field" id="cuName" placeholder="Nom (ex. Mon serveur)"><input class="field" id="cuUrl" placeholder="https://…/v1"><input class="field" id="cuKey" placeholder="Clé (facultatif)"><input class="field" id="cuModel" placeholder="Modèle (ex. llama-3.3-70b)"><button class="btn" id="cuAdd">Ajouter</button></div>
         </details>
       </div>
+      <div class="card"><h3>⚡ Réponses</h3>
+        <label class="help" for="lenF">Longueur des réponses</label>
+        <select class="field" id="lenF"><option value="court">Courtes — l’essentiel en quelques phrases</option><option value="equilibre">Équilibrées — droit au but (conseillé)</option><option value="detaille">Détaillées — explications complètes</option></select>
+        <label class="check" style="margin-top:8px"><input type="checkbox" id="encF"><span>🌍 Consulter les encyclopédies libres (Wikipédia, Wiktionnaire, OpenAlex…) quand la bibliothèque ne connaît pas le sujet, et apprendre ce qui est trouvé</span></label>
+        <label class="check"><input type="checkbox" id="svF"><span>🌍 Utiliser le Savoir Ivass, partagé par le créateur d’Ivass AI (${S.savoir.entries.length} fiche(s) reçue(s))</span></label>
+        <label class="check"><input type="checkbox" id="routeF"><span>Afficher le nom de l’IA utilisée (sinon : bouton ⓘ sous chaque réponse)</span></label>
+      </div>
       <div class="card"><h3>🧭 Mes consignes</h3><p class="help">Ce que l’IA doit toujours savoir ou respecter (ton, métier, format…).</p>
         <textarea class="field" id="instrF" placeholder="Ex. : Je suis technicien chauffagiste. Réponds court, avec des étapes numérotées.">${esc(S.settings.instructions)}</textarea></div>
       <div class="card"><h3>🤝 Améliorer Ivass AI <span class="muted" style="font-weight:400;font-size:13px">— facultatif</span></h3>
@@ -549,6 +663,14 @@
         };
       });
       $('#instrF', r).onchange = (e) => { S.settings.instructions = e.target.value.slice(0, 4000); saveSettings(); };
+      $('#lenF', r).value = S.settings.answerLength || 'equilibre';
+      $('#encF', r).checked = S.settings.encyclo !== false;
+      $('#svF', r).checked = S.settings.savoir !== false;
+      $('#routeF', r).checked = !!S.settings.showRoute;
+      $('#lenF', r).onchange = (e) => { S.settings.answerLength = e.target.value; saveSettings(); };
+      $('#encF', r).onchange = (e) => { S.settings.encyclo = e.target.checked; saveSettings(); };
+      $('#svF', r).onchange = (e) => { S.settings.savoir = e.target.checked; saveSettings(); if (e.target.checked) receiveSavoir(true).then(() => N.toast(`🌍 Savoir Ivass : ${S.savoir.entries.length} fiche(s)`)).catch(() => {}); };
+      $('#routeF', r).onchange = (e) => { S.settings.showRoute = e.target.checked; saveSettings(); renderChat(); };
       const drawLook = () => { $('#lookBox', r).innerHTML = lookHTML(); bindLook($('#lookBox', r), drawLook); };
       drawLook();
       $('#exportBtn', r).onclick = () => N.share(JSON.stringify({ format: 'ivass-mobile-export-1', conversations: S.convs.list, bibliotheque: S.lib.list }, null, 1));
@@ -853,7 +975,7 @@
   }
   fetch('config.json').then((r) => r.json()).then((c) => { S.config = c || {}; }).catch(() => {})
     .then(remoteConfig)
-    .finally(() => { if (S.settings.sync.auto) syncNow(false); flushSoon(15000); setTimeout(() => checkUpdate(false), 4000); });
+    .finally(() => { if (S.settings.sync.auto) syncNow(false); flushSoon(15000); setTimeout(() => checkUpdate(false), 4000); setTimeout(() => receiveSavoir(false).catch(() => {}), 8000); });
   setInterval(() => checkUpdate(false), 6 * 3600e3);
   setInterval(() => contrib.flush().catch(() => {}), 10 * 60000);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.settings.sync.auto) syncNow(false); });

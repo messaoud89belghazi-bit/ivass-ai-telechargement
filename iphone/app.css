@@ -330,3 +330,14 @@ html, body { overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
 .lvr-video { width: 100%; margin-top: 8px; border-radius: 12px; background: #000; }
 @keyframes lvrPulse { 50% { opacity: .55; } }
 .news-badge { display: inline-block; min-width: 18px; padding: 0 6px; margin-left: 6px; border-radius: 99px; background: #ef4444; color: #fff; font-size: 12px; line-height: 18px; text-align: center; }
+
+/* ---------- 1.4 : ⓘ Coulisses et sources des encyclopédies ---------- */
+.msg .backstage { display: none; margin: 6px 4px 0; padding: 8px 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--panel); font-size: 12.5px; }
+.msg.show-bs .backstage { display: block; }
+.msg .backstage .bs-row { display: flex; gap: 10px; justify-content: space-between; padding: 3px 0; border-bottom: 1px dashed var(--border); }
+.msg .backstage .bs-row:last-child { border-bottom: 0; }
+.msg .backstage .bs-row span { color: var(--muted); }
+.msg .backstage .bs-row b { font-weight: 500; text-align: right; overflow-wrap: anywhere; }
+.msg .meta button.on { color: var(--accent); }
+.msg .enc-src { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 4px 0; }
+.msg .enc-src a { font-size: 12px; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); text-decoration: none; }

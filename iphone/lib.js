@@ -5,8 +5,8 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
   const STOP = new Set('le la les un une des de du d l et ou en au aux a à ce ces cet cette est sont pour par sur dans avec sans que qui quoi dont il elle ils elles on nous vous je tu me te se ne pas plus mon ma mes ton ta tes son sa ses leur leurs y the of and to in is for on with'.split(' '));
-  const WEIGHT = { competence: 1.5, knowledge: 1.3, methode: 1.25, video: 1.15, code: 1.1, project: 1, task: 1, note: 1, transcript: 0.6 };
-  const KINDS = { note: '📝 Note', methode: '🧭 Méthode', competence: '🎓 Compétence', knowledge: '💡 Fiche apprise', video: '🎬 Vidéo', code: '💻 Code', project: '📁 Projet', task: '✅ Tâche', transcript: '📜 Transcription' };
+  const WEIGHT = { savoir: 1.2, competence: 1.5, knowledge: 1.3, methode: 1.25, video: 1.15, code: 1.1, project: 1, task: 1, note: 1, transcript: 0.6 };
+  const KINDS = { savoir: '🌍 Savoir Ivass', note: '📝 Note', methode: '🧭 Méthode', competence: '🎓 Compétence', knowledge: '💡 Fiche apprise', video: '🎬 Vidéo', code: '💻 Code', project: '📁 Projet', task: '✅ Tâche', transcript: '📜 Transcription' };
 
   const tokens = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .split(/[^a-z0-9]+/).filter((w) => w.length > 1 && !STOP.has(w));
@@ -24,12 +24,24 @@
     return (parts.length ? parts : ['']).map((t, i) => ({ id: e.id, i, title: e.title || '', kind: e.kind || 'note', text: t }));
   }
 
+  // Passages découpés et tokenisés, gardés tant que la liste ne change pas (empreinte : taille + dates de mise à jour)
+  const CACHE = new WeakMap();
+  function docsOf(entries) {
+    let sig = entries.length;
+    for (const e of entries) sig = (sig * 31 + (e.updated || 0) + String(e.text || '').length) % 2147483647;
+    const hit = CACHE.get(entries);
+    if (hit && hit.sig === sig) return hit.docs;
+    const docs = [];
+    for (const e of entries) for (const c of chunks(e)) docs.push({ ...c, toks: tokens(c.title + ' ' + c.title + ' ' + (e.tags || []).join(' ') + ' ' + c.text) });
+    CACHE.set(entries, { sig, docs });
+    return docs;
+  }
+
   /** entries → résultats [{ id, title, kind, text, score }] */
   function search(entries, query, limit = 6) {
     const q = [...new Set(tokens(query))];
     if (!q.length) return [];
-    const docs = [];
-    for (const e of entries) for (const c of chunks(e)) docs.push({ ...c, toks: tokens(c.title + ' ' + c.title + ' ' + (e.tags || []).join(' ') + ' ' + c.text) });
+    const docs = docsOf(entries);
     if (!docs.length) return [];
     const N = docs.length;
     const avg = docs.reduce((s, d) => s + d.toks.length, 0) / N || 1;
@@ -61,5 +73,16 @@
     }
     return { text: out.trim(), hits: hits.slice(0, n) };
   }
-  return { search, contextFor, tokens, KINDS };
+  /** Plusieurs bibliothèques (la vôtre + le Savoir Ivass) : chacune garde son cache, les meilleurs passages sont fusionnés. */
+  function contextForMany(lists, query, maxChars = 6000) {
+    const hits = lists.filter((l) => l && l.length).flatMap((l) => search(l, query, 8)).sort((a, b) => b.score - a.score).slice(0, 8);
+    let out = '', n = 0;
+    for (const h of hits) {
+      const block = `[${++n}] ${h.title} (${KINDS[h.kind] || h.kind})\n${h.text}\n\n`;
+      if (out.length + block.length > maxChars) break;
+      out += block;
+    }
+    return { text: out.trim(), hits: hits.slice(0, n), top: hits.length ? hits[0].score : 0 };
+  }
+  return { search, contextFor, contextForMany, tokens, KINDS };
 });
