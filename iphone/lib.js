@@ -5,8 +5,8 @@
 })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
   const STOP = new Set('le la les un une des de du d l et ou en au aux a à ce ces cet cette est sont pour par sur dans avec sans que qui quoi dont il elle ils elles on nous vous je tu me te se ne pas plus mon ma mes ton ta tes son sa ses leur leurs y the of and to in is for on with'.split(' '));
-  const WEIGHT = { savoir: 1.2, competence: 1.5, knowledge: 1.3, methode: 1.25, video: 1.15, code: 1.1, project: 1, task: 1, note: 1, transcript: 0.6 };
-  const KINDS = { savoir: '🌍 Savoir Ivass', note: '📝 Note', methode: '🧭 Méthode', competence: '🎓 Compétence', knowledge: '💡 Fiche apprise', video: '🎬 Vidéo', code: '💻 Code', project: '📁 Projet', task: '✅ Tâche', transcript: '📜 Transcription' };
+  const WEIGHT = { savoir: 1.2, monde: 1.05, competence: 1.5, knowledge: 1.3, methode: 1.25, video: 1.15, code: 1.1, project: 1, task: 1, note: 1, transcript: 0.6 };
+  const KINDS = { savoir: '🌍 Savoir Ivass', monde: '📖 Encyclopédie apprise', note: '📝 Note', methode: '🧭 Méthode', competence: '🎓 Compétence', knowledge: '💡 Fiche apprise', video: '🎬 Vidéo', code: '💻 Code', project: '📁 Projet', task: '✅ Tâche', transcript: '📜 Transcription' };
 
   const tokens = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .split(/[^a-z0-9]+/).filter((w) => w.length > 1 && !STOP.has(w));

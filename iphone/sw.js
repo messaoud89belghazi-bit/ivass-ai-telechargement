@@ -5,10 +5,10 @@
  * VERSION est réécrit à chaque publication (outils/web.mjs) : c'est ce qui déclenche la mise à jour sur les iPhone.
  */
 'use strict';
-const VERSION = '1.4.25-mvrgiecz';
+const VERSION = '1.5.26-mvtg3exy';
 const CACHE = 'ivass-ai-' + VERSION;
 const SHELL = [
-  './', 'index.html', 'app.css', 'web-version.js', 'pwa.js', 'native.js', 'platforms.js', 'markdown.js', 'lib.js', 'encyclo.js', 'sync.js',
+  './', 'index.html', 'app.css', 'web-version.js', 'pwa.js', 'native.js', 'platforms.js', 'markdown.js', 'lib.js', 'encyclo.js', 'fichiers.js', 'sync.js',
   'nacl-fast.min.js', 'contrib.js', 'core.js', 'livrables-core.js', 'livrables-ui.js', 'app.js', 'config.json', 'manifest.webmanifest',
   'emblem.png', 'wordmark.png', 'icon.png', 'qr.png', 'icones/apple-touch-icon.png', 'icones/icone-192.png',
   'fonts/cinzel-latin-400-normal.woff2', 'fonts/cinzel-latin-600-normal.woff2',

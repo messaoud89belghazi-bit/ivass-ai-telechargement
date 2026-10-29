@@ -17,7 +17,9 @@ const PLATFORMS = [
   { id: 'openai', name: 'OpenAI (ChatGPT)', type: 'openai', baseUrl: 'https://api.openai.com/v1', key: /^sk-(proj|svcacct|admin)-|^sk-[A-Za-z0-9]{40,}$/, priority: 2,
     prefer: [/^gpt-5(\.\d)?$/, /^gpt-5/, /^gpt-4\.1$/, /^gpt-4o$/, /^o\d/, /^gpt-4/], keyUrl: 'https://platform.openai.com/api-keys' },
   { id: 'gemini', name: 'Google Gemini', type: 'gemini', baseUrl: 'https://generativelanguage.googleapis.com', key: /^AIza[0-9A-Za-z_-]{30,}$/, priority: 2,
-    prefer: [/^gemini-\d(\.\d)?-pro$/, /^gemini-\d(\.\d)?-flash$/, /^gemini-.*-pro/, /^gemini-.*flash(?!.*lite)/, /^gemini/], keyUrl: 'https://aistudio.google.com/app/apikey' },
+    // Flash d'abord : une clé gratuite n'a souvent AUCUN quota pour les modèles « Pro » (erreur « limit: 0 »)
+    prefer: [/^gemini-\d+(\.\d+)?-flash$/, /^gemini-flash-latest$/, /^gemini-\d+(\.\d+)?-flash-lite$/, /^gemini-.*flash(?!.*(lite|thinking))/, /^gemini-\d+(\.\d+)?-pro$/, /^gemini-.*-pro/, /^gemini/],
+    free: 'Gratuit avec un compte Google (limites par minute et par jour)', keyUrl: 'https://aistudio.google.com/app/apikey' },
   { id: 'groq', name: 'Groq (ultra-rapide)', type: 'openai', baseUrl: 'https://api.groq.com/openai/v1', key: /^gsk_/, priority: 3,
     prefer: [/llama-3\.3-70b/, /qwen.*coder/, /deepseek-r1/, /llama.*70b/, /gpt-oss/, /llama/], keyUrl: 'https://console.groq.com/keys' },
   { id: 'xai', name: 'xAI (Grok)', type: 'openai', baseUrl: 'https://api.x.ai/v1', key: /^xai-/, priority: 3,
@@ -41,6 +43,24 @@ const PLATFORMS = [
     prefer: [/Qwen.*Coder/i, /Llama-3\.3-70B/i, /DeepSeek-V3/i], keyUrl: 'https://api.together.ai/settings/api-keys' },
   { id: 'cohere', name: 'Cohere', type: 'openai', baseUrl: 'https://api.cohere.ai/compatibility/v1', probe: /^[A-Za-z0-9]{40}$/, priority: 5,
     prefer: [/command-a/, /command-r-plus/, /command/], keyUrl: 'https://dashboard.cohere.com/api-keys' },
+  // Gratuites avec un compte (clé à coller)
+  { id: 'zai', name: 'Z.AI (GLM)', type: 'openai', baseUrl: 'https://api.z.ai/api/paas/v4', probe: /^[0-9a-f]{32}\.[A-Za-z0-9]{16}$/, priority: 5,
+    models: ['glm-4.5-flash'], prefer: [/flash/, /glm/], free: 'GLM-4.5-Flash gratuit', keyUrl: 'https://z.ai/manage-apikey/apikey-list' },
+  { id: 'ollamacloud', name: 'Ollama Cloud', type: 'openai', baseUrl: 'https://ollama.com/v1', priority: 5, manual: true,
+    prefer: [/gpt-oss/, /qwen/, /deepseek/], free: 'Crédits gratuits chaque mois', keyUrl: 'https://ollama.com/settings/keys' },
+];
+
+/**
+ * IA utilisables SANS clé (services publics, limites strictes par adresse IP). Désactivées par défaut :
+ * l'utilisateur les active lui-même (ce qu'il écrit part chez ces services). Elles servent surtout de secours.
+ */
+const KEYLESS = [
+  { id: 'pollinations', name: 'Pollinations (sans clé)', type: 'openai', baseUrl: 'https://text.pollinations.ai/v1', models: ['openai'], priority: 8, noKey: true,
+    limit: '1 demande à la fois, 30 s entre deux', site: 'https://pollinations.ai' },
+  { id: 'llm7', name: 'LLM7.io (sans clé)', type: 'openai', baseUrl: 'https://api.llm7.io/v1', models: ['gpt-4o-mini', 'mistral-small-3.1-24b', 'qwen2.5-coder-32b'], priority: 8, noKey: true,
+    limit: 'quelques dizaines de demandes par minute', site: 'https://llm7.io' },
+  { id: 'ovh', name: 'OVHcloud AI Endpoints (sans clé)', type: 'openai', baseUrl: 'https://oai.endpoints.kepler.ai.cloud.ovh.net/v1', models: ['gpt-oss-120b'], priority: 9, noKey: true,
+    limit: '2 demandes par minute', site: 'https://www.ovhcloud.com/fr/public-cloud/ai-endpoints/' },
 ];
 
 /** Serveurs d'IA qui tournent sur ce PC, recherchés automatiquement. */
@@ -141,5 +161,5 @@ function mergeDuplicates(providers, decKey = (x) => x) {
   return { providers: out, merged };
 }
 
-module.exports = { PLATFORMS, LOCAL_SERVERS, detectKey, rankModels, rankLocal, sizeOf, platformOf, mergeDuplicates, normUrl, cleanKey, NOT_CHAT };
+module.exports = { KEYLESS, PLATFORMS, LOCAL_SERVERS, detectKey, rankModels, rankLocal, sizeOf, platformOf, mergeDuplicates, normUrl, cleanKey, NOT_CHAT };
 ; window.Platforms = module.exports; })();

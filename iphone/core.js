@@ -22,6 +22,13 @@
   }
 
   /** Découpe un flux SSE arrivant par morceaux en lignes « data: ». */
+  /** Erreur propre à UN modèle (on peut essayer un autre modèle de la même plateforme). */
+  function modelSpecific(e) {
+    const m = String(e && e.message || '');
+    if (/limit:\s*0\b|free_tier|for this model|per model|model.{0,40}(not found|not supported|does not exist|is not available|deprecated|retired|decommission)|not support(ed)? (image|vision|multimodal)|image input|invalid model|unknown model/i.test(m)) return true;
+    return e && (e.status === 404 || (e.status === 400 && /model/i.test(m)));
+  }
+
   function sseParser(onData) {
     let buf = '';
     const line = (l) => { l = l.replace(/\r$/, ''); if (l.startsWith('data:')) { const d = l.slice(5).trim(); if (d && d !== '[DONE]') onData(d); } };
@@ -43,23 +50,45 @@
   }
   const toGemini = (msgs) => toAnthropic(msgs).map((m) => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] }));
 
+  /**
+   * Pièces jointes du DERNIER message de l'utilisateur : att = { images: [{ mime, data }], video: { mime, data } | null }
+   * (data = base64). Images : tous les modèles qui voient ; vidéo : Gemini seulement (les autres reçoivent une note).
+   */
+  function withAttachments(type, msgs, att) {
+    if (!att || (!(att.images && att.images.length) && !att.video)) return msgs;
+    const out = msgs.map((m) => ({ ...m }));
+    let i = out.length - 1; while (i >= 0 && out[i].role !== 'user') i--;
+    if (i < 0) return msgs;
+    const text = String(out[i].content || '');
+    const imgs = att.images || [];
+    if (type === 'anthropic') out[i].content = [...imgs.map((x) => ({ type: 'image', source: { type: 'base64', media_type: x.mime, data: x.data } })), { type: 'text', text: text + (att.video ? '\n\n(Une vidéo est jointe : seule Gemini peut la regarder.)' : '') }];
+    else if (type === 'gemini') out[i].parts = [...imgs, ...(att.video ? [att.video] : [])].map((x) => ({ inline_data: { mime_type: x.mime, data: x.data } })).concat([{ text }]);
+    else out[i].content = [{ type: 'text', text: text + (att.video ? '\n\n(Une vidéo est jointe : seule Gemini peut la regarder.)' : '') }, ...imgs.map((x) => ({ type: 'image_url', image_url: { url: `data:${x.mime};base64,${x.data}` } }))];
+    return out;
+  }
+
   function buildRequest(p, key, model, messages, system, params) {
     const base = trim(p.baseUrl);
     const headers = { 'content-type': 'application/json' };
+    const att = params && params.attach;
     if (p.type === 'anthropic') {
       headers['x-api-key'] = key; headers['anthropic-version'] = '2023-06-01';
-      const body = { model, max_tokens: params.maxTokens || 8192, messages: toAnthropic(messages), stream: true };
+      const msgs = toAnthropic(messages);
+      const body = { model, max_tokens: params.maxTokens || 8192, messages: withAttachments('anthropic', msgs, att), stream: true };
       if (system) body.system = system;
       return { url: `${base}/v1/messages`, headers, body };
     }
     if (p.type === 'gemini') {
       headers['x-goog-api-key'] = key;
-      const body = { contents: toGemini(messages), generationConfig: params.maxTokens ? { maxOutputTokens: params.maxTokens } : {} };
+      const contents = toGemini(messages);
+      if (att) { const w = withAttachments('gemini', contents.map((c) => ({ role: c.role === 'model' ? 'assistant' : 'user', content: c.parts[0].text })), att); const last = w[w.length - 1]; if (last.parts) contents[contents.length - 1].parts = last.parts; }
+      const body = { contents, generationConfig: params.maxTokens ? { maxOutputTokens: params.maxTokens } : {} };
       if (system) body.systemInstruction = { parts: [{ text: system }] };
       return { url: `${base}/v1beta/models/${encodeURIComponent(model)}:streamGenerateContent?alt=sse`, headers, body };
     }
     if (key) headers.authorization = `Bearer ${key}`;
-    const body = { model, messages: [...(system ? [{ role: 'system', content: system }] : []), ...messages.map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content || '') }))], stream: true };
+    const plain = messages.map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content || '') }));
+    const body = { model, messages: [...(system ? [{ role: 'system', content: system }] : []), ...withAttachments('openai', plain, att)], stream: true };
     if (params.maxTokens) body.max_tokens = params.maxTokens;
     return { url: `${base}/chat/completions`, headers, body };
   }
@@ -94,7 +123,7 @@
         r = await http({ url: `${base}/v1beta/models?pageSize=200`, headers: { 'x-goog-api-key': key } });
         if (r.ok) ids = (JSON.parse(r.body).models || []).filter((m) => !m.supportedGenerationMethods || m.supportedGenerationMethods.includes('generateContent')).map((m) => String(m.name).replace(/^models\//, ''));
       } else {
-        const pl = P.PLATFORMS.find((x) => x.id === p.platform);
+        const pl = P.PLATFORMS.find((x) => x.id === p.platform) || (P.KEYLESS || []).find((x) => x.id === p.platform);
         if (pl && pl.models) return P.rankModels(pl.models, pl);
         r = await http({ url: `${base}/models`, headers: key ? { authorization: `Bearer ${key}` } : {} });
         if (r.ok) { const j = JSON.parse(r.body); ids = (j.data || j.models || []).map((m) => m.id || m.name); }
@@ -154,20 +183,26 @@
       const errors = [];
       for (const p of order) {
         const key = deps.getKey(p.id);
-        if (!key && p.type !== 'openai') continue;
+        if (!key && p.type !== 'openai' && !p.noKey) continue;
         let msgs = o.messages;
         if (done) msgs = [...o.messages, { role: 'assistant', content: done }, { role: 'user', content: 'Ta réponse précédente a été coupée. Continue EXACTEMENT là où elle s’arrête, sans répéter ni commenter.' }];
-        o.onStatus && o.onStatus({ provider: p.name, model: p.model });
-        try {
-          const t = await streamOne(p, key, p.model, msgs, o.system, (x) => { done += x; o.onText && o.onText(x); }, o.signal, { maxTokens: o.maxTokens });
-          void t;
-          return { text: done, provider: p.name, model: p.model, switches, errors };
-        } catch (e) {
-          if (o.signal && o.signal.aborted) throw new Error('Arrêté.');
-          errors.push(p.name + ' : ' + e.message);
-          switches.push(p.name);
-          o.onStatus && o.onStatus({ provider: p.name, model: p.model, failed: e.message });
+        // Un modèle refusé (quota « limit: 0 » des clés gratuites, modèle retiré, pas de vision…) n'élimine pas la
+        // plateforme : on essaie ses autres modèles avant de passer à l'IA suivante.
+        const models = [p.model, ...(p.models || []).filter((m) => m !== p.model)].slice(0, 4);
+        for (const model of models) {
+          o.onStatus && o.onStatus({ provider: p.name, model });
+          try {
+            await streamOne(p, key, model, msgs, o.system, (x) => { done += x; o.onText && o.onText(x); }, o.signal, { maxTokens: o.maxTokens, attach: o.attach });
+            if (model !== p.model) { p.model = model; o.onModelFix && o.onModelFix(p); }
+            return { text: done, provider: p.name, model, switches, errors };
+          } catch (e) {
+            if (o.signal && o.signal.aborted) throw new Error('Arrêté.');
+            errors.push(`${p.name} (${model}) : ${e.message}`);
+            o.onStatus && o.onStatus({ provider: p.name, model, failed: e.message });
+            if (done || !modelSpecific(e)) break; // panne de la plateforme, clé refusée ou réponse déjà commencée → IA suivante
+          }
         }
+        switches.push(p.name);
       }
       if (done) return { text: done, provider: '?', model: '?', switches, errors, incomplete: true };
       throw new Error('Tous les fournisseurs ont échoué :\n• ' + errors.join('\n• '));
@@ -212,6 +247,6 @@
       return t.length > 48 ? t.slice(0, 46).replace(/\s\S*$/, '') + '…' : t || 'Nouvelle discussion';
     }
 
-    return { listModels, addKey, streamOne, chat, deep, systemPrompt, titleOf, sseParser, fmtErr, buildRequest };
+    return { listModels, addKey, streamOne, chat, deep, systemPrompt, titleOf, sseParser, fmtErr, buildRequest, modelSpecific };
   };
 });

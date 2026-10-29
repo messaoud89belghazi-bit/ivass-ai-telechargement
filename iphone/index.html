@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' blob:; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https:; worker-src 'self'; manifest-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="theme-color" content="#08090b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -63,9 +63,13 @@
         <button data-mode="plan" class="mode">🗺️ Plan</button>
         <button data-mode="deep" class="mode">🧠 Profond</button>
         <button data-mode="pc" class="mode" title="Faire répondre Ivass AI sur votre PC (ses IA, y compris locales, et toute sa bibliothèque)">🖥️ Mon PC</button>
+        <button data-mode="solo" class="mode" title="Ivass répond tout seul, sans IA externe : bibliothèque, Savoir Ivass, encyclopédie apprise et encyclopédies libres">🌱 Ivass seul</button>
         <button id="libToggle" class="mode toggle on" title="Utiliser ma bibliothèque">📚 Mémoire</button>
       </div>
+      <div id="attachBar" class="attach-bar hidden"></div>
       <div class="input-row">
+        <button id="attachBtn" class="attach" aria-label="Joindre un fichier" title="Joindre des photos, une vidéo, un PDF, Word, Excel, PowerPoint ou un texte">📎</button>
+        <input id="fileInput" type="file" multiple hidden accept="image/*,video/*,.pdf,.doc,.docx,.xlsx,.xlsm,.pptx,.odt,.txt,.md,.csv,.json,.html,.js,.py,.java,.kt,.sql,.xml,.yaml,.yml,.log">
         <textarea id="input" rows="1" placeholder="Écrivez votre message…" enterkeyhint="send"></textarea>
         <button id="sendBtn" class="send" aria-label="Envoyer">➤</button>
       </div>
@@ -109,6 +113,7 @@
   <script src="markdown.js"></script>
   <script src="lib.js"></script>
   <script src="encyclo.js"></script>
+  <script src="fichiers.js"></script>
   <script src="sync.js"></script>
   <script src="nacl-fast.min.js"></script>
   <script src="contrib.js"></script>

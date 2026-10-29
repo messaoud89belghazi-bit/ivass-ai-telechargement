@@ -14,6 +14,8 @@
     convs: N.read('convs.json') || { list: [], deleted: {} },
     lib: N.read('library.json') || { list: [], deleted: {} },
     savoir: N.read('savoir.json') || { hash: '', at: '', fetched: 0, entries: [] },
+    monde: N.read('monde.json') || { hash: '', at: '', fetched: 0, entries: [] },
+    attach: [], sent: new Map(),
     cur: null, busy: null, config: {},
   };
   S.settings.sync = Object.assign({}, DEF.sync, S.settings.sync || {});
@@ -157,6 +159,7 @@
   }
   function activeLabel() {
     if (S.settings.mode === 'pc') return '🖥️ Mon PC — Ivass AI répond depuis votre ordinateur';
+    if (S.settings.mode === 'solo') return '🌱 Ivass seul — sans IA externe';
     const p = [...S.settings.providers].filter((x) => x.enabled !== false).sort((a, b) => (a.priority || 5) - (b.priority || 5))[0];
     if (!p) return 'Aucune IA — ajoutez une clé dans Réglages';
     return S.settings.showRoute ? `${p.name} · ${p.model}` : '✨ Prêt à répondre';
@@ -164,7 +167,9 @@
   function msgEl(m, i, c) {
     const d = document.createElement('div');
     d.className = 'msg ' + (m.role === 'user' ? 'user' : 'ai');
-    if (m.role === 'user') d.innerHTML = `<div class="bubble">${esc(m.content)}</div>`;
+    if (m.role === 'user') d.innerHTML = (m.thumbs && m.thumbs.length ? `<div class="thumbs">${m.thumbs.map((t) => `<img src="${esc(t)}" alt="">`).join('')}</div>` : '') +
+      (m.files && m.files.length ? `<div class="files">${m.files.map((f) => `<span>${f.kind === 'video' ? '🎬' : '📄'} ${esc(f.name)}</span>`).join('')}</div>` : '') +
+      `<div class="bubble">${esc(m.display != null ? m.display : m.content)}</div>`;
     else {
       d.innerHTML = `<div class="who"><img src="icon.png" alt="">Ivass AI</div>` +
         (m.notice ? `<div class="notice">${esc(m.notice)}</div>` : '') +
@@ -280,16 +285,51 @@
   $('#chips').onclick = (e) => { if (e.target.classList.contains('chip')) { input.value = e.target.textContent + ' : '; grow(); input.focus(); } };
 
   async function send(textArg) {
-    const text = (textArg != null ? textArg : input.value).trim();
-    if (!text || S.busy) return;
+    let text = (textArg != null ? textArg : input.value).trim();
+    const att = textArg != null ? [] : S.attach.filter((a) => !a.busy && !a.error);
+    if (S.attach.some((a) => a.busy)) return N.toast('Lecture des fichiers en cours…');
+    if ((!text && !att.length) || S.busy) return;
+    if (!text) text = att.some((a) => a.kind === 'image') ? 'Que vois-tu sur cette image ?' : att.some((a) => a.kind === 'video') ? 'Que se passe-t-il dans cette vidéo ?' : 'Résume ce document.';
     let c = conv(S.cur);
     if (!c) { c = { id: uid(), title: core.titleOf(text), created: Date.now(), updated: Date.now(), messages: [] }; S.convs.list.push(c); S.cur = c.id; }
-    if (textArg == null) { input.value = ''; grow(); }
-    c.messages.push({ role: 'user', content: text, ts: Date.now() });
+    if (textArg == null) { input.value = ''; grow(); S.attach = []; drawAttach(); }
+    // le texte des documents part avec le message ; images et vidéo restent en mémoire pour l'IA (vignettes dans la discussion)
+    const docs = att.filter((a) => a.kind === 'doc');
+    const content = text + docs.map((a) => `\n\n--- Fichier joint : ${a.name} ---\n\`\`\`\n${a.text}\n\`\`\``).join('');
+    const um = { role: 'user', content, display: text, ts: Date.now() };
+    if (att.length) {
+      um.thumbs = att.filter((a) => a.kind === 'image').map((a) => a.thumb);
+      um.files = att.filter((a) => a.kind !== 'image').map((a) => ({ name: a.name, kind: a.kind }));
+      const vid = att.find((a) => a.kind === 'video');
+      S.sent.set(c.id, { images: att.filter((a) => a.kind === 'image').map((a) => ({ mime: a.mime, data: a.data })), video: vid ? { mime: vid.mime, data: vid.data } : null });
+    } else S.sent.delete(c.id);
+    c.messages.push(um);
     c.updated = Date.now(); saveConvs();
     renderChat();
     await answer(c);
   }
+  function drawAttach() {
+    const bar = $('#attachBar');
+    bar.classList.toggle('hidden', !S.attach.length);
+    bar.innerHTML = S.attach.map((a, i) => `<div class="chip${a.busy ? ' busy' : ''}" title="${esc(a.error || a.name)}">${a.thumb ? `<img src="${esc(a.thumb)}" alt="">` : `<span class="ic">${a.busy ? '⏳' : a.error ? '⚠️' : a.kind === 'video' ? '🎬' : '📄'}</span>`}<span class="nm">${esc(a.error ? a.error : a.name)}</span><button class="x" data-rm="${i}" aria-label="Retirer">✕</button></div>`).join('');
+  }
+  $('#attachBtn').onclick = () => $('#fileInput').click();
+  $('#attachBar').onclick = (e) => { const b = e.target.closest('[data-rm]'); if (b) { S.attach.splice(+b.dataset.rm, 1); drawAttach(); } };
+  $('#fileInput').onchange = async (e) => {
+    const files = [...e.target.files].slice(0, 8); e.target.value = '';
+    for (const f of files) {
+      const a = { name: f.name, kind: /^image\//.test(f.type) ? 'image' : /^video\//.test(f.type) ? 'video' : 'doc', busy: true };
+      if (a.kind === 'video' && S.attach.some((x) => x.kind === 'video')) { N.toast('Une seule vidéo par message'); continue; }
+      S.attach.push(a); drawAttach();
+      try { Object.assign(a, await window.IvassFichiers.read(f), { busy: false }); }
+      catch (err) { a.busy = false; a.error = err.message; N.toast(err.message); }
+      drawAttach();
+    }
+    S.attach = S.attach.filter((x) => !x.error);
+    drawAttach();
+    input.focus();
+  };
+
   function regenerate() {
     const c = conv(S.cur); if (!c || S.busy) return;
     if (c.messages.length && c.messages[c.messages.length - 1].role === 'assistant') c.messages.pop();
@@ -309,7 +349,7 @@
   }
   async function answer(c) {
     const hasAI = S.settings.providers.some((p) => p.enabled !== false && p.model);
-    if (!hasAI && S.settings.mode !== 'pc') {
+    if (!hasAI && S.settings.mode !== 'pc' && S.settings.mode !== 'solo') {
       if (syncCode() && syncServer()) { S.settings.mode = 'pc'; saveSettings(); paintModes(); }
       else {
         c.messages.push({ role: 'assistant', content: '', setup: true, ts: Date.now() });
@@ -341,14 +381,15 @@
     };
     const last = c.messages[c.messages.length - 1].content;
     let ctx = '', libTop = 0;
-    if (S.settings.useLib && (S.lib.list.length || S.savoir.entries.length)) {
-      const lc = window.IvassLib.contextForMany([S.lib.list, S.settings.savoir !== false ? S.savoir.entries : []], last);
+    if (S.settings.useLib && (S.lib.list.length || S.savoir.entries.length || S.monde.entries.length)) {
+      const lc = window.IvassLib.contextForMany(knowledge(), last);
       ctx = lc.text; libTop = lc.top; m.libHits = lc.hits.length;
     }
     const mode = S.settings.mode;
     // 🌍 Encyclopédies libres quand la bibliothèque ne connaît pas (encore) le sujet
     const EN = window.IvassEncyclo;
-    if (EN && mode !== 'pc' && S.settings.encyclo !== false && navigator.onLine && EN.worth(last)) {
+    let encDocs = [];
+    if (EN && mode !== 'pc' && (S.settings.encyclo !== false || mode === 'solo') && navigator.onLine && EN.worth(last)) {
       const volatileQ = EN.pick(last).some((id) => EN.SOURCES[id] && EN.SOURCES[id].volatile);
       if (!ctx || libTop < 3 || volatileQ) {
         try {
@@ -356,7 +397,7 @@
           const r = await EN.lookup(last, { get: encGet, getText: encGetText, timeoutMs: 4500, limit: 4 });
           if (r.docs.length) {
             ctx = (ctx ? ctx + '\n\n' : '') + EN.contextText(r.docs);
-            m.enc = r.docs.map((d) => ({ title: d.title, url: d.url, name: d.name, icon: d.icon }));
+            m.enc = r.docs.map((d) => ({ title: d.title, url: d.url, name: d.name, icon: d.icon })); encDocs = r.docs;
             learnFromEncyclo(r.docs);
           }
         } catch (_) { /* sans encyclopédie */ }
@@ -364,8 +405,20 @@
       }
     }
     m.switches = [];
+    const att = S.sent.get(c.id) || null;
+    // 🌱 Ivass seul : réponse composée par Ivass lui-même, sans IA externe
+    if (mode === 'solo') {
+      m.content = soloAnswer(last, encDocs); m.model = 'Ivass (autonome)'; m.provider = 'Ivass';
+      el.remove(); S.busy = null; $('#sendBtn').classList.remove('stop'); $('#sendBtn').textContent = '➤';
+      m.mode = mode; m.ms = Date.now() - m.ts; if (!m.switches.length) delete m.switches;
+      c.messages.push(m); c.updated = Date.now(); saveConvs(); renderChat(); autoSync();
+      return;
+    }
     const opts = {
-      providers: S.settings.providers,
+      // une vidéo jointe : Gemini (la seule à savoir la regarder) passe en premier
+      providers: att && att.video ? [...S.settings.providers].sort((a, b) => (b.type === 'gemini') - (a.type === 'gemini') || (a.priority || 5) - (b.priority || 5)).map((p, i) => ({ ...p, priority: i })) : S.settings.providers,
+      attach: att,
+      onModelFix: (p) => { const real = S.settings.providers.find((x) => x.id === p.id); if (real) { real.model = p.model; saveSettings(); } },
       messages: trimHistory(c.messages.filter((x) => !x.setup).map((x) => ({ role: x.role, content: x.content })).filter((x) => x.content)),
       system: core.systemPrompt({ extra: S.settings.instructions, context: ctx, mode }) + (LENGTH[S.settings.answerLength || 'equilibre'] ? '\n\n' + LENGTH[S.settings.answerLength || 'equilibre'] : '') + (LV ? '\n\n' + LV.RULES : ''),
       signal: ctrl.signal,
@@ -395,7 +448,12 @@
       const offline = e.offline || !navigator.onLine || /Réseau :|Unable to resolve|failed to connect|timeout|UnknownHost|Failed to fetch/i.test(e.message);
       if (m.content) m.notice = 'Interrompu : ' + e.message.split('\n')[0];
       else if (offline && !ctrl.signal.aborted) { m.content = offlineAnswer(last); m.notice = '📴 Hors connexion — réponse tirée de votre bibliothèque (sans IA)'; m.model = 'bibliothèque'; }
-      else m.error = e.message;
+      else if (!ctrl.signal.aborted && /Tous les fournisseurs|Aucun fournisseur/.test(e.message)) {
+        // aucune IA n'a pu répondre : Ivass répond tout seul avec ce qu'il sait, le détail est dans ⓘ Coulisses
+        m.content = soloAnswer(last, encDocs); m.model = 'Ivass (autonome)'; m.provider = 'Ivass';
+        m.notice = '🌱 Aucune IA disponible : Ivass répond avec ses propres connaissances';
+        for (const x of String(e.message).split('\n• ').slice(1)) m.switches.push(x);
+      } else m.error = e.message;
     } finally {
       S.busy = null;
       $('#sendBtn').classList.remove('stop'); $('#sendBtn').textContent = '➤';
@@ -458,6 +516,66 @@
     }
     if (added) saveLib();
   }
+  /** Toutes les connaissances d'Ivass sur ce téléphone : votre bibliothèque, le Savoir Ivass, l'encyclopédie apprise dans le cloud. */
+  function knowledge() {
+    return [S.lib.list, S.settings.savoir !== false ? S.savoir.entries : [], S.settings.monde !== false ? S.monde.entries : []];
+  }
+
+  /**
+   * 🌱 Ivass seul : Ivass compose LUI-MÊME la réponse, sans IA externe, à partir de ce qu'il sait (bibliothèque,
+   * Savoir Ivass, encyclopédie apprise) et des encyclopédies consultées : les phrases les plus proches de la question,
+   * regroupées par source et citées. Il ne raisonne pas comme un grand modèle : il retrouve et assemble.
+   */
+  function soloAnswer(q, encDocs = []) {
+    const L = window.IvassLib;
+    const qt = new Set(L.tokens(q));
+    // titre qui correspond à la question → les premières phrases de la fiche comptent même sans mot commun
+    const best = (text, n, title) => {
+      const flat = String(text || '').replace(/\s+/g, ' ').trim();
+      const onTitle = L.tokens(title || '').some((t) => qt.has(t));
+      if (onTitle && flat.length <= 400) return flat.length >= 8 ? [flat] : [];
+      const sents = flat.split(/(?<=[.!?…])\s+(?=[A-ZÀ-ÖØ-Þ0-9«"(])/).filter((x) => x.length > 15 && x.length < 600);
+      const scored = sents.map((x, i) => ({ x, i, s: L.tokens(x).filter((t) => qt.has(t)).length + (i === 0 ? 0.5 : 0) + (onTitle && i < 2 ? 0.6 : 0) })).filter((o) => o.s > 0.5);
+      return scored.sort((a, b) => b.s - a.s).slice(0, n).sort((a, b) => a.i - b.i).map((o) => o.x);
+    };
+    const parts = [], refs = [];
+    for (const h of L.contextForMany(knowledge(), q, 12000).hits.slice(0, 4)) {
+      const lines = best(h.text, 3, h.title);
+      if (!lines.length) continue;
+      refs.push(`[${refs.length + 1}] ${h.title}${h.kind === 'savoir' ? ' (🌍 Savoir Ivass)' : h.kind === 'monde' ? ' (📖 encyclopédie apprise)' : ' (📚 bibliothèque)'}`);
+      parts.push(`**${h.title}** — ${lines.join(' ')} [${refs.length}]`);
+    }
+    encDocs.slice(0, 3).forEach((d, i) => {
+      const lines = best(d.text, 3, d.title);
+      if (lines.length) parts.push(`**${d.title}** — ${lines.join(' ')} [E${i + 1}]`);
+    });
+    if (!parts.length) return '🌱 Je ne trouve encore rien sur ce sujet dans mes connaissances.\n\nPour que j’apprenne : activez les 🌍 encyclopédies libres (⚙️ Réglages → Réponses), ajoutez une fiche dans 📚 Bibliothèque, ou ajoutez une IA (même sans clé).';
+    return `🌱 **Réponse d’Ivass, avec ses propres connaissances** (sans IA externe)\n\n${parts.join('\n\n')}` +
+      (refs.length ? `\n\n> Sources : ${refs.join(' · ')}` : '') + (encDocs.length ? `${refs.length ? ' · ' : '\n\n> Sources : '}${encDocs.slice(0, 3).map((d, i) => `[E${i + 1}] ${d.name}`).join(' · ')}` : '');
+  }
+
+  /** Paquet de connaissances publié sur la page (format « ivass-savoir ») : savoir/ (créateur) ou monde/ (apprentissage dans le cloud). */
+  async function receivePack(folder, file, kind, force) {
+    const cur = S[kind];
+    if (!force && Date.now() - (cur.fetched || 0) < 12 * 3600e3) return cur;
+    const base = S.config.pageUrl.replace(/\/*$/, '/') + folder + '/';
+    const get = async (u) => { const r = await N.http({ url: u, timeout: 20000 }); if (r.status === 404) return null; if (!r.ok) throw new Error('HTTP ' + r.status); return JSON.parse(r.body); };
+    const index = await get(base + 'index.json?t=' + Date.now());
+    cur.fetched = Date.now();
+    if (!index || index.format !== 'ivass-savoir' || !Array.isArray(index.parts) || (index.hash === cur.hash && !force)) { N.write(file, cur); return cur; }
+    const entries = [];
+    for (const p of index.parts.slice(0, 200)) {
+      const part = await get(base + encodeURIComponent(p.file) + '?h=' + p.hash);
+      for (const e of (part && part.entries) || []) {
+        if (!e || !/^(sv|mo)-[0-9a-f]{16}$/.test(e.id || '')) continue;
+        entries.push({ id: e.id, title: String(e.title || '').slice(0, 200), text: String(e.content || '').slice(0, 60000), kind, tags: (e.tags || []).slice(0, 10).map(String), url: /^https:\/\//.test(e.url || '') ? e.url : '', updated: e.at || 0 });
+      }
+    }
+    S[kind] = { hash: index.hash, at: index.at || '', fetched: Date.now(), entries };
+    N.write(file, S[kind]);
+    return S[kind];
+  }
+
   /** 🌍 Savoir Ivass : le savoir publié par le créateur (nettoyé, sans vie privée), relu au plus toutes les 12 h. */
   async function receiveSavoir(force) {
     if (S.settings.savoir === false || !S.config.pageUrl) return;
@@ -608,11 +726,22 @@
           <div style="display:grid;gap:8px;margin-top:10px"><input class="field" id="cuName" placeholder="Nom (ex. Mon serveur)"><input class="field" id="cuUrl" placeholder="https://…/v1"><input class="field" id="cuKey" placeholder="Clé (facultatif)"><input class="field" id="cuModel" placeholder="Modèle (ex. llama-3.3-70b)"><button class="btn" id="cuAdd">Ajouter</button></div>
         </details>
       </div>
+      <div class="card"><h3>🆓 IA sans clé <span class="muted" style="font-weight:400;font-size:13px">— gratuites, limitées, en secours</span></h3>
+        <p class="help">Services publics utilisables sans compte. Ce que vous écrivez part chez eux : évitez les informations personnelles. Ils servent surtout quand vos autres IA sont épuisées.</p>
+        ${(window.Platforms.KEYLESS || []).map((k) => `<label class="check"><input type="checkbox" data-keyless="${esc(k.id)}" ${P.some((p) => p.platform === k.id) ? 'checked' : ''}><span><b>${esc(k.name.replace(' (sans clé)', ''))}</b> — ${esc(k.limit)}</span></label>`).join('')}
+      </div>
+      <div class="card"><h3>🎁 IA gratuites avec une clé</h3>
+        <p class="help">Créez un compte gratuit, copiez la clé, collez-la plus haut : Ivass reconnaît la plateforme toute seule. Vous pouvez ajouter autant de clés que vous voulez ; Ivass passe de l’une à l’autre quand une limite est atteinte.</p>
+        <div class="row" style="flex-wrap:wrap;gap:6px">${window.Platforms.PLATFORMS.filter((x) => x.keyUrl && /^(gemini|groq|openrouter|mistral|cerebras|nvidia|cohere|huggingface|zai|ollamacloud)$/.test(x.id)).map((x) => `<a class="btn sm" href="${esc(x.keyUrl)}" target="_blank" rel="noopener">${esc(x.name.replace(/ \(.*\)/, ''))}</a>`).join('')}</div>
+        <details style="margin-top:8px"><summary class="muted">Clé Ollama Cloud (non reconnue automatiquement)</summary>
+          <div class="row" style="margin-top:8px"><input class="field" id="olKey" placeholder="Clé Ollama Cloud" autocomplete="off"><button class="btn sm" id="olAdd">Ajouter</button></div></details>
+      </div>
       <div class="card"><h3>⚡ Réponses</h3>
         <label class="help" for="lenF">Longueur des réponses</label>
         <select class="field" id="lenF"><option value="court">Courtes — l’essentiel en quelques phrases</option><option value="equilibre">Équilibrées — droit au but (conseillé)</option><option value="detaille">Détaillées — explications complètes</option></select>
         <label class="check" style="margin-top:8px"><input type="checkbox" id="encF"><span>🌍 Consulter les encyclopédies libres (Wikipédia, Wiktionnaire, OpenAlex…) quand la bibliothèque ne connaît pas le sujet, et apprendre ce qui est trouvé</span></label>
         <label class="check"><input type="checkbox" id="svF"><span>🌍 Utiliser le Savoir Ivass, partagé par le créateur d’Ivass AI (${S.savoir.entries.length} fiche(s) reçue(s))</span></label>
+        <label class="check"><input type="checkbox" id="mondeF"><span>📖 Utiliser l’encyclopédie qu’Ivass apprend chaque jour dans le cloud, même quand vos appareils sont éteints (${S.monde.entries.length} article(s) reçu(s))</span></label>
         <label class="check"><input type="checkbox" id="routeF"><span>Afficher le nom de l’IA utilisée (sinon : bouton ⓘ sous chaque réponse)</span></label>
       </div>
       <div class="card"><h3>🧭 Mes consignes</h3><p class="help">Ce que l’IA doit toujours savoir ou respecter (ton, métier, format…).</p>
@@ -667,6 +796,20 @@
       $('#encF', r).checked = S.settings.encyclo !== false;
       $('#svF', r).checked = S.settings.savoir !== false;
       $('#routeF', r).checked = !!S.settings.showRoute;
+      $('#mondeF', r).checked = S.settings.monde !== false;
+      $('#mondeF', r).onchange = (e) => { S.settings.monde = e.target.checked; saveSettings(); if (e.target.checked) receivePack('monde', 'monde.json', 'monde', true).then((x) => N.toast(`📖 ${x.entries.length} article(s) reçu(s)`)).catch(() => N.toast('Encyclopédie pas encore disponible')); };
+      $$('[data-keyless]', r).forEach((cb) => { cb.onchange = () => {
+        const k = window.Platforms.KEYLESS.find((x) => x.id === cb.dataset.keyless);
+        if (cb.checked) { if (!S.settings.providers.some((p) => p.platform === k.id)) S.settings.providers.push({ id: k.id + '-' + uid().slice(-5), platform: k.id, name: k.name, type: k.type, baseUrl: k.baseUrl, model: k.models[0], models: k.models, priority: k.priority, enabled: true, noKey: true }); }
+        else S.settings.providers = S.settings.providers.filter((p) => p.platform !== k.id);
+        saveSettings(); openSettings();
+      }; });
+      $('#olAdd', r).onclick = () => {
+        const key = $('#olKey', r).value.trim(); if (key.length < 10) return N.toast('Collez la clé Ollama Cloud');
+        const pl = window.Platforms.PLATFORMS.find((x) => x.id === 'ollamacloud');
+        const p = { id: 'ollamacloud-' + uid().slice(-5), platform: 'ollamacloud', name: pl.name, type: 'openai', baseUrl: pl.baseUrl, model: 'gpt-oss:20b', models: ['gpt-oss:20b', 'gpt-oss:120b'], priority: 5, enabled: true };
+        N.secretSet('key:' + p.id, key); S.settings.providers.push(p); saveSettings(); N.toast('Ollama Cloud ajouté ✓'); openSettings();
+      };
       $('#lenF', r).onchange = (e) => { S.settings.answerLength = e.target.value; saveSettings(); };
       $('#encF', r).onchange = (e) => { S.settings.encyclo = e.target.checked; saveSettings(); };
       $('#svF', r).onchange = (e) => { S.settings.savoir = e.target.checked; saveSettings(); if (e.target.checked) receiveSavoir(true).then(() => N.toast(`🌍 Savoir Ivass : ${S.savoir.entries.length} fiche(s)`)).catch(() => {}); };
@@ -975,7 +1118,7 @@
   }
   fetch('config.json').then((r) => r.json()).then((c) => { S.config = c || {}; }).catch(() => {})
     .then(remoteConfig)
-    .finally(() => { if (S.settings.sync.auto) syncNow(false); flushSoon(15000); setTimeout(() => checkUpdate(false), 4000); setTimeout(() => receiveSavoir(false).catch(() => {}), 8000); });
+    .finally(() => { if (S.settings.sync.auto) syncNow(false); flushSoon(15000); setTimeout(() => checkUpdate(false), 4000); setTimeout(() => receiveSavoir(false).catch(() => {}), 8000); setTimeout(() => { if (S.settings.monde !== false && S.config.pageUrl) receivePack('monde', 'monde.json', 'monde', false).catch(() => {}); }, 12000); });
   setInterval(() => checkUpdate(false), 6 * 3600e3);
   setInterval(() => contrib.flush().catch(() => {}), 10 * 60000);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.settings.sync.auto) syncNow(false); });

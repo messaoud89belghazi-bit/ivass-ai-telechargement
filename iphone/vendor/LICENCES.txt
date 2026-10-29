@@ -4,3 +4,5 @@ Bibliothèques utilisées par Ivass AI Mobile pour créer les fichiers (toutes s
 - PptxGenJS (PowerPoint, inclut JSZip MIT/GPLv3 au choix) — licence MIT — https://github.com/gitbrent/PptxGenJS
 - pdfmake (PDF) — licence MIT — https://github.com/bpampuch/pdfmake
 - Police Roboto (vfs_fonts.js) — licence Apache 2.0 — https://fonts.google.com/specimen/Roboto
+
+pdf.js (vendor/pdfjs) — Mozilla Foundation — Apache License 2.0 (voir vendor/pdfjs/LICENSE.txt). Lecture des PDF joints.
