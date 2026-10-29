@@ -1,0 +1,96 @@
+{
+ "format": "ivass-savoir",
+ "version": 1,
+ "at": "2026-10-29T11:08:00.174Z",
+ "app": "apprentissage-quotidien",
+ "count": 396,
+ "hash": "02572963dbeb06396de3c7e628b8aa49",
+ "parts": [
+  {
+   "file": "base-arts.json",
+   "hash": "99e092ec107e03814ee71972b555cde4",
+   "count": 24
+  },
+  {
+   "file": "base-cuisine.json",
+   "hash": "9a91aecdc51adb55064d4b09d83fd5e3",
+   "count": 19
+  },
+  {
+   "file": "base-droit.json",
+   "hash": "5defba505d06a03fe513ae00681a02be",
+   "count": 21
+  },
+  {
+   "file": "base-economie.json",
+   "hash": "9fc83a1df57e985253f8615818c9046a",
+   "count": 25
+  },
+  {
+   "file": "base-geographie.json",
+   "hash": "80b31c9c32b0bb7cf63643e6dd31b6ab",
+   "count": 25
+  },
+  {
+   "file": "base-histoire.json",
+   "hash": "377af6eb8227a8a213af85224321faec",
+   "count": 25
+  },
+  {
+   "file": "base-langue.json",
+   "hash": "6000386373cc135b32ffabac3b013b0c",
+   "count": 18
+  },
+  {
+   "file": "base-maths.json",
+   "hash": "a9366a2f11fda189283ee7f3937808e2",
+   "count": 20
+  },
+  {
+   "file": "base-nature.json",
+   "hash": "96464c27ff2e76c8b0d8624c7057f69b",
+   "count": 19
+  },
+  {
+   "file": "base-numerique.json",
+   "hash": "570c19e1dd0a8af80e06d6263ad63aa4",
+   "count": 25
+  },
+  {
+   "file": "base-philosophie.json",
+   "hash": "7f62f965e1ceb46129e2b647c6f1e3ab",
+   "count": 21
+  },
+  {
+   "file": "base-pratique.json",
+   "hash": "b041949c74aa24803b9022cf50e5ef93",
+   "count": 15
+  },
+  {
+   "file": "base-sante.json",
+   "hash": "7f51f9a56b08f0c3b313f0e73df75fdf",
+   "count": 24
+  },
+  {
+   "file": "base-sciences.json",
+   "hash": "037741970223fc5823f5eb5afe28a89b",
+   "count": 25
+  },
+  {
+   "file": "base-sport.json",
+   "hash": "5027dffbc57e2f0a0bfbbb6fe5216394",
+   "count": 20
+  },
+  {
+   "file": "base-technique.json",
+   "hash": "e44242999dc5e73631eea8a2d89b34ba",
+   "count": 19
+  },
+  {
+   "file": "jour-2026-10-28.json",
+   "hash": "7151e5ffb54612a3004dbbb54bfe5779",
+   "count": 51
+  }
+ ],
+ "licence": "Textes issus de Wikipédia, licence CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/deed.fr) ; source et lien conservés dans chaque fiche."
+}
