@@ -1,0 +1,40 @@
+# 📖 Ivass AI apprend tous les jours, même quand vos appareils sont éteints.
+# Chaque matin, ce travail lit Wikipédia (article du jour, plus lus, actualité, éphémérides, un sujet approfondi)
+# et publie le résultat dans monde/. Les applications PC, Android et iPhone le téléchargent ensuite
+# (Android le fait aussi en arrière-plan, application fermée). Aucune clé, aucun secret : seulement des textes publics.
+name: Apprentissage quotidien d'Ivass
+
+on:
+  schedule:
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apprendre
+  cancel-in-progress: false
+
+jobs:
+  apprendre:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Lire Wikipédia et mettre à jour monde/
+        run: node outils/apprendre-monde.mjs monde
+      - name: Publier
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Ivass AI (apprentissage)"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add monde
+          if git diff --cached --quiet; then echo "Rien de nouveau."; exit 0; fi
+          git commit -q -m "📖 Apprentissage du $(date -u -d yesterday +%F)"
+          for i in 1 2 3; do git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0; sleep 5; done
+          exit 1
