@@ -1,10 +1,10 @@
 {
  "format": "ivass-savoir",
  "version": 1,
- "at": "2026-10-29T11:08:00.174Z",
+ "at": "2026-10-30T10:54:46.071Z",
  "app": "apprentissage-quotidien",
- "count": 396,
- "hash": "02572963dbeb06396de3c7e628b8aa49",
+ "count": 448,
+ "hash": "fe8562ad25041aa0b672730b4aa13e87",
  "parts": [
   {
    "file": "base-arts.json",
@@ -90,6 +90,11 @@
    "file": "jour-2026-10-28.json",
    "hash": "7151e5ffb54612a3004dbbb54bfe5779",
    "count": 51
+  },
+  {
+   "file": "jour-2026-10-29.json",
+   "hash": "5736e7e39f6621210ba869bb38bfb6bd",
+   "count": 52
   }
  ],
  "licence": "Textes issus de Wikipédia, licence CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/deed.fr) ; source et lien conservés dans chaque fiche."
