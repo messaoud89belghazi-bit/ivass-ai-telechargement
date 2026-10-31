@@ -5,14 +5,14 @@
  * VERSION est réécrit à chaque publication (outils/web.mjs) : c'est ce qui déclenche la mise à jour sur les iPhone.
  */
 'use strict';
-const VERSION = '1.6.27-mvvrxgqj';
+const VERSION = '1.7.28-mvwmpda7';
 const CACHE = 'ivass-ai-' + VERSION;
 const SHELL = [
   './', 'index.html', 'app.css', 'web-version.js', 'pwa.js', 'native.js', 'i18n.js', 'i18n-boot.js', 'platforms.js', 'markdown.js', 'lib.js', 'encyclo.js', 'fichiers.js', 'sync.js',
-  'nacl-fast.min.js', 'contrib.js', 'core.js', 'livrables-core.js', 'livrables-ui.js', 'app.js', 'config.json', 'manifest.webmanifest',
+  'nacl-fast.min.js', 'contrib.js', 'core.js', 'licence-core.js', 'offres.js', 'livrables-core.js', 'livrables-ui.js', 'app.js', 'config.json', 'manifest.webmanifest',
   'emblem.png', 'wordmark.png', 'icon.png', 'qr.png', 'icones/apple-touch-icon.png', 'icones/icone-192.png',
   'fonts/cinzel-latin-400-normal.woff2', 'fonts/cinzel-latin-600-normal.woff2',
-  'legal/CGU.md', 'legal/CONFIDENTIALITE.md', 'legal/MOBILE.md',
+  'legal/CGU.md', 'legal/CGV.md', 'legal/CONFIDENTIALITE.md', 'legal/MOBILE.md',
 ];
 
 self.addEventListener('install', (e) => {

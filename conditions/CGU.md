@@ -1,12 +1,12 @@
 # Conditions générales d'utilisation d'Ivass AI
 
-*Version 1 — en vigueur au 19 octobre 2026*
+*Version 2 — en vigueur au 31 octobre 2026*
 
 ## 1. Objet
 
-Ivass AI est un logiciel de bureau gratuit d'assistance par intelligence artificielle (programmation, rédaction, recherche, création graphique). Il est développé par **Messaoud BELGHAZI** (ci-après « l'éditeur »).
+Ivass AI est un logiciel d'assistance par intelligence artificielle (programmation, rédaction, recherche, création graphique), gratuit avec des offres payantes facultatives (Pro, Expert, clés API supplémentaires). Il est développé par **Messaoud BELGHAZI** (ci-après « l'éditeur »).
 
-Ces conditions encadrent l'utilisation d'Ivass AI et des services en ligne qui l'accompagnent : les mises à jour et le programme facultatif d'amélioration. Vous les acceptez en installant le logiciel, puis au premier lancement. Si vous ne les acceptez pas, n'utilisez pas Ivass AI.
+Ces conditions encadrent l'utilisation d'Ivass AI et des services en ligne qui l'accompagnent : les mises à jour, le programme facultatif d'amélioration, la vérification des offres et le parrainage. Les offres payantes sont régies en plus par les **Conditions générales de vente**. Vous les acceptez en installant le logiciel, puis au premier lancement. Si vous ne les acceptez pas, n'utilisez pas Ivass AI.
 
 ## 2. Licence du logiciel
 
@@ -36,6 +36,10 @@ Vous restez responsable de l'usage des contenus, du code et des fichiers produit
 ## 6. Vos données
 
 Vos discussions, votre bibliothèque, vos projets et vos réglages restent **sur votre ordinateur**. Le programme d'amélioration est **facultatif** : il ne s'active qu'avec votre accord séparé, catégorie par catégorie, et peut être arrêté à tout moment. Tout est détaillé dans la **Politique de confidentialité**.
+
+## 6 bis. Offres et limites
+
+Avec l'offre Gratuit, Ivass AI utilise **5 clés API** ; certains outils de l'application PC sont réservés aux offres **Pro** et **Expert**. Le détail, les prix, le parrainage et la résiliation figurent dans les **Conditions générales de vente** (⭐ Offres). Contourner la vérification des offres d'une version distribuée sous le nom « Ivass » n'est pas autorisé ; l'AGPL-3.0 vous permet de modifier le code, mais une version modifiée doit porter un autre nom (article 3).
 
 ## 7. Mises à jour
 

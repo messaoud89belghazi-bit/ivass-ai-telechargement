@@ -4,5 +4,7 @@
  "contribKey": "/Di+uQSrImmBYOdU7GtqZVzeqBuggHavc1BMIpDoySs=",
  "remoteConfig": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/app-config.json",
  "updateUrl": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/version.json",
- "pageUrl": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/"
+ "pageUrl": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/",
+ "licenceServer": "https://ivass-ai-contributions.ivass-messaoud.workers.dev",
+ "licenceKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEnemoLICzdOxqnkmSWnNI4dnupzVwZHJE2YmUYOrtVHH6MxFQebBnsKqzHeSRU7fcy+3jRvAkZEjio7Tg31NE5g=="
 }

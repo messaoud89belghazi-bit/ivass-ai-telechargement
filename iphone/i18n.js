@@ -123,7 +123,7 @@
     for (const p of c.patterns) {
       if (p.longest && !s.includes(p.longest)) continue;
       const m = p.re.exec(s);
-      if (m) return fill(p.tr, m.slice(1).map((v) => lookup(c, v) || v));
+      if (m) return fill(p.tr, m.slice(1).map((v) => { const t = v.trim(), r = t ? lookup(c, t) : null; return r == null ? v : v.replace(t, r); }));
     }
     // emoji ou symbole devant le texte (« 📖 Wikipédia », « ○ Lecture de l’écran ») : traduire le reste
     const e = /^((?:[\p{Extended_Pictographic}\u2190-\u21ff\u2600-\u27bf\u25a0-\u25ff\u2b00-\u2bff\u2190-\u21ff✓✗★☆]|\ufe0f|\u200d)+\s*)(\S.*)$/u.exec(s);

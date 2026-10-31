@@ -1,6 +1,6 @@
 # Politique de confidentialité d'Ivass AI
 
-*Version 1 — en vigueur au 19 octobre 2026*
+*Version 2 — en vigueur au 31 octobre 2026*
 
 ## 1. Qui est responsable ?
 
@@ -14,7 +14,8 @@ Ivass ne se connecte à Internet que pour :
 - **les IA que vous avez choisies** : vos questions partent directement de votre ordinateur vers ces services, avec vos clés, et l'éditeur n'y a pas accès ;
 - **les recherches web** que vous lancez ;
 - **la vérification des mises à jour** sur GitHub : GitHub voit alors votre adresse IP, comme pour toute visite d'un site ;
-- **le programme d'amélioration**, seulement si vous l'avez accepté (voir ci-dessous).
+- **le programme d'amélioration**, seulement si vous l'avez accepté (voir ci-dessous) ;
+- **la vérification des offres** (Gratuit, Pro, Expert) et, si vous les utilisez, le **code licence** et le **parrainage** (voir la section « Offres payantes et parrainage »).
 
 ## 3. Le programme d'amélioration (facultatif)
 
@@ -86,6 +87,24 @@ Si vous vous y inscrivez vous-même (Paramètres › 🤝 Contribution, ou Régl
 ### Nouveautés et packs
 
 Les **📣 Nouveautés** sont lues sur la page publique d’Ivass AI et sur le serveur de contributions, sans rien envoyer de vous. Un **🎁 pack à partager** est un fichier créé sur votre PC à partir de votre bibliothèque (jamais vos discussions ni votre historique), nettoyé avant export ; c’est vous qui choisissez à qui l’envoyer.
+
+## 3 bis. Offres payantes et parrainage
+
+**Sans compte, rien n'est envoyé.** Ivass AI demande seulement au serveur si les offres payantes sont ouvertes et quels sont leurs prix ; cette demande ne contient aucune donnée vous concernant.
+
+**Quand un compte est créé.** Un compte n'est créé que si **vous** souscrivez une offre, demandez votre code de parrainage ou saisissez un code (licence ou parrainage). Le serveur enregistre alors, sans votre nom ni votre e-mail :
+- un identifiant aléatoire de compte et l'**empreinte** (SHA-256) de votre code licence — le code lui-même reste sur vos appareils, chiffré ;
+- votre code de parrainage public (IVA-…) et, le cas échéant, le lien avec votre parrain et le nombre de vos filleuls validés ;
+- les identifiants aléatoires de vos appareils (3 au maximum) et la date de leur dernière vérification ;
+- si vous avez un parrain : les **dates** (jour seulement) où vous avez utilisé Ivass AI, pour valider le parrainage ; aucun contenu, aucune question ;
+- si vous avez souscrit : l'identifiant de votre abonnement PayPal, la formule, son état et sa date de fin ;
+- pour limiter les abus, une empreinte de votre adresse IP, effacée au bout de 3 jours.
+
+**Paiement.** Il est traité par **PayPal**, responsable de ses propres traitements (politique de confidentialité de PayPal). L'éditeur reçoit de PayPal l'état de l'abonnement et les montants ; il ne reçoit jamais vos coordonnées bancaires.
+
+**Pourquoi.** Exécuter le contrat (offre, licence, parrainage : article 6.1.b du RGPD), prévenir la fraude au parrainage (intérêt légitime : article 6.1.f) et tenir la comptabilité (obligation légale : article 6.1.c).
+
+**Durée.** Les données du compte sont conservées tant que le compte sert, puis supprimées **3 ans** après la dernière utilisation, ou plus tôt sur demande. Les données comptables (montant, date, identifiant de transaction) sont conservées **10 ans**, comme l'exige la loi. Le serveur est hébergé par Cloudflare (voir « Hébergement et durée »).
 
 ## 4. Vos droits
 

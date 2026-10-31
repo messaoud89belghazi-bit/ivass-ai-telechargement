@@ -13,6 +13,14 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
+### ⭐ Nouveau : offres Gratuit, Pro et Expert
+- 🌱 **Gratuit** : 5 clés API, discussion, bibliothèque, apprentissage, Bouclier, synchronisation, 11 langues.
+- ⭐ **Pro** (4,99 €/mois) : 20 clés API, Mode Agent, Recherche autonome, Explorateur, Studio images, fichiers Word/PDF/Excel/PowerPoint…
+- 💎 **Expert** (9,99 €/mois) : 25 clés API, tout Pro + Conseil multi-agents, Réflexion profonde, Studio vidéo IA, 3D, images 4K/8K, MCP, projets GitHub…
+- 🔑 Plus de clés : 6-10 1,99 € · 11-15 3,49 € · 16-20 4,99 € · 21-25 6,99 € · 26-30 8,99 € · plus de 30 14,99 €/mois. Paiement PayPal, résiliable à tout moment.
+- 🎁 Parrainage : +1 clé par proche parrainé (jusqu'à +5), 1 mois Pro à 3 filleuls, 1 mois Expert à 10.
+- Tant que les paiements ne sont pas ouverts, tout reste gratuit et illimité. [Conditions de vente](https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/conditions/)
+
 ### 📦 Nouveau : de vrais fichiers, pas du code
 Demandez un CV, une facture, un rapport, un budget ou une présentation : Ivass crée directement le fichier **Word, PDF, Excel, PowerPoint ou CSV**, ainsi que vos **images** et **vidéos**, prêts à ouvrir et à partager — sur PC comme sur téléphone.
 

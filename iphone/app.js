@@ -44,6 +44,14 @@
   const saveLib = () => N.write('library.json', S.lib);
   const getKey = (id) => N.secretGet('key:' + id) || '';
   const core = window.IvassCore({ http: N.http, Platforms: window.Platforms, getKey });
+  // ⭐ Offres : limite de clés API, code licence, parrainage (mêmes règles que le PC)
+  const OF = window.IvassOffres({
+    N, getSettings: () => S.settings, saveSettings: () => saveSettings(), toast: (m) => N.toast(m), T: (s, ...v) => T(s, ...v),
+    server: () => (S.config && S.config.licenceServer) || '', publicKey: () => (S.config && S.config.licenceKey) || '',
+  });
+  const nCles = () => OF.keyed(S.settings.providers, getKey).length;
+  const provsIA = (list) => OF.pourChat(list, getKey);
+  const limiteCles = () => OF.verifierAjout(nCles() + 1, nCles());
   const LV = window.IvassLivrables;
   const lvCtx = { providers: () => S.settings.providers, getKey, save: () => saveConvs(), redraw: () => renderChat(true) };
   if (LV) LV.init(lvCtx);
@@ -119,10 +127,10 @@
   });
 
   // ---------------- Accueil / CGU ----------------
-  const CGU_VERSION = 1;
+  const CGU_VERSION = 2; // 2 : offres payantes, Conditions générales de vente
   async function showLegal() {
     const get = async (f) => { try { return await (await fetch('legal/' + f)).text(); } catch (_) { return ''; } };
-    openPanel('Conditions et confidentialité', `${LANG.lang === 'fr' ? '' : '<p class="help">Version officielle en français.</p>'}<div class="card bubble no-i18n">${md(await get('CGU.md'))}</div><div class="card bubble no-i18n">${md(await get('MOBILE.md'))}</div><div class="card bubble no-i18n">${md(await get('CONFIDENTIALITE.md'))}</div>`);
+    openPanel('Conditions et confidentialité', `${LANG.lang === 'fr' ? '' : '<p class="help">Version officielle en français.</p>'}<div class="card bubble no-i18n">${md(await get('CGU.md'))}</div><div class="card bubble no-i18n">${md(await get('MOBILE.md'))}</div><div class="card bubble no-i18n">${md(await get('CGV.md'))}</div><div class="card bubble no-i18n">${md(await get('CONFIDENTIALITE.md'))}</div>`);
   }
   if (S.settings.cgu < CGU_VERSION) {
     $('#welcome').classList.remove('hidden');
@@ -306,7 +314,14 @@
   $('#chips').innerHTML = CHIPS.map((c) => `<button class="chip">${esc(c)}</button>`).join('');
   $('#chips').onclick = (e) => { if (e.target.classList.contains('chip')) { input.value = e.target.textContent + ' : '; grow(); input.focus(); } };
 
+  // ----- ⭐ Offres -----
+  function openOffres() {
+    const draw = () => openPanel('⭐ ' + T('Offres'), OF.html(nCles()), (r) => OF.mount(r, nCles(), draw));
+    draw();
+    OF.refresh(true).then(() => { if (!$('#panel').classList.contains('hidden') && $('#panelTitle').textContent.includes('⭐')) draw(); }).catch(() => {});
+  }
   async function send(textArg) {
+    OF.activite().catch(() => {}); // jour d'utilisation (valide un parrainage)
     let text = (textArg != null ? textArg : input.value).trim();
     const att = textArg != null ? [] : S.attach.filter((a) => !a.busy && !a.error);
     if (S.attach.some((a) => a.busy)) return N.toast('Lecture des fichiers en cours…');
@@ -438,7 +453,7 @@
     }
     const opts = {
       // une vidéo jointe : Gemini (la seule à savoir la regarder) passe en premier
-      providers: att && att.video ? [...S.settings.providers].sort((a, b) => (b.type === 'gemini') - (a.type === 'gemini') || (a.priority || 5) - (b.priority || 5)).map((p, i) => ({ ...p, priority: i })) : S.settings.providers,
+      providers: provsIA(att && att.video ? [...S.settings.providers].sort((a, b) => (b.type === 'gemini') - (a.type === 'gemini') || (a.priority || 5) - (b.priority || 5)).map((p, i) => ({ ...p, priority: i })) : S.settings.providers),
       attach: att,
       onModelFix: (p) => { const real = S.settings.providers.find((x) => x.id === p.id); if (real) { real.model = p.model; saveSettings(); } },
       messages: trimHistory(c.messages.filter((x) => !x.setup).map((x) => ({ role: x.role, content: x.content })).filter((x) => x.content)),
@@ -711,7 +726,7 @@
   $('#menuBtn').onclick = openDrawer;
   $('#scrim').onclick = closeDrawer;
   $('#newBtn').onclick = newConv;
-  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, settings: () => openSettings(), sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
+  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, settings: () => openSettings(), offres: openOffres, sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
 
   // ---------------- Panneaux ----------------
   let panelRefresh = null;
@@ -752,7 +767,7 @@
     try {
       await I18.translateMissing({
         lang: code, keys, have, signal: langJob.signal,
-        ask: async (prompt) => (await core.chat({ providers: S.settings.providers, messages: [{ role: 'user', content: prompt }], system: 'You are a professional software localizer. Output only JSON.', maxTokens: 8000 })).text,
+        ask: async (prompt) => (await core.chat({ providers: provsIA(S.settings.providers), messages: [{ role: 'user', content: prompt }], system: 'You are a professional software localizer. Output only JSON.', maxTokens: 8000 })).text,
         onPart: (part) => {
           Object.assign(have, part); N.write('i18n-' + code + '.json', have);
           msg.textContent = T('Traduction de l’interface : {} / {} textes…', Object.keys(have).length, keys.length);
@@ -844,6 +859,7 @@
         const raw = $('#keyF', r).value; const msg = $('#keyMsg', r);
         msg.className = 'help'; msg.textContent = 'Vérification de la clé…'; $('#keyAdd', r).disabled = true;
         try {
+          limiteCles(); // ⭐
           const { provider, key } = await core.addKey(raw, P);
           if (!N.secretSet('key:' + provider.id, key)) throw new Error('Impossible d’enregistrer la clé.');
           P.push(provider); saveSettings();
@@ -854,7 +870,8 @@
         const url = $('#cuUrl', r).value.trim().replace(/\/+$/, ''), model = $('#cuModel', r).value.trim();
         if (!/^https:\/\//.test(url) || !model) return N.toast('Adresse https et modèle obligatoires');
         const p = { id: 'custom-' + uid(), platform: 'custom', name: $('#cuName', r).value.trim() || 'Personnalisé', type: 'openai', baseUrl: url, model, models: [model], priority: 6, enabled: true };
-        const k = $('#cuKey', r).value.trim(); if (k) N.secretSet('key:' + p.id, k);
+        const k = $('#cuKey', r).value.trim();
+        if (k) { try { limiteCles(); } catch (e) { return N.toast(e.message); } N.secretSet('key:' + p.id, k); } // ⭐
         P.push(p); saveSettings(); openSettings();
       };
       $$('.prov', r).forEach((row) => {
@@ -885,6 +902,7 @@
       }; });
       $('#olAdd', r).onclick = () => {
         const key = $('#olKey', r).value.trim(); if (key.length < 10) return N.toast('Collez la clé Ollama Cloud');
+        try { limiteCles(); } catch (e) { return N.toast(e.message); } // ⭐
         const pl = window.Platforms.PLATFORMS.find((x) => x.id === 'ollamacloud');
         const p = { id: 'ollamacloud-' + uid().slice(-5), platform: 'ollamacloud', name: pl.name, type: 'openai', baseUrl: pl.baseUrl, model: 'gpt-oss:20b', models: ['gpt-oss:20b', 'gpt-oss:120b'], priority: 5, enabled: true };
         N.secretSet('key:' + p.id, key); S.settings.providers.push(p); saveSettings(); N.toast('Ollama Cloud ajouté ✓'); openSettings();
@@ -1196,9 +1214,14 @@
     } catch (_) { /* hors ligne : on garde la dernière version connue */ }
   }
   fetch('config.json').then((r) => r.json()).then((c) => { S.config = c || {}; }).catch(() => {})
+    .then(() => OF.init().catch(() => {})) // ⭐ licence enregistrée vérifiée tout de suite
     .then(remoteConfig)
     .finally(() => { if (S.settings.sync.auto) syncNow(false); flushSoon(15000); setTimeout(() => checkUpdate(false), 4000); setTimeout(() => receiveSavoir(false).catch(() => {}), 8000); setTimeout(() => { if (S.settings.monde !== false && S.config.pageUrl) receivePack('monde', 'monde.json', 'monde', false).catch(() => {}); }, 12000); });
   setInterval(() => checkUpdate(false), 6 * 3600e3);
+  // ⭐ offres : licence vérifiée hors ligne, contrôle auprès du serveur toutes les 6 h
+  const offresCheck = (force) => OF.init().then(() => OF.refresh(force)).then(() => OF.noterTransition(nCles())).catch(() => {});
+  setTimeout(() => offresCheck(false), 9000);
+  setInterval(() => offresCheck(false), 6 * 3600e3);
   setInterval(() => contrib.flush().catch(() => {}), 10 * 60000);
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.settings.sync.auto) syncNow(false); });
   renderChat();
