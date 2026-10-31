@@ -1,6 +1,6 @@
 # Conditions générales de vente d'Ivass AI
 
-*Version 1 — en vigueur au 31 octobre 2026*
+*Version 1.1 — en vigueur au 31 octobre 2026*
 
 ## 1. Vendeur
 
@@ -13,8 +13,8 @@ Ivass AI reste **gratuit** : discussion avec vos IA, bibliothèque, apprentissag
 | Offre | Prix par mois | Clés API comprises | Outils de l'application PC |
 |---|---|---|---|
 | 🌱 Gratuit | 0 € | 5 | outils gratuits |
-| ⭐ Pro | 4,99 € | 20 | + Mode Agent, Recherche autonome, Explorateur, Atelier d'assistants, Studio images, mode comparaison, Rattacher sans limite, fichiers Word, PDF, Excel et PowerPoint |
-| 💎 Expert | 9,99 € | 25 | tout Pro + Conseil multi-agents, Réflexion profonde, Studio vidéo IA, Studio 3D, images 4K/8K, Smart Audit et Smart CEO, serveurs MCP, projets et publication GitHub, pipeline CI/CD, Modelfile Ollama |
+| ⭐ Pro | 4,99 € | 20 | + Mode Agent, Recherche autonome, Explorateur, Atelier d'assistants, Studio images, mode comparaison, Rattacher sans limite, fichiers Word, PDF, Excel et PowerPoint, Ivass Dev : Académie complète (niveaux 2 à 6), Mode Architecte et missions autonomes |
+| 💎 Expert | 9,99 € | 25 | tout Pro + Conseil multi-agents, Réflexion profonde, Studio vidéo IA, Studio 3D, images 4K/8K, Smart Audit et Smart CEO, serveurs MCP, projets et publication GitHub, pipeline CI/CD, Modelfile Ollama, kits de démarrage d'Ivass Dev |
 
 **Clés API supplémentaires.** Au-delà des clés comprises dans votre offre, chacun paie le même palier mensuel, qui s'ajoute au prix de l'offre :
 

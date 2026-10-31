@@ -1,6 +1,20 @@
 {
  "nouveautes": [
   {
+   "titre": "Nouveau : 🧑‍💻 Ivass Dev sur PC",
+   "texte": "Ivass AI 3.19 (PC) : bouton 🧑‍💻 Ivass Dev. Académie de 55 leçons pour devenir développeur professionnel (web, backend, desktop, mobile, DevOps, IA, architecture), Mode Architecte (dossier de conception en 13 sections), docs officielles et Context7, 7 kits de démarrage (Next.js, NestJS, FastAPI, Electron, Flutter, Expo, RAG) et missions autonomes de votre IA, avec votre accord avant chaque commande.",
+   "lien": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/",
+   "version": "3.19.0",
+   "quand": 1793480543330
+  },
+  {
+   "titre": "Nouveau : 🧑‍💻 Ivass Dev sur le téléphone",
+   "texte": "Ivass AI Mobile 1.8 : menu → 🧑‍💻 Ivass Dev. Leçons et quiz pour apprendre le développement, dossier de conception de vos projets (Word/PDF), réponses sourcées par la documentation officielle, kits de projets en .zip et missions que votre IA mène seule par écrit.",
+   "lien": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/",
+   "version": "1.8.30",
+   "quand": 1793480542330
+  },
+  {
    "titre": "Nouveau : ⭐ offres Pro et Expert et 🎁 parrainage (PC)",
    "texte": "Ivass AI 3.18 (PC) : bouton ⭐ Offres en bas de la barre latérale. Gratuit avec 5 clés API ; Pro (4,99 €/mois) : 20 clés, Mode Agent, Recherche autonome, Studio images… ; Expert (9,99 €/mois) : 25 clés, Conseil multi-agents, Réflexion profonde, Studio vidéo IA, 3D… Parrainez un proche : +1 clé API. Tant que les paiements ne sont pas ouverts, tout reste gratuit et illimité.",
    "lien": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/conditions/",

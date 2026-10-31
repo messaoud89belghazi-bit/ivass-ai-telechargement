@@ -367,3 +367,24 @@ html[dir="rtl"] pre, html[dir="rtl"] code, html[dir="rtl"] .code { direction: lt
 
 /* retour : la flèche pointe vers le début de la ligne (à droite en arabe, persan, ourdou, hébreu) */
 html[dir="rtl"] #panelBack { transform: scaleX(-1); }
+
+/* 🧑‍💻 Ivass Dev */
+.dv-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 10px; scrollbar-width: none; }
+.dv-tabs .chip, .dv-missions .chip, .dv-docs .chip { flex: none; border: 1px solid var(--border); background: var(--panel); color: var(--text); border-radius: 99px; padding: 8px 12px; font: inherit; font-size: 14px; }
+.dv-tabs .chip.on, .dv-missions .chip.on { background: var(--accent-soft); border-color: var(--accent2); }
+.dv-missions, .dv-docs { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+.dv-bar { height: 8px; background: var(--bg2); border-radius: 99px; overflow: hidden; margin: 10px 0 4px; }
+.dv-bar i { display: block; height: 100%; background: var(--accent); }
+.dv-niv-h { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; color: inherit; font: inherit; padding: 0; text-align: left; }
+.dv-niv-h b { flex: 1; } .dv-niv-h span:first-child { font-size: 22px; }
+.dv-lecon { padding: 10px 0; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+.dv-lecon .row { flex-wrap: wrap; gap: 6px; }
+.dv-steps { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.dv-step { font-size: 12px; padding: 3px 8px; border-radius: 99px; background: var(--panel2); color: var(--muted); }
+.dv-step.ok { color: var(--text); background: var(--accent-soft); } .dv-step.cur { color: var(--text); outline: 1px solid var(--accent2); }
+.dv-md { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 6px; overflow-x: auto; }
+.dv-q { padding: 10px 0; border-bottom: 1px solid var(--border); } .dv-q.bon b { color: #3fb37f; } .dv-q.faux b { color: #e0656b; }
+.dv-choix { display: flex; gap: 8px; padding: 6px 0 6px 4px; align-items: flex-start; }
+.dv-code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+.dv-cmd { background: var(--bg2); border-radius: 9px; padding: 10px; font-size: 13px; overflow-x: auto; white-space: pre; }
+.dv-plan { padding-left: 20px; margin: 6px 0; } .dv-plan li { margin: 4px 0; color: var(--muted); } .dv-plan li.ok, .dv-plan li.cur { color: var(--text); } .dv-plan li.cur { font-weight: 600; }

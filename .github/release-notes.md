@@ -13,6 +13,13 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
+### 🧑‍💻 Nouveau : Ivass Dev
+- 🎓 **Académie** : 7 niveaux et 55 leçons pour devenir développeur professionnel (web, backend, desktop, mobile, DevOps, IA, architecture SaaS), expliquées par votre IA, avec quiz et relecture de code.
+- 📐 **Mode Architecte** : une idée devient un dossier de conception complet en 13 sections, exportable en Word ou PDF.
+- 📚 **Docs officielles** : réponses techniques qui citent MDN, react.dev, FastAPI, Docker… et Context7 en un clic.
+- 🧰 **Kits de démarrage** : Next.js, NestJS + PostgreSQL + Docker, FastAPI, Electron, Flutter, Expo, assistant RAG Ollama — avec tests, CI et README.
+- 🎯 **Missions** : votre IA travaille en autonomie sur un projet ; Ivass vous demande votre accord avant chaque commande et chaque modification.
+
 ### ⭐ Nouveau : offres Gratuit, Pro et Expert
 - 🌱 **Gratuit** : 5 clés API, discussion, bibliothèque, apprentissage, Bouclier, synchronisation, 11 langues.
 - ⭐ **Pro** (4,99 €/mois) : 20 clés API, Mode Agent, Recherche autonome, Explorateur, Studio images, fichiers Word/PDF/Excel/PowerPoint…

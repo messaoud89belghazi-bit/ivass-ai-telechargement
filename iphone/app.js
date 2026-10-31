@@ -314,13 +314,36 @@
   $('#chips').innerHTML = CHIPS.map((c) => `<button class="chip">${esc(c)}</button>`).join('');
   $('#chips').onclick = (e) => { if (e.target.classList.contains('chip')) { input.value = e.target.textContent + ' : '; grow(); input.focus(); } };
 
+  // ----- 🧑‍💻 Ivass Dev -----
+  const peutF = (f) => window.IvassLicence.peut(f, OF.droits());
+  const gardeF = (f) => { if (peutF(f)) return true; const x = window.IvassLicence.FONCTIONS[f]; N.toast('🔒 ' + T('« {} » fait partie de l’offre {}.', T(x.nom), x.niveau === 'pro' ? 'Pro' : 'Expert')); openOffres(); return false; };
+  const ajouterConv = (titre, affichage, contenu, ouvrir) => {
+    const c = { id: uid(), title: String(titre).slice(0, 80), created: Date.now(), updated: Date.now(), messages: [{ role: 'user', content: affichage, display: affichage, ts: Date.now() }, { role: 'assistant', content: contenu, ts: Date.now() }] };
+    S.convs.list.push(c); saveConvs();
+    if (ouvrir) { closePanel(); openConv(c.id); }
+    return c.id;
+  };
+  ajouterConv.ouvrir = (id) => { closePanel(); openConv(id); };
+  const DV = window.IvassDevMobile && window.IvassDevMobile({
+    N, T: (s, ...v) => T(s, ...v), esc, md: (t) => md(t), toast: (m) => N.toast(m), LV, langue: () => LANG.lang,
+    getSettings: () => S.settings, saveSettings: () => saveSettings(), peut: peutF, garde: gardeF, ajouterConv,
+    providers: () => provsIA(S.settings.providers).filter((p) => p.enabled !== false && p.model),
+    ask: async (prompt, system, maxTokens, signal, ia) => (await core.chat({ providers: provsIA(S.settings.providers).map((p) => (ia && p.id === ia ? { ...p, priority: -1 } : p)), messages: [{ role: 'user', content: prompt }], system, maxTokens, signal })).text,
+    lancer: (texte, affichage) => { if (S.busy) return N.toast(T('Une réponse est en cours : attendez qu’elle se termine.')); closePanel(); newConv(); send(texte, affichage); },
+  });
+  function openDev() {
+    if (!DV) return;
+    const draw = () => openPanel('🧑‍💻 Ivass Dev', DV.html(), (r) => DV.mount(r, draw));
+    draw();
+  }
+
   // ----- ⭐ Offres -----
   function openOffres() {
     const draw = () => openPanel('⭐ ' + T('Offres'), OF.html(nCles()), (r) => OF.mount(r, nCles(), draw));
     draw();
     OF.refresh(true).then(() => { if (!$('#panel').classList.contains('hidden') && $('#panelTitle').textContent.includes('⭐')) draw(); }).catch(() => {});
   }
-  async function send(textArg) {
+  async function send(textArg, shown) {
     OF.activite().catch(() => {}); // jour d'utilisation (valide un parrainage)
     let text = (textArg != null ? textArg : input.value).trim();
     const att = textArg != null ? [] : S.attach.filter((a) => !a.busy && !a.error);
@@ -328,12 +351,12 @@
     if ((!text && !att.length) || S.busy) return;
     if (!text) text = att.some((a) => a.kind === 'image') ? 'Que vois-tu sur cette image ?' : att.some((a) => a.kind === 'video') ? 'Que se passe-t-il dans cette vidéo ?' : 'Résume ce document.';
     let c = conv(S.cur);
-    if (!c) { c = { id: uid(), title: core.titleOf(text), created: Date.now(), updated: Date.now(), messages: [] }; S.convs.list.push(c); S.cur = c.id; }
+    if (!c) { c = { id: uid(), title: core.titleOf(shown || text), created: Date.now(), updated: Date.now(), messages: [] }; S.convs.list.push(c); S.cur = c.id; }
     if (textArg == null) { input.value = ''; grow(); S.attach = []; drawAttach(); }
     // le texte des documents part avec le message ; images et vidéo restent en mémoire pour l'IA (vignettes dans la discussion)
     const docs = att.filter((a) => a.kind === 'doc');
     const content = text + docs.map((a) => `\n\n--- Fichier joint : ${a.name} ---\n\`\`\`\n${a.text}\n\`\`\``).join('');
-    const um = { role: 'user', content, display: text, ts: Date.now() };
+    const um = { role: 'user', content, display: shown || text, ts: Date.now() };
     if (att.length) {
       um.thumbs = att.filter((a) => a.kind === 'image').map((a) => a.thumb);
       um.files = att.filter((a) => a.kind !== 'image').map((a) => ({ name: a.name, kind: a.kind }));
@@ -726,7 +749,7 @@
   $('#menuBtn').onclick = openDrawer;
   $('#scrim').onclick = closeDrawer;
   $('#newBtn').onclick = newConv;
-  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, settings: () => openSettings(), offres: openOffres, sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
+  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, dev: openDev, settings: () => openSettings(), offres: openOffres, sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
 
   // ---------------- Panneaux ----------------
   let panelRefresh = null;

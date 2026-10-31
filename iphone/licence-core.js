@@ -47,6 +47,9 @@
     compare: { niveau: 'pro', nom: 'Mode comparaison', icone: '⚖️' },
     connectPlus: { niveau: 'pro', nom: 'Rattacher sans limite', icone: '🔗' },
     livrables: { niveau: 'pro', nom: 'Fichiers Word, PDF, Excel, PowerPoint', icone: '📦' },
+    academie: { niveau: 'pro', nom: 'Académie complète (niveaux 2 à 6)', icone: '🎓' },
+    architecte: { niveau: 'pro', nom: 'Mode Architecte', icone: '📐' },
+    missions: { niveau: 'pro', nom: 'Missions autonomes', icone: '🎯' },
     council: { niveau: 'expert', nom: 'Conseil multi-agents', icone: '🏛' },
     deep: { niveau: 'expert', nom: 'Réflexion profonde', icone: '🧠' },
     videoIA: { niveau: 'expert', nom: 'Studio vidéo IA', icone: '🎬' },
@@ -57,6 +60,7 @@
     projects: { niveau: 'expert', nom: 'Projets et publication GitHub', icone: '📁' },
     devops: { niveau: 'expert', nom: 'Pipeline CI/CD', icone: '⚙️' },
     modelfile: { niveau: 'expert', nom: 'Modelfile Ollama', icone: '🦙' },
+    kits: { niveau: 'expert', nom: 'Kits de démarrage', icone: '🧰' },
   };
   const RATTACHER_GRATUIT = 3; // sources rattachées avec l'offre gratuite
 
