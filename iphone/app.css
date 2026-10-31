@@ -356,3 +356,14 @@ html, body { overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
 .msg.user .thumbs img { width: 96px; height: 96px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); }
 .msg.user .files { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; margin-bottom: 6px; }
 .msg.user .files span { font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); }
+
+/* 🌐 Langues : sélecteur d'accueil et écriture de droite à gauche (arabe, persan, ourdou, hébreu) */
+.lang-pick { max-width: 320px; margin: 4px auto 14px; display: block; text-align: center; }
+html[dir="rtl"] body { text-align: right; }
+html[dir="rtl"] .composer, html[dir="rtl"] .top, html[dir="rtl"] .row, html[dir="rtl"] .modes, html[dir="rtl"] .prov, html[dir="rtl"] .meta { direction: rtl; }
+html[dir="rtl"] .msg.user { align-items: flex-start; }
+html[dir="rtl"] .msg .bubble.no-i18n, html[dir="rtl"] .msg.user .bubble { unicode-bidi: plaintext; text-align: start; }
+html[dir="rtl"] pre, html[dir="rtl"] code, html[dir="rtl"] .code { direction: ltr; text-align: left; }
+
+/* retour : la flèche pointe vers le début de la ligne (à droite en arabe, persan, ourdou, hébreu) */
+html[dir="rtl"] #panelBack { transform: scaleX(-1); }

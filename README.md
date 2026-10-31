@@ -12,13 +12,14 @@
 | Appareil | Téléchargement |
 |---|---|
 | 💻 **PC Windows 10 / 11** (64 bits) | [Ivass-AI-Setup.exe](https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases/latest/download/Ivass-AI-Setup.exe) — version 3.16.0 |
-| 🤖 **Android 7 ou plus récent** | [Ivass-AI-Mobile.apk](Ivass-AI-Mobile.apk) — version 1.5.26 |
+| 🤖 **Android 7 ou plus récent** | [Ivass-AI-Mobile.apk](Ivass-AI-Mobile.apk) — version 1.6.27 |
 | 📱 **iPhone** (iOS 16.4 ou plus récent) | [Ouvrir dans Safari](https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/iphone/), puis Partager → « Sur l’écran d’accueil » |
 
 Les applications se mettent ensuite à jour toutes seules. Toutes les versions : [Releases](https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases).
 
 ## ✨ Ce que fait Ivass AI
 
+- 🌐 **Dans votre langue** : interface en français, English, العربية, español, Deutsch, italiano, português, русский, Türkçe, 日本語 et 中文, plus 35 autres langues traduites par votre IA. Ivass comprend toutes les langues et répond dans la vôtre.
 - 🔗 **Rattacher** : GitHub, Notion, Hugging Face, Wikipédia, arXiv, Todoist, Trello, Airtable, dossiers du PC… et n’importe quel **serveur MCP**. Le **Radar de connaissances** détecte ce qu’Ivass connaît mal et l’apprend depuis GitHub et les sources ouvertes.
 - 📦 **De vrais fichiers, pas du code** : CV, facture, rapport, budget, présentation… Ivass crée directement le fichier **Word, PDF, Excel, PowerPoint ou CSV**, ainsi que vos **images** et **vidéos**, prêts à ouvrir et à partager.
 - 🤖 **Toutes les IA réunies** : Claude, Gemini, ChatGPT, Groq, Mistral… Si une IA est en panne, la suivante reprend la réponse.

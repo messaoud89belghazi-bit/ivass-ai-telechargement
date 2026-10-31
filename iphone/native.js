@@ -188,7 +188,7 @@
     share: (t) => (N ? N.share(t) : navigator.share ? navigator.share({ text: t }).catch(() => {}) : navigator.clipboard.writeText(t)),
     copy: (t) => (N ? N.copy(t) : navigator.clipboard && navigator.clipboard.writeText(t)),
     openUrl: (u) => { if (!/^https:\/\//.test(u)) return; N ? N.openUrl(u) : window.open(u, '_blank', 'noopener'); },
-    toast: (m) => (N ? N.toast(m) : toastWeb(m)),
+    toast: (m) => { if (typeof window.ivassT === 'function') m = window.ivassT(String(m)); return N ? N.toast(m) : toastWeb(m); }, // 🌐 traduit avant l’affichage natif
     version: () => (N ? N.appVersion() : (window.IVASS_WEB_VERSION || 'aperçu')),
     setBars: (color, light) => {
       if (N && N.setBars) { N.setBars(String(color), !!light); return; }

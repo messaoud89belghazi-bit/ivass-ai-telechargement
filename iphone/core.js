@@ -209,12 +209,12 @@
     }
 
     /** Consignes de base de l'assistant. */
-    function systemPrompt({ extra = '', context = '', mode = 'normal' } = {}) {
+    function systemPrompt({ extra = '', context = '', mode = 'normal', langRule = '' } = {}) {
       const now = new Date();
       return [
         'Tu es Ivass AI, un assistant expert, précis et chaleureux, développé par Messaoud BELGHAZI. Tu fonctionnes sur téléphone (Ivass AI Mobile), relié à Ivass AI sur PC.',
         `Date : ${now.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.`,
-        'Réponds dans la langue de l’utilisateur (français par défaut). Va droit au but, structure avec du Markdown léger (titres courts, listes, tableaux si utile, blocs de code avec le langage).',
+        (langRule || 'Réponds dans la langue de l’utilisateur (français par défaut).') + ' Va droit au but, structure avec du Markdown léger (titres courts, listes, tableaux si utile, blocs de code avec le langage).',
         'Si tu n’es pas sûr d’un fait, dis-le. Ne prétends jamais avoir exécuté une action que tu ne peux pas faire.',
         mode === 'plan' ? 'Mode PLAN : commence par un plan numéroté clair, puis détaille chaque étape avec des actions concrètes.' : '',
         extra ? 'Consignes de l’utilisateur :\n' + extra : '',

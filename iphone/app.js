@@ -19,6 +19,26 @@
     cur: null, busy: null, config: {},
   };
   S.settings.sync = Object.assign({}, DEF.sync, S.settings.sync || {});
+
+  // ---------------- 🌐 Langue de l'interface (50 langues ; 11 traduites en entier, les autres par votre IA) ----------------
+  const I18 = window.IvassI18n;
+  function loadDict(code) {
+    const l = I18.info(code), base = l.full ? code : 'en';
+    const dicts = () => window.IvassI18nDicts || {};
+    const ready = base === 'fr' || dicts()[base] ? Promise.resolve() : new Promise((res) => { const sc = document.createElement('script'); sc.src = 'i18n/' + base + '.js'; sc.onload = sc.onerror = () => res(); document.head.appendChild(sc); });
+    return ready.then(() => Object.assign({}, dicts()[base] || {}, (!l.full && N.read('i18n-' + code + '.json')) || {}));
+  }
+  const LANG = I18.setup({
+    load: loadDict,
+    // jamais traduits : vos messages, les réponses des IA, vos fiches (seule l'interface change de langue)
+    skip: ['.msg .bubble.no-i18n', '.msg.user .bubble', '.msg.user .files', '.lib-item b'],
+    unskip: ['.code-btns', '.tbl-tools', '.lvr-card', '.lvr-wait', '.lvr-err'],
+    save: (c) => { S.settings.lang = c; saveSettings(); try { localStorage.setItem('ivass-lang', c); } catch (_) { /* aperçu */ } },
+    onChange: (c) => { window.ivassLocale = c === 'ar' ? 'ar-u-nu-latn' : c; },
+  });
+  const T = LANG.t;
+  window.ivassT = T; // toasts natifs (Android) traduits aussi
+  LANG.use(S.settings.lang || window.ivassBootLang || I18.detect(navigator.languages || [navigator.language]));
   const saveSettings = () => N.write('settings.json', S.settings);
   const saveConvs = () => N.write('convs.json', S.convs);
   const saveLib = () => N.write('library.json', S.lib);
@@ -102,10 +122,12 @@
   const CGU_VERSION = 1;
   async function showLegal() {
     const get = async (f) => { try { return await (await fetch('legal/' + f)).text(); } catch (_) { return ''; } };
-    openPanel('Conditions et confidentialité', `<div class="card bubble">${md(await get('CGU.md'))}</div><div class="card bubble">${md(await get('MOBILE.md'))}</div><div class="card bubble">${md(await get('CONFIDENTIALITE.md'))}</div>`);
+    openPanel('Conditions et confidentialité', `${LANG.lang === 'fr' ? '' : '<p class="help">Version officielle en français.</p>'}<div class="card bubble no-i18n">${md(await get('CGU.md'))}</div><div class="card bubble no-i18n">${md(await get('MOBILE.md'))}</div><div class="card bubble no-i18n">${md(await get('CONFIDENTIALITE.md'))}</div>`);
   }
   if (S.settings.cgu < CGU_VERSION) {
     $('#welcome').classList.remove('hidden');
+    const wl = $('#welLang');
+    if (wl) { wl.innerHTML = langOptions(); wl.onchange = () => LANG.use(wl.value, true); }
     $('#cguOk').onchange = (e) => { $('#startBtn').disabled = !e.target.checked; };
     $('#cguLink').onclick = (e) => { e.preventDefault(); showLegal(); };
     $('#startBtn').onclick = () => {
@@ -169,11 +191,11 @@
     d.className = 'msg ' + (m.role === 'user' ? 'user' : 'ai');
     if (m.role === 'user') d.innerHTML = (m.thumbs && m.thumbs.length ? `<div class="thumbs">${m.thumbs.map((t) => `<img src="${esc(t)}" alt="">`).join('')}</div>` : '') +
       (m.files && m.files.length ? `<div class="files">${m.files.map((f) => `<span>${f.kind === 'video' ? '🎬' : '📄'} ${esc(f.name)}</span>`).join('')}</div>` : '') +
-      `<div class="bubble">${esc(m.display != null ? m.display : m.content)}</div>`;
+      `<div class="bubble" dir="auto">${esc(m.display != null ? m.display : m.content)}</div>`;
     else {
       d.innerHTML = `<div class="who"><img src="icon.png" alt="">Ivass AI</div>` +
         (m.notice ? `<div class="notice">${esc(m.notice)}</div>` : '') +
-        `<div class="bubble">${m.setup ? setupHTML() : m.error ? `<div class="err">${esc(m.error)}</div>` : mdMsg(m, false)}</div>` +
+        `<div class="bubble${m.setup || m.error ? '' : ' no-i18n'}"${m.setup || m.error ? '' : ' dir="auto"'}>${m.setup ? setupHTML() : m.error ? `<div class="err">${esc(m.error)}</div>` : mdMsg(m, false)}</div>` +
         sourcesHTML(m) + (m.content || m.error ? backstageHTML(m) : '') +
         `<div class="meta">${S.settings.showRoute && m.model ? `<span>${esc(m.model)}</span>` : ''}${m.content && !m.setup ? `<button data-act="up" style="${m.vote === 1 ? 'opacity:1;color:var(--ok)' : ''}">👍</button><button data-act="down" style="${m.vote === -1 ? 'opacity:1;color:var(--danger)' : ''}">👎</button>` : ''}<button data-act="copy">📋</button><button data-act="share">↗</button><button data-act="save" title="Garder dans la bibliothèque">📚</button>` +
         (m.content || m.error ? `<button data-act="bs" title="Coulisses : quelle IA a répondu, bascules, sources">ⓘ</button>` : '') +
@@ -209,7 +231,7 @@
     const rows = [];
     const row = (k, v) => rows.push(`<div class="bs-row"><span>${k}</span><b>${v}</b></div>`);
     if (m.provider || m.model) row('Réponse par', esc([m.provider, m.model].filter(Boolean).join(' · ')));
-    if (m.ms) row('Durée', `${(m.ms / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 1 })} s`);
+    if (m.ms) row('Durée', `${(m.ms / 1000).toLocaleString(window.ivassLocale || 'fr-FR', { maximumFractionDigits: 1 })} s`);
     if (m.libHits) row('Bibliothèque', `${m.libHits} passage(s)`);
     if (m.enc && m.enc.length) row('Encyclopédies', esc([...new Set(m.enc.map((r) => `${r.icon || '🌍'} ${r.name}`))].join(' · ')));
     for (const x of m.switches || []) row('Bascule', esc(x));
@@ -361,7 +383,7 @@
     const m = { role: 'assistant', content: '', ts: Date.now() };
     const el = document.createElement('div');
     el.className = 'msg ai';
-    el.innerHTML = `<div class="who"><img src="icon.png" alt="">Ivass AI</div><div class="notice hidden"></div><div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div>`;
+    el.innerHTML = `<div class="who"><img src="icon.png" alt="">Ivass AI</div><div class="notice hidden"></div><div class="bubble no-i18n" dir="auto"><span class="typing"><i></i><i></i><i></i></span></div>`;
     box.appendChild(el); box.scrollTop = box.scrollHeight;
     const bubble = el.querySelector('.bubble'), notice = el.querySelector('.notice');
     const ctrl = new AbortController();
@@ -420,7 +442,7 @@
       attach: att,
       onModelFix: (p) => { const real = S.settings.providers.find((x) => x.id === p.id); if (real) { real.model = p.model; saveSettings(); } },
       messages: trimHistory(c.messages.filter((x) => !x.setup).map((x) => ({ role: x.role, content: x.content })).filter((x) => x.content)),
-      system: core.systemPrompt({ extra: S.settings.instructions, context: ctx, mode }) + (LENGTH[S.settings.answerLength || 'equilibre'] ? '\n\n' + LENGTH[S.settings.answerLength || 'equilibre'] : '') + (LV ? '\n\n' + LV.RULES : ''),
+      system: core.systemPrompt({ extra: S.settings.instructions, context: ctx, mode, langRule: window.IvassI18n.answerRule(LANG.lang) }) + (LENGTH[S.settings.answerLength || 'equilibre'] ? '\n\n' + LENGTH[S.settings.answerLength || 'equilibre'] : '') + (LV ? '\n\n' + LV.RULES : ''),
       signal: ctrl.signal,
       onText: (t) => { m.content += t; paint(); },
       onStatus: (s) => {
@@ -542,16 +564,16 @@
     for (const h of L.contextForMany(knowledge(), q, 12000).hits.slice(0, 4)) {
       const lines = best(h.text, 3, h.title);
       if (!lines.length) continue;
-      refs.push(`[${refs.length + 1}] ${h.title}${h.kind === 'savoir' ? ' (🌍 Savoir Ivass)' : h.kind === 'monde' ? ' (📖 encyclopédie apprise)' : ' (📚 bibliothèque)'}`);
+      refs.push(`[${refs.length + 1}] ${h.title} ${T(h.kind === 'savoir' ? '(🌍 Savoir Ivass)' : h.kind === 'monde' ? '(📖 encyclopédie apprise)' : '(📚 bibliothèque)')}`);
       parts.push(`**${h.title}** — ${lines.join(' ')} [${refs.length}]`);
     }
     encDocs.slice(0, 3).forEach((d, i) => {
       const lines = best(d.text, 3, d.title);
       if (lines.length) parts.push(`**${d.title}** — ${lines.join(' ')} [E${i + 1}]`);
     });
-    if (!parts.length) return '🌱 Je ne trouve encore rien sur ce sujet dans mes connaissances.\n\nPour que j’apprenne : activez les 🌍 encyclopédies libres (⚙️ Réglages → Réponses), ajoutez une fiche dans 📚 Bibliothèque, ou ajoutez une IA (même sans clé).';
-    return `🌱 **Réponse d’Ivass, avec ses propres connaissances** (sans IA externe)\n\n${parts.join('\n\n')}` +
-      (refs.length ? `\n\n> Sources : ${refs.join(' · ')}` : '') + (encDocs.length ? `${refs.length ? ' · ' : '\n\n> Sources : '}${encDocs.slice(0, 3).map((d, i) => `[E${i + 1}] ${d.name}`).join(' · ')}` : '');
+    if (!parts.length) return T('🌱 Je ne trouve encore rien sur ce sujet dans mes connaissances.') + '\n\n' + T('Pour que j’apprenne : activez les 🌍 encyclopédies libres (⚙️ Réglages → Réponses), ajoutez une fiche dans 📚 Bibliothèque, ou ajoutez une IA (même sans clé).');
+    return `🌱 **${T('Réponse d’Ivass, avec ses propres connaissances')}** ${T('(sans IA externe)')}\n\n${parts.join('\n\n')}` +
+      (refs.length ? `\n\n> ${T('Sources :')} ${refs.join(' · ')}` : '') + (encDocs.length ? `${refs.length ? ' · ' : `\n\n> ${T('Sources :')} `}${encDocs.slice(0, 3).map((d, i) => `[E${i + 1}] ${d.name}`).join(' · ')}` : '');
   }
 
   /** Paquet de connaissances publié sur la page (format « ivass-savoir ») : savoir/ (créateur) ou monde/ (apprentissage dans le cloud). */
@@ -601,10 +623,10 @@
   // ---------------- Hors connexion : la bibliothèque répond ----------------
   function offlineAnswer(q) {
     const hits = window.IvassLib.contextForMany([S.lib.list, S.settings.savoir !== false ? S.savoir.entries : []], q, 4000).hits.slice(0, 3);
-    if (!hits.length) return '📴 **Pas de connexion Internet** et rien dans votre bibliothèque sur ce sujet.\n\nVotre question est gardée dans la discussion : touchez ↻ dès que le réseau revient.';
-    return '📴 **Pas de connexion Internet.** Voici ce que dit votre bibliothèque :\n\n' +
+    if (!hits.length) return `📴 **${T('Pas de connexion Internet')}** ${T('et rien dans votre bibliothèque sur ce sujet.')}\n\n${T('Votre question est gardée dans la discussion : touchez ↻ dès que le réseau revient.')}`;
+    return `📴 **${T('Pas de connexion Internet.')}** ${T('Voici ce que dit votre bibliothèque :')}\n\n` +
       hits.map((h) => `### ${h.title}\n${h.text.length > 1200 ? h.text.slice(0, 1200) + '…' : h.text}`).join('\n\n') +
-      '\n\n*Touchez ↻ quand le réseau revient pour une vraie réponse de l’IA.*';
+      `\n\n*${T('Touchez ↻ quand le réseau revient pour une vraie réponse de l’IA.')}*`;
   }
 
   // ---------------- 🖥️ Demander à Ivass AI sur le PC (boîte aux lettres chiffrée) ----------------
@@ -703,6 +725,61 @@
   $('#panelBack').onclick = closePanel;
 
   // ----- Réglages -----
+  // ---------------- 🌐 Langue ----------------
+  function langOptions() { return I18.LANGS.map((l) => `<option value="${l.code}" ${l.code === LANG.lang ? 'selected' : ''}>${esc(l.name)}${l.code === 'fr' || l.name === l.en ? '' : ' — ' + esc(l.en)}${l.full ? '' : ' · IA'}</option>`).join(''); }
+  const langHTML = () => `<div class="card"><h3 data-noi18n>🌐 Langue · Language · اللغة · 语言</h3>
+    <select class="field" id="langSel" data-noi18n>${langOptions()}</select>
+    <p class="help" id="langMsg"></p>
+    <div class="row hidden" id="langAiRow"><button class="btn sm" id="langAi">🤖 Traduire l’interface avec mon IA</button></div>
+    <p class="help">Ivass comprend toutes les langues : écrivez dans la vôtre, il répond dans la même langue.</p></div>`;
+  let catalog = null;
+  const loadCatalog = () => catalog ? Promise.resolve(catalog) : new Promise((res) => {
+    if (window.IvassI18nCatalog) return res((catalog = window.IvassI18nCatalog));
+    const sc = document.createElement('script'); sc.src = 'i18n/catalogue.js';
+    sc.onload = sc.onerror = () => res((catalog = window.IvassI18nCatalog || []));
+    document.head.appendChild(sc);
+  });
+  let langJob = null;
+  /** Langue sans traduction livrée : votre IA traduit les textes de l'interface (jamais vos messages), gardés sur le téléphone. */
+  async function aiTranslateUI(code, msg) {
+    if (langJob) return;
+    const usable = S.settings.providers.filter((p) => p.enabled !== false && p.model);
+    if (!usable.length) { msg.textContent = T('Ajoutez d’abord une IA (même sans clé) pour traduire l’interface.'); return; }
+    const keys = await loadCatalog();
+    const have = N.read('i18n-' + code + '.json') || {};
+    langJob = new AbortController();
+    msg.textContent = T('Traduction de l’interface : {} / {} textes…', Object.keys(have).length, keys.length);
+    try {
+      await I18.translateMissing({
+        lang: code, keys, have, signal: langJob.signal,
+        ask: async (prompt) => (await core.chat({ providers: S.settings.providers, messages: [{ role: 'user', content: prompt }], system: 'You are a professional software localizer. Output only JSON.', maxTokens: 8000 })).text,
+        onPart: (part) => {
+          Object.assign(have, part); N.write('i18n-' + code + '.json', have);
+          msg.textContent = T('Traduction de l’interface : {} / {} textes…', Object.keys(have).length, keys.length);
+        },
+      });
+      if (LANG.lang === code) await LANG.use(code);
+      msg.textContent = T('Interface traduite : {} / {} textes. Touchez à nouveau pour compléter.', Object.keys(have).length, keys.length);
+    } catch (e) { msg.textContent = e.message; }
+    langJob = null;
+  }
+  function mountLang(r) {
+    const sel = $('#langSel', r), msg = $('#langMsg', r);
+    if (!sel) return;
+    const paint = () => {
+      const l = I18.info(LANG.lang);
+      const ai = N.read('i18n-' + l.code + '.json') || {};
+      $('#langAiRow', r).classList.toggle('hidden', !!l.full);
+      msg.textContent = l.full ? '' : T('{} textes traduits par votre IA ; le reste s’affiche en anglais. Seuls les textes de l’interface sont envoyés à l’IA.', Object.keys(ai).length);
+    };
+    sel.onchange = async () => {
+      await LANG.use(sel.value, true); paint();
+      if (!I18.info(sel.value).full && !Object.keys(N.read('i18n-' + sel.value + '.json') || {}).length) aiTranslateUI(sel.value, msg);
+    };
+    $('#langAi', r).onclick = () => aiTranslateUI(LANG.lang, msg);
+    paint();
+  }
+
   function openSettings(first) {
     const P = S.settings.providers;
     const provHtml = [...P].sort((a, b) => (a.priority || 5) - (b.priority || 5)).map((p) => `
@@ -714,6 +791,7 @@
       </div>`).join('');
     openPanel('Réglages', `
       ${first ? '<div class="card"><h3>👋 Bienvenue !</h3><p class="help">Pour commencer, collez une clé API. Ivass AI reconnaît la plateforme toute seule. Des clés <b>gratuites</b> existent : Google Gemini (aistudio.google.com), Groq (console.groq.com), OpenRouter (modèles « :free »), Mistral, Cerebras.</p></div>' : ''}
+      ${langHTML()}
       <div class="card"><h3>🔑 Ajouter une clé API</h3>
         <p class="help">Claude, Gemini, ChatGPT, Groq, Mistral, OpenRouter, DeepSeek, xAI, Perplexity, Hugging Face, Cerebras… Les clés restent chiffrées sur ce téléphone et ne sont jamais synchronisées (vous pouvez aussi les recevoir du PC : ☰ → 📱 Synchronisation PC).</p>
         <div class="row"><input class="field" id="keyF" placeholder="Collez votre clé ici" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn primary" id="keyAdd">Ajouter</button></div>
@@ -761,6 +839,7 @@
       <div class="card"><h3>🎨 Apparence</h3><div id="lookBox"></div></div>
       <div class="card"><h3>💾 Mes données</h3><div class="row"><button class="btn sm" id="exportBtn">Exporter (JSON)</button><button class="btn sm danger" id="wipeLocal">Tout effacer sur ce téléphone</button></div></div>
       <div class="card"><h3>ℹ️ À propos</h3><p class="help">Ivass AI Mobile ${esc(N.version())} — développé par Messaoud BELGHAZI.</p><div class="row"><button class="btn sm" id="updCheck">✨ Rechercher une mise à jour</button><button class="btn sm" id="legalBtn">Conditions et confidentialité</button></div></div>`, (r) => {
+      mountLang(r);
       $('#keyAdd', r).onclick = async () => {
         const raw = $('#keyF', r).value; const msg = $('#keyMsg', r);
         msg.className = 'help'; msg.textContent = 'Vérification de la clé…'; $('#keyAdd', r).disabled = true;
@@ -942,7 +1021,7 @@
           <div class="row"><button class="btn primary" id="syGo" ${code && syncServer() ? '' : 'disabled'}>Synchroniser maintenant</button>
           <label class="row" style="gap:8px"><span class="switch"><input type="checkbox" id="syAuto" ${sy.auto ? 'checked' : ''}><span></span></span> Automatique</label></div>
           <p class="help" id="syncStep"></p>
-          <p class="help">${sy.last ? 'Dernière synchro : ' + new Date(sy.last).toLocaleString('fr-FR') : 'Jamais synchronisé.'} ${sy.error ? `<br><span class="ko">⚠ ${esc(sy.error)}</span>` : ''}</p></div>
+          <p class="help">${sy.last ? 'Dernière synchro : ' + new Date(sy.last).toLocaleString(window.ivassLocale || 'fr-FR') : 'Jamais synchronisé.'} ${sy.error ? `<br><span class="ko">⚠ ${esc(sy.error)}</span>` : ''}</p></div>
         ${code && syncServer() ? `<div class="card"><h3>🖥️ Mon PC</h3><p class="help" id="pcState">Recherche du PC…</p>
           <div class="row"><button class="btn sm" id="getKeys">📲 Utiliser les clés API du PC</button></div>
           <p class="help">Choisissez le mode « 🖥️ Mon PC » sous la zone de saisie pour faire répondre Ivass AI sur votre PC (ses IA, y compris Ollama gratuit, et toute sa bibliothèque), même loin de chez vous. Le PC doit rester allumé avec Ivass AI ouvert. Seules des questions et des réponses circulent, chiffrées : aucune commande n’est exécutée.</p></div>` : ''}
@@ -954,7 +1033,7 @@
       if ($('#pcState', r)) pcPresence().then((p) => {
         const el = $('#pcState', r); if (!el) return;
         const age = p ? Math.round((Date.now() - p.at) / 1000) : null;
-        el.innerHTML = p && age < 180 ? `<span class="ok">● En ligne</span> — ${esc(p.name || 'PC')} · ${esc(p.ai || '')} (vu il y a ${age} s)` : `<span class="ko">● Hors ligne</span> — ouvrez Ivass AI sur le PC${p ? ' (vu le ' + new Date(p.at).toLocaleString('fr-FR') + ')' : ''}.`;
+        el.innerHTML = p && age < 180 ? `<span class="ok">● En ligne</span> — ${esc(p.name || 'PC')} · ${esc(p.ai || '')} (vu il y a ${age} s)` : `<span class="ko">● Hors ligne</span> — ouvrez Ivass AI sur le PC${p ? ' (vu le ' + new Date(p.at).toLocaleString(window.ivassLocale || 'fr-FR') + ')' : ''}.`;
       });
       on('genCode', () => { N.secretSet('sync-code', window.IvassSync.newCode()); draw(r); });
       on('useCode', async () => {
@@ -1035,7 +1114,7 @@
   async function openNews() {
     await fetchNews();
     const seen = S.settings.newsSeen || 0;
-    openPanel('📣 Nouveautés', news.length ? news.map((x) => `<div class="card"><h3>${esc(x.titre)}${x.quand > seen ? ' <span class="tag">nouveau</span>' : ''}</h3><p class="help">${new Date(x.quand).toLocaleDateString('fr-FR')}${x.version ? ' · version ' + esc(x.version) : ''}</p><p style="white-space:pre-wrap">${esc(x.texte)}</p>${x.lien ? `<a href="${esc(x.lien)}">En savoir plus ↗</a>` : ''}</div>`).join('') : '<p class="muted">Pas encore de nouveautés (ou pas de connexion).</p>');
+    openPanel('📣 Nouveautés', news.length ? news.map((x) => `<div class="card"><h3>${esc(x.titre)}${x.quand > seen ? ' <span class="tag">nouveau</span>' : ''}</h3><p class="help">${new Date(x.quand).toLocaleDateString(window.ivassLocale || 'fr-FR')}${x.version ? ' · version ' + esc(x.version) : ''}</p><p style="white-space:pre-wrap">${esc(x.texte)}</p>${x.lien ? `<a href="${esc(x.lien)}">En savoir plus ↗</a>` : ''}</div>`).join('') : '<p class="muted">Pas encore de nouveautés (ou pas de connexion).</p>');
     S.settings.newsSeen = Date.now(); saveSettings();
     const b = $('#newsBadge'); if (b) b.classList.add('hidden');
   }

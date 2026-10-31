@@ -32,6 +32,7 @@
         <li><b>📚 Bibliothèque</b> vos notes et méthodes servent de mémoire à l’IA.</li>
         <li><b>🔐 Synchronisation chiffrée</b> avec le PC : le serveur ne lit rien.</li>
       </ul>
+      <select class="field lang-pick" id="welLang" data-noi18n aria-label="Langue · Language"></select>
       <label class="check"><input type="checkbox" id="cguOk"><span>J’ai lu et j’accepte les <a href="#" id="cguLink">conditions d’utilisation et de confidentialité</a>.</span></label>
       <button class="btn primary big" id="startBtn" disabled>Commencer</button>
     </div>
@@ -109,6 +110,8 @@
 
   <script src="web-version.js"></script>
   <script src="native.js"></script>
+  <script src="i18n.js"></script>
+  <script src="i18n-boot.js"></script>
   <script src="platforms.js"></script>
   <script src="markdown.js"></script>
   <script src="lib.js"></script>

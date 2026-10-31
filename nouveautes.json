@@ -1,6 +1,13 @@
 {
  "nouveautes": [
   {
+   "titre": "Nouveau : 🌐 Ivass dans votre langue",
+   "texte": "Ivass AI Mobile 1.6 : l’interface existe en français, English, العربية, español, Deutsch, italiano, português, русский, Türkçe, 日本語 et 中文 (l’arabe s’affiche de droite à gauche), et 35 autres langues sont traduites par votre IA. Ivass comprend toutes les langues et répond dans la vôtre. Choisissez-la dans ⚙️ Réglages → 🌐 Langue.",
+   "lien": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/",
+   "version": "1.6.27",
+   "quand": 1793413356629
+  },
+  {
    "titre": "Nouveau : 📎 fichiers dans la discussion et 🌱 Ivass seul",
    "texte": "Ivass AI Mobile 1.5 : joignez photos, vidéos (Gemini), PDF, Word, Excel ou PowerPoint ; Gemini fonctionne avec les clés gratuites ; IA sans clé (Pollinations, LLM7, OVHcloud) ; mode 🌱 Ivass seul qui répond avec ses propres connaissances ; et une encyclopédie apprise chaque jour dans le cloud, téléchargée en arrière-plan sur Android.",
    "lien": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/",
