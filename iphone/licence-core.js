@@ -264,6 +264,56 @@
   const normEmail = (e) => String(e || '').trim().toLowerCase();
   const masquerEmail = (e) => { const [u, d] = normEmail(e).split('@'); return u && d ? `${u[0]}${'•'.repeat(Math.min(6, Math.max(2, u.length - 1)))}@${d}` : ''; };
 
+  // ---------- 🔐 comptes : mot de passe étiré sur l'appareil, robustesse, double authentification (TOTP) ----------
+  /** Le mot de passe ne quitte jamais l'appareil : il est étiré ici (PBKDF2-SHA-256) et seule la clé obtenue part au serveur,
+      qui la scelle encore (HMAC avec un secret serveur). Une fuite de la base ne donne ni le mot de passe ni de quoi se connecter. */
+  const MDP = { iterations: 600000, min: 10, max: 128 };
+  const octets = (n) => { const a = new Uint8Array(n); (globalThis.crypto || require('crypto').webcrypto).getRandomValues(a); return a; };
+  const nouveauSel = () => b64.to(octets(16));
+  async function deriverCle(motDePasse, selB64, iterations = MDP.iterations) {
+    const enc = new TextEncoder();
+    const k = await subtle().importKey('raw', enc.encode(String(motDePasse).normalize('NFKC')), 'PBKDF2', false, ['deriveBits']);
+    const bits = await subtle().deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: b64.from(selB64), iterations }, k, 256);
+    return b64.to(new Uint8Array(bits));
+  }
+  const COURANTS = new Set(('123456 123456789 12345678 password motdepasse azerty azertyuiop qwerty qwertyuiop 1234567890 000000 111111 abc123 iloveyou ' +
+    'admin welcome bonjour soleil marseille doudou loulou chouchou nicolas jetaime football 123123 654321 password1 motdepasse1 azerty123 ' +
+    'qwerty123 1q2w3e4r 1qaz2wsx dragon monkey letmein sunshine princess passw0rd trustno1 superman batman zaq12wsx').split(' '));
+  /** Robustesse : 10 caractères au moins, pas une suite connue, ni l'adresse e-mail, et une variété suffisante. */
+  function evaluerMotDePasse(mdp, email = '') {
+    const m = String(mdp || ''), bas = m.toLowerCase(), raisons = [];
+    if (m.length < MDP.min) raisons.push(`au moins ${MDP.min} caractères`);
+    if (m.length > MDP.max) raisons.push(`${MDP.max} caractères au plus`);
+    const nom = normEmail(email).split('@')[0];
+    if (COURANTS.has(bas) || COURANTS.has(bas.replace(/[0-9!?.]+$/, ''))) raisons.push('mot de passe trop courant');
+    if (nom && nom.length >= 4 && bas.includes(nom)) raisons.push('ne doit pas contenir votre adresse e-mail');
+    if (/^(.)\1+$/.test(m) || /^(0123456789|1234567890|abcdefghij)/i.test(m)) raisons.push('suite trop simple');
+    const classes = [/[a-z]/, /[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/].filter((r) => r.test(m)).length;
+    if (m.length < 16 && classes < 3) raisons.push('mélangez minuscules, majuscules, chiffres ou symboles (ou 16 caractères et plus)');
+    const score = Math.max(0, Math.min(4, Math.floor(m.length / 6) + classes - 2 - (raisons.length ? 2 : 0)));
+    return { ok: !raisons.length, score, raisons };
+  }
+  // base32 (RFC 4648) pour les secrets TOTP des applications d'authentification
+  const B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  function base32(bytes) { let bits = 0, v = 0, out = ''; for (const b of bytes) { v = (v << 8) | b; bits += 8; while (bits >= 5) { out += B32[(v >>> (bits - 5)) & 31]; bits -= 5; } } if (bits > 0) out += B32[(v << (5 - bits)) & 31]; return out; }
+  function deBase32(s) { const c = String(s || '').toUpperCase().replace(/[\s=-]/g, ''); let bits = 0, v = 0; const out = []; for (const ch of c) { const i = B32.indexOf(ch); if (i < 0) throw new Error('secret invalide'); v = (v << 5) | i; bits += 5; if (bits >= 8) { out.push((v >>> (bits - 8)) & 255); bits -= 8; } } return new Uint8Array(out); }
+  const nouveauSecretTotp = () => base32(octets(20));
+  /** Code TOTP (RFC 6238 : HMAC-SHA-1, pas de 30 s, 6 chiffres) pour le pas n. */
+  async function totpPas(secretB32, n) {
+    const k = await subtle().importKey('raw', deBase32(secretB32), { name: 'HMAC', hash: 'SHA-1' }, false, ['sign']);
+    const msg = new Uint8Array(8); let x = n; for (let i = 7; i >= 0; i--) { msg[i] = x & 255; x = Math.floor(x / 256); }
+    const h = new Uint8Array(await subtle().sign('HMAC', k, msg));
+    const o = h[19] & 15;
+    const bin = ((h[o] & 127) << 24) | (h[o + 1] << 16) | (h[o + 2] << 8) | h[o + 3];
+    return String(bin % 1e6).padStart(6, '0');
+  }
+  const pasTotp = (t = Date.now()) => Math.floor(t / 30000);
+  const totp = (secretB32, t = Date.now()) => totpPas(secretB32, pasTotp(t));
+  const uriTotp = (secretB32, email) => `otpauth://totp/${encodeURIComponent('Ivass AI:' + normEmail(email))}?secret=${secretB32}&issuer=${encodeURIComponent('Ivass AI')}&algorithm=SHA1&digits=6&period=30`;
+  /** Codes de secours : 10 codes XXXX-XXXX, à usage unique. */
+  const codesSecours = (n = 10) => Array.from({ length: n }, () => { const c = Array.from(octets(8), (b) => ALPHA[b % ALPHA.length]).join(''); return c.slice(0, 4) + '-' + c.slice(4); });
+  const normSecours = (c) => String(c || '').toUpperCase().replace(/[^0-9A-Z]/g, '').replace(/^(.{4})(.{4})$/, '$1-$2');
+
   return {
     DEVISE, OFFRES, ORDRE, PALIERS, PARRAINAGE, PALIERS_PARRAINAGE, BADGES, FONCTIONS, AVANTAGES, RATTACHER_GRATUIT, GRACE_JOURS, TRANSITION_JOURS,
     APPAREILS, APPAREILS_MAX, TRANSFERT,
@@ -271,5 +321,6 @@
     signer, verifier, nouvellesCles, canon, euros, rang,
     codeLicence, codeSession, codeParrain, controle, normCode, estCodeLicence, estCodeSession, estCodeParrain, formatLicence, formatSession, formatParrain,
     emailValide, normEmail, masquerEmail,
+    MDP, nouveauSel, deriverCle, evaluerMotDePasse, base32, deBase32, nouveauSecretTotp, totp, totpPas, pasTotp, uriTotp, codesSecours, normSecours,
   };
 });

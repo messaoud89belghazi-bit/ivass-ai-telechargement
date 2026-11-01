@@ -13,33 +13,27 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
-### ⭐ Nouveau : 6 versions, compte Ivass, 1 PC + 1 téléphone
-- 🌱 **Free** (0 €, sans compte) : 5 clés API, discussion avec toutes vos IA, bibliothèque, Bouclier, Académie (niveaux 0 et 1), 11 langues.
-- 🔹 **Basic** 2,99 € · ⭐ **Plus** 4,99 € · 💎 **Pro** 9,99 € · 🏢 **Enterprise** 19,99 € · 👑 **Ultimate** 29,99 € par mois : 10, 15, 25, 40 clés puis illimitées, et la matrice complète des permissions dans ⭐ Versions.
-- 👤 **Compte par e-mail** : un code à 6 chiffres, sans mot de passe ; Ivass ne garde pas votre adresse en clair.
-- 💻📱 **1 PC principal + 1 téléphone principal**, synchronisés ; un nouvel appareil se **transfère** en un clic (1 fois tous les 30 jours).
-- 🎁 **Parrainage** : votre code IVASS-XXXXX-XXXX, des récompenses qui montent avec vos filleuls (clés, jours Plus, Pro, Ultimate, badges).
-- 🔗 **Rattachements** : plus de 200 plateformes (IA, SaaS, cloud, API publiques, outils développeurs, automatisation) avec documentation, lien de création de clé et assistant de connexion.
-- Tant que les paiements ne sont pas ouverts, tout reste gratuit et illimité. Anciens abonnés : Pro garde Pro, Expert devient Ultimate, au même prix. [Conditions de vente](https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/conditions/)
+### 🔐 Nouveau : un compte aussi sûr que celui des grandes plateformes d'IA
+- **Adresse e-mail vérifiée** par un code à 6 chiffres, puis **mot de passe** (10 caractères minimum, jauge de robustesse, mots de passe courants refusés). Le mot de passe n'est **jamais envoyé** : il est étiré sur votre appareil (PBKDF2-SHA-256, 600 000 tours) et seul le résultat part au serveur.
+- **Double authentification (2FA)** : code à 6 chiffres de votre application d'authentification (Google Authenticator, Microsoft Authenticator, 2FAS…), QR code sur PC, lien direct sur téléphone, **10 codes de secours**.
+- **Appareils de confiance** : un nouvel appareil est confirmé par un code envoyé par e-mail ; vous voyez et retirez vos appareils de confiance, et déconnectez tous les autres appareils en un clic.
+- **Mot de passe oublié** : code par e-mail (+ code 2FA si elle est activée) ; tous les appareils sont déconnectés par sécurité.
+- 👆 **Biométrie** quand l'appareil le permet : **Windows Hello** (visage, empreinte), **Touch ID** sur Mac, **empreinte / visage** sur Android, **Face ID / Touch ID** sur iPhone — déverrouille le compte au démarrage et confirme les actions sensibles. Votre empreinte et votre visage restent dans l'appareil.
+- Protection contre la recherche d'adresses inscrites, limites de tentatives, alertes par e-mail.
 
-### 🧑‍💻 Ivass Dev
-Académie de 55 leçons, Mode Architecte, docs officielles, kits de démarrage et missions autonomes, avec votre accord avant chaque commande.
+### 🖥 Interface mesurée au pixel
+- Plus aucun nom coupé dans le menu (« Recherche a… », « Bibli… », « Rattach… ») : les noms passent à la ligne, les compteurs sont des pastilles, le menu a de la place pour les futurs outils et la barre latérale s'élargit à la souris.
+- **Adaptation automatique à l'écran** : taille de l'écran, densité de pixels et type de pointeur détectés ; zoom choisi tout seul (petit portable, Full HD, QHD, 4K, tablette Windows) ou réglé dans ⚙ Paramètres › Général › Taille de l'interface.
+- Audit d'affichage sur 10 écrans (1024 × 640 à 4K) et plusieurs langues : textes, boutons, onglets, menus et fenêtres vérifiés en pixels ; l'interrupteur qui sortait de son rail est corrigé.
 
-### 📦 Nouveau : de vrais fichiers, pas du code
-Demandez un CV, une facture, un rapport, un budget ou une présentation : Ivass crée directement le fichier **Word, PDF, Excel, PowerPoint ou CSV**, ainsi que vos **images** et **vidéos**, prêts à ouvrir et à partager — sur PC comme sur téléphone.
+### 🤖 Agent : plus jamais bloqué sur une commande
+- Un **serveur** lancé par l'agent (`node backend/src/main.js`, `npm start`, `nest start`, `uvicorn`, `python manage.py runserver`…) ne se termine jamais tout seul : Ivass vérifie qu'il **démarre**, puis l'arrête et continue la mission en vous donnant la commande pour le lancer vous-même.
+- **Délai dépassé** ou bouton **■ Arrêter** : toute la chaîne de processus est arrêtée (sous Windows, `cmd.exe` **et** le programme lancé), et l'agent reprend la main.
 
-### Ce que fait Ivass AI
-- 🤖 Claude, Gemini, ChatGPT, Groq, Mistral… réunis, avec bascule automatique si une IA est en panne.
-- 🧠 Réflexion profonde : brouillon, relecture experte, réponse corrigée.
-- 📚 Bibliothèque personnelle qui sert de mémoire à l'IA, même sans réseau.
-- 🔄 Synchronisation PC ↔ téléphone chiffrée de bout en bout.
-- 🎨 Thèmes clairs et sombres, arrière-plans, taille du texte.
+### 🧭 Menu plus compact
+- Les outils prennent moins de place ; la barre du bas (⭐ Versions, ⚙ Paramètres, 📣, 📤) et vos discussions restent **toujours visibles**, même sur un petit écran.
+- Chaque groupe du menu (Travailler, Créer, Développer, Connaissances, Protéger) se **replie d'un clic** ; Ivass s'en souvient.
+- Les compteurs sont abrégés (19 626 → 19,6k).
 
-### Installation
-- **PC** : ouvrez le fichier .exe. Si Windows affiche « Windows a protégé votre ordinateur », cliquez sur *Informations complémentaires* puis *Exécuter quand même* (logiciel récent, pas encore connu de Microsoft).
-- **Android** : ouvrez le fichier .apk et autorisez « Installer des applications inconnues » si Android le demande.
-- Au premier lancement, ajoutez une clé d'IA : une clé **Google Gemini** est gratuite sur https://aistudio.google.com/app/apikey
-
-Les applications se mettent ensuite à jour toutes seules.
-
-*Ce dépôt contient uniquement les applications compilées et la page de téléchargement ; le code source d'Ivass AI n'est pas public.*
+### ⚖️ Mentions légales complétées
+- Éditeur et vendeur : **IVASS SERVICES**, SARL, SIRET 940 702 780 00013, 61 rue de Lyon, 75012 Paris — contact : **ivass.contact@gmail.com** (CGU, CGV, politique de confidentialité, page de téléchargement).

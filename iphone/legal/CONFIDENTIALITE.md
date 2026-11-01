@@ -4,7 +4,7 @@
 
 ## 1. Qui est responsable ?
 
-Le responsable du traitement des contributions est **Messaoud BELGHAZI**, éditeur d'Ivass AI. Contact : **[ADRESSE E-MAIL DE CONTACT À COMPLÉTER]**.
+Le responsable du traitement est **IVASS SERVICES** (SARL, SIRET 940 702 780 00013, 61 rue de Lyon, 75012 Paris), éditeur d'Ivass AI, représentée par **Messaoud BELGHAZI**. Contact : **ivass.contact@gmail.com**.
 
 ## 2. Le principe : tout reste sur votre ordinateur
 
@@ -92,11 +92,20 @@ Les **📣 Nouveautés** sont lues sur la page publique d’Ivass AI et sur le s
 
 **Sans compte, rien n'est envoyé.** Ivass Free fonctionne sans compte : Ivass AI demande seulement au serveur si les versions payantes sont ouvertes et quels sont leurs prix ; cette demande ne contient aucune donnée vous concernant.
 
-**Connexion par e-mail.** Quand **vous** créez votre compte ou vous connectez, votre adresse e-mail est envoyée au serveur, qui vous adresse un code à 6 chiffres par le service d'envoi **Resend** (Resend, Inc., États-Unis, sous-traitant, encadré par les clauses contractuelles types de la Commission européenne). Le serveur **ne garde pas votre adresse en clair** : il conserve son **empreinte** (HMAC-SHA-256 avec une clé secrète), qui sert à retrouver votre compte, et une **forme masquée** (ex. m•••••@gmail.com) affichée dans ⭐ Versions. Le code reçu n'est conservé que sous forme d'empreinte, 10 minutes au plus.
+**Adresse e-mail vérifiée.** Quand **vous** créez votre compte, votre adresse e-mail est envoyée au serveur, qui vous adresse un code à 6 chiffres par le service d'envoi **Resend** (Resend, Inc., États-Unis, sous-traitant, encadré par les clauses contractuelles types de la Commission européenne). Le serveur **ne garde pas votre adresse en clair** : il conserve son **empreinte** (HMAC-SHA-256 avec une clé secrète), qui sert à retrouver votre compte, et une **forme masquée** (ex. m•••••@gmail.com) affichée dans ⭐ Versions. Les codes reçus ne sont conservés que sous forme d'empreinte, 10 minutes au plus. Resend envoie aussi les **codes de confirmation d'un nouvel appareil** et les **alertes de sécurité** (nouvel appareil, mot de passe changé, double authentification activée ou désactivée).
+
+**Mot de passe (depuis la version 3.21).** Votre mot de passe **n'est jamais envoyé ni enregistré** : il est transformé sur votre appareil (PBKDF2-SHA-256, 600 000 tours, avec un sel aléatoire propre à votre compte) et seul ce résultat part au serveur, qui le transforme encore (HMAC avec une clé secrète) avant de le garder. Personne, pas même l'éditeur, ne peut retrouver votre mot de passe à partir de ces données. Pour empêcher de deviner quelles adresses sont inscrites, le serveur répond de la même façon pour une adresse inconnue.
+
+**Double authentification (facultative).** Si vous l'activez, le serveur garde la **clé secrète** de votre application d'authentification **chiffrée** (AES-GCM), le dernier code utilisé (pour qu'il ne serve pas deux fois) et l'**empreinte** de vos 10 codes de secours.
+
+**Appareils de confiance.** Un appareil confirmé reçoit un jeton aléatoire gardé chiffré sur l'appareil ; le serveur n'en garde que l'**empreinte**, avec le nom de l'appareil (ex. « PC Windows », « Android ») et les dates d'ajout et de dernière utilisation. Vous les voyez et les retirez dans ⭐ Versions › 👤 Compte › 🛡 Sécurité. Les appareils de confiance inutilisés depuis 1 an sont effacés.
+
+**Biométrie.** Le déverrouillage par Windows Hello, Touch ID, empreinte, visage ou Face ID est vérifié **par le système de votre appareil** : Ivass AI reçoit seulement « vérifié » ou « refusé ». Aucune donnée biométrique n'est lue, conservée ni envoyée.
 
 **Ce que le serveur enregistre pour votre compte**, sans votre nom :
 - un identifiant aléatoire de compte, l'empreinte et la forme masquée de votre e-mail ;
-- l'**empreinte** du jeton de session de chacun de vos appareils — le jeton lui-même reste sur l'appareil, chiffré ;
+- l'**empreinte** du jeton de session de chacun de vos appareils — le jeton lui-même reste sur l'appareil, chiffré ; une session inutilisée pendant 90 jours est fermée ;
+- le **sel** et l'empreinte de votre mot de passe étiré, la clé chiffrée de la double authentification et les empreintes de vos codes de secours, les empreintes des jetons de vos appareils de confiance ;
 - vos **appareils principaux** (1 PC, 1 téléphone) : un identifiant aléatoire, le nom choisi par Ivass (ex. « PC Windows », « Android ») et la date de dernière vérification ;
 - l'**historique des activations** (connexions, appareils ajoutés, transferts, refus d'un appareil supplémentaire, changements d'abonnement), conservé 1 an ;
 - votre code de parrainage (IVASS-…) avec ses dates et son nombre d'utilisations, le lien avec votre parrain, vos filleuls validés et l'historique de vos récompenses ;

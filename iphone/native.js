@@ -198,5 +198,41 @@
     files,
     b64of, bytesOf,
     installUpdate: (url) => { if (N && N.installUpdate) N.installUpdate(url); else window.open(url, '_blank', 'noopener'); },
+    /** Lien otpauth:// (2FA) : ouvre l'application d'authentification installée (Google Authenticator, Microsoft, 2FAS…). */
+    openOtp: (u) => { if (!/^otpauth:\/\/totp\//.test(u)) return; if (A && A.openOtp) A.openOtp(u); else if (I) I.call('openUrl', { url: u }).catch(() => {}); else window.location.href = u; },
+    biometrieDispo, biometrie,
   };
+
+  // ---------- 👆 Biométrie (empreinte, visage, Face ID / Touch ID) : vérification locale, rien n'est envoyé ----------
+  async function biometrieDispo() {
+    if (A) { if (!A.biometrieDispo) return { ok: false, raison: 'mettez à jour l’application' }; try { return JSON.parse(A.biometrieDispo()); } catch (_) { return { ok: false, raison: 'indisponible' }; } }
+    if (I) { try { return await I.call('biometrieDispo', {}); } catch (_) { return { ok: false, raison: 'mettez à jour l’application' }; } }
+    // navigateur (version iPhone web) : authentificateur de l'appareil par WebAuthn (Face ID, Touch ID, Windows Hello…)
+    if (window.isSecureContext && window.PublicKeyCredential && PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable) {
+      const ok = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().catch(() => false);
+      return ok ? { ok: true, methode: isIOS ? 'Face ID / Touch ID' : 'Biométrie de l’appareil', web: true } : { ok: false, raison: 'non pris en charge par ce navigateur' };
+    }
+    return { ok: false, raison: 'non pris en charge sur cet appareil' };
+  }
+  /** true si l'utilisateur est vérifié. Web : la 1re fois (enregistrer = true), une clé locale est créée sur l'appareil. */
+  async function biometrie(raison = 'Ivass AI', enregistrer = false) {
+    if (A && A.biometrie) {
+      const id = 'b' + (++seq) + '_' + Date.now();
+      return new Promise((resolve) => { pending.set(id, { resolve: (r) => resolve(r.status === 200), reject: () => resolve(false) }); A.biometrie(id, String(raison).slice(0, 120)); });
+    }
+    if (I) { const r = await I.call('biometrie', { raison: String(raison).slice(0, 120) }).catch(() => null); return !!(r && r.ok); }
+    if (!window.PublicKeyCredential) return false;
+    const alea = (n) => crypto.getRandomValues(new Uint8Array(n));
+    try {
+      let idCle = LS.get('bio-cle');
+      if (!idCle || enregistrer) {
+        const c = await navigator.credentials.create({ publicKey: { challenge: alea(32), rp: { name: 'Ivass AI' }, user: { id: alea(16), name: 'ivass', displayName: 'Ivass AI' }, pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }], authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'discouraged' }, timeout: 60000 } });
+        idCle = b64of(new Uint8Array(c.rawId)); LS.set('bio-cle', idCle);
+        return true;
+      }
+      const a = await navigator.credentials.get({ publicKey: { challenge: alea(32), allowCredentials: [{ type: 'public-key', id: bytesOf(idCle) }], userVerification: 'required', timeout: 60000 } });
+      const flags = new Uint8Array(a.response.authenticatorData)[32];
+      return !!(flags & 0x04); // bit « utilisateur vérifié »
+    } catch (_) { return false; }
+  }
 })();

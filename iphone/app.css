@@ -388,3 +388,22 @@ html[dir="rtl"] #panelBack { transform: scaleX(-1); }
 .dv-code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
 .dv-cmd { background: var(--bg2); border-radius: 9px; padding: 10px; font-size: 13px; overflow-x: auto; white-space: pre; }
 .dv-plan { padding-left: 20px; margin: 6px 0; } .dv-plan li { margin: 4px 0; color: var(--muted); } .dv-plan li.ok, .dv-plan li.cur { color: var(--text); } .dv-plan li.cur { font-weight: 600; }
+
+/* 3.21 · 🔐 compte sécurisé */
+.auth-onglets { flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.mdp-champ { display: flex; gap: 6px; align-items: stretch; }
+.mdp-champ .field { flex: 1; min-width: 0; }
+.jauge { height: 6px; border-radius: 999px; background: var(--panel2, rgba(255,255,255,.08)); overflow: hidden; margin: 6px 0 2px; }
+.jauge i { display: block; height: 100%; width: 0; background: var(--danger); transition: width .2s, background .2s; }
+.jauge[data-n="1"] i { width: 25%; } .jauge[data-n="2"] i { width: 50%; background: #f0b429; }
+.jauge[data-n="3"] i { width: 75%; background: #9bd36a; } .jauge[data-n="4"] i { width: 100%; background: var(--ok, #5ee0a8); }
+pre.secours { font-size: 15px; line-height: 1.6; letter-spacing: .06em; padding: 10px 12px; border-radius: 10px; background: rgba(0,0,0,.25); overflow-x: auto; }
+/* 3.21 · audit du bac à sable (12 téléphones et tablettes) : cibles tactiles d'au moins 44 × 44 px (recommandation Apple / Google) */
+.btn.sm { min-height: 44px; }
+a.tag, button.tag { display: inline-flex; align-items: center; min-height: 44px; padding: 2px 12px; }
+#panelBack, #pwaHintNo { min-width: 44px; min-height: 44px; }
+.icon { width: 44px; height: 44px; }
+.btn.sm { min-width: 44px; }
+.chip { min-height: 44px; }
+#modes .mode, #libToggle { min-height: 44px; }
+#sendBtn, #attachBtn { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }

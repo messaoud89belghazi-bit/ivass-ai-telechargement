@@ -1248,7 +1248,7 @@
     } catch (_) { /* hors ligne : on garde la dernière version connue */ }
   }
   fetch('config.json').then((r) => r.json()).then((c) => { S.config = c || {}; }).catch(() => {})
-    .then(() => OF.init().catch(() => {})) // ⭐ licence enregistrée vérifiée tout de suite
+    .then(() => OF.init().then(() => { if (OF.verrouille) OF.garde().catch(() => {}); }).catch(() => {})) // ⭐ licence vérifiée tout de suite ; 👆 déverrouillage biométrique si activé
     .then(remoteConfig)
     .finally(() => { if (S.settings.sync.auto) syncNow(false); flushSoon(15000); setTimeout(() => checkUpdate(false), 4000); setTimeout(() => receiveSavoir(false).catch(() => {}), 8000); setTimeout(() => { if (S.settings.monde !== false && S.config.pageUrl) receivePack('monde', 'monde.json', 'monde', false).catch(() => {}); }, 12000); });
   setInterval(() => checkUpdate(false), 6 * 3600e3);
