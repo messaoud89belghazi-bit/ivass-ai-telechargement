@@ -127,7 +127,7 @@
   });
 
   // ---------------- Accueil / CGU ----------------
-  const CGU_VERSION = 2; // 2 : offres payantes, Conditions générales de vente
+  const CGU_VERSION = 3; // 2 : offres payantes, CGV ; 3 : versions Free à Ultimate, compte e-mail, 1 PC + 1 téléphone
   async function showLegal() {
     const get = async (f) => { try { return await (await fetch('legal/' + f)).text(); } catch (_) { return ''; } };
     openPanel('Conditions et confidentialité', `${LANG.lang === 'fr' ? '' : '<p class="help">Version officielle en français.</p>'}<div class="card bubble no-i18n">${md(await get('CGU.md'))}</div><div class="card bubble no-i18n">${md(await get('MOBILE.md'))}</div><div class="card bubble no-i18n">${md(await get('CGV.md'))}</div><div class="card bubble no-i18n">${md(await get('CONFIDENTIALITE.md'))}</div>`);
@@ -316,7 +316,7 @@
 
   // ----- 🧑‍💻 Ivass Dev -----
   const peutF = (f) => window.IvassLicence.peut(f, OF.droits());
-  const gardeF = (f) => { if (peutF(f)) return true; const x = window.IvassLicence.FONCTIONS[f]; N.toast('🔒 ' + T('« {} » fait partie de l’offre {}.', T(x.nom), x.niveau === 'pro' ? 'Pro' : 'Expert')); openOffres(); return false; };
+  const gardeF = (f) => { if (peutF(f)) return true; const x = window.IvassLicence.FONCTIONS[f]; N.toast('🔒 ' + T('« {} » fait partie d’Ivass {}.', T(x.nom), window.IvassLicence.OFFRES[x.niveau].nom)); openOffres(); return false; };
   const ajouterConv = (titre, affichage, contenu, ouvrir) => {
     const c = { id: uid(), title: String(titre).slice(0, 80), created: Date.now(), updated: Date.now(), messages: [{ role: 'user', content: affichage, display: affichage, ts: Date.now() }, { role: 'assistant', content: contenu, ts: Date.now() }] };
     S.convs.list.push(c); saveConvs();
@@ -331,15 +331,25 @@
     ask: async (prompt, system, maxTokens, signal, ia) => (await core.chat({ providers: provsIA(S.settings.providers).map((p) => (ia && p.id === ia ? { ...p, priority: -1 } : p)), messages: [{ role: 'user', content: prompt }], system, maxTokens, signal })).text,
     lancer: (texte, affichage) => { if (S.busy) return N.toast(T('Une réponse est en cours : attendez qu’elle se termine.')); closePanel(); newConv(); send(texte, affichage); },
   });
+  // ----- 🔗 Rattachements -----
+  const RT = window.IvassRattachementsMobile && window.IvassRattachementsMobile({
+    N, T: (s, ...v) => T(s, ...v), esc, core, providers: () => S.settings.providers, saveSettings: () => saveSettings(), limiteCles,
+    ask: async (prompt, system) => (await core.chat({ providers: provsIA(S.settings.providers), messages: [{ role: 'user', content: prompt }], system, maxTokens: 700 })).text,
+  });
+  function openRattach() {
+    if (!RT) return;
+    const draw = () => openPanel('🔗 ' + T('Rattachements'), RT.html(), (r) => RT.mount(r, draw));
+    draw();
+  }
   function openDev() {
     if (!DV) return;
     const draw = () => openPanel('🧑‍💻 Ivass Dev', DV.html(), (r) => DV.mount(r, draw));
     draw();
   }
 
-  // ----- ⭐ Offres -----
+  // ----- ⭐ Versions -----
   function openOffres() {
-    const draw = () => openPanel('⭐ ' + T('Offres'), OF.html(nCles()), (r) => OF.mount(r, nCles(), draw));
+    const draw = () => openPanel('⭐ ' + T('Versions'), OF.html(nCles()), (r) => OF.mount(r, nCles(), draw));
     draw();
     OF.refresh(true).then(() => { if (!$('#panel').classList.contains('hidden') && $('#panelTitle').textContent.includes('⭐')) draw(); }).catch(() => {});
   }
@@ -749,7 +759,7 @@
   $('#menuBtn').onclick = openDrawer;
   $('#scrim').onclick = closeDrawer;
   $('#newBtn').onclick = newConv;
-  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, dev: openDev, settings: () => openSettings(), offres: openOffres, sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
+  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, dev: openDev, rattach: openRattach, settings: () => openSettings(), offres: openOffres, sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
 
   // ---------------- Panneaux ----------------
   let panelRefresh = null;
@@ -1024,6 +1034,7 @@
     if (syncing) return syncing;
     const server = syncServer(), code = syncCode();
     if (!server || !code) { if (manual) N.toast('Choisissez d’abord un code de synchronisation'); return null; }
+    if (!peutF('synchro')) { if (manual) gardeF('synchro'); return null; } // ⭐ Ivass Basic et plus
     $('#syncBadge').classList.remove('hidden');
     syncing = (async () => {
       try {
@@ -1076,8 +1087,8 @@
         const age = p ? Math.round((Date.now() - p.at) / 1000) : null;
         el.innerHTML = p && age < 180 ? `<span class="ok">● En ligne</span> — ${esc(p.name || 'PC')} · ${esc(p.ai || '')} (vu il y a ${age} s)` : `<span class="ko">● Hors ligne</span> — ouvrez Ivass AI sur le PC${p ? ' (vu le ' + new Date(p.at).toLocaleString(window.ivassLocale || 'fr-FR') + ')' : ''}.`;
       });
-      on('genCode', () => { N.secretSet('sync-code', window.IvassSync.newCode()); draw(r); });
-      on('useCode', async () => {
+      on('genCode', () => { if (!gardeF('synchro')) return; N.secretSet('sync-code', window.IvassSync.newCode()); draw(r); });
+      on('useCode', async () => { if (!gardeF('synchro')) return;
         const c = window.IvassSync.normCode($('#codeF', r).value);
         try { await window.IvassSync.open(c); } catch (e) { return N.toast(e.message); }
         N.secretSet('sync-code', c); draw(r); syncNow(true);

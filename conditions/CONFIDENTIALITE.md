@@ -1,6 +1,6 @@
 # Politique de confidentialité d'Ivass AI
 
-*Version 2 — en vigueur au 31 octobre 2026*
+*Version 3 — en vigueur au 1er novembre 2026*
 
 ## 1. Qui est responsable ?
 
@@ -15,7 +15,7 @@ Ivass ne se connecte à Internet que pour :
 - **les recherches web** que vous lancez ;
 - **la vérification des mises à jour** sur GitHub : GitHub voit alors votre adresse IP, comme pour toute visite d'un site ;
 - **le programme d'amélioration**, seulement si vous l'avez accepté (voir ci-dessous) ;
-- **la vérification des offres** (Gratuit, Pro, Expert) et, si vous les utilisez, le **code licence** et le **parrainage** (voir la section « Offres payantes et parrainage »).
+- **la vérification des versions** (Free, Basic, Plus, Pro, Enterprise, Ultimate) et, si vous les utilisez, le **compte Ivass**, la **licence** et le **parrainage** (voir la section « Compte Ivass, versions payantes et parrainage »).
 
 ## 3. Le programme d'amélioration (facultatif)
 
@@ -88,21 +88,31 @@ Si vous vous y inscrivez vous-même (Paramètres › 🤝 Contribution, ou Régl
 
 Les **📣 Nouveautés** sont lues sur la page publique d’Ivass AI et sur le serveur de contributions, sans rien envoyer de vous. Un **🎁 pack à partager** est un fichier créé sur votre PC à partir de votre bibliothèque (jamais vos discussions ni votre historique), nettoyé avant export ; c’est vous qui choisissez à qui l’envoyer.
 
-## 3 bis. Offres payantes et parrainage
+## 3 bis. Compte Ivass, versions payantes et parrainage
 
-**Sans compte, rien n'est envoyé.** Ivass AI demande seulement au serveur si les offres payantes sont ouvertes et quels sont leurs prix ; cette demande ne contient aucune donnée vous concernant.
+**Sans compte, rien n'est envoyé.** Ivass Free fonctionne sans compte : Ivass AI demande seulement au serveur si les versions payantes sont ouvertes et quels sont leurs prix ; cette demande ne contient aucune donnée vous concernant.
 
-**Quand un compte est créé.** Un compte n'est créé que si **vous** souscrivez une offre, demandez votre code de parrainage ou saisissez un code (licence ou parrainage). Le serveur enregistre alors, sans votre nom ni votre e-mail :
-- un identifiant aléatoire de compte et l'**empreinte** (SHA-256) de votre code licence — le code lui-même reste sur vos appareils, chiffré ;
-- votre code de parrainage public (IVA-…) et, le cas échéant, le lien avec votre parrain et le nombre de vos filleuls validés ;
-- les identifiants aléatoires de vos appareils (3 au maximum) et la date de leur dernière vérification ;
+**Connexion par e-mail.** Quand **vous** créez votre compte ou vous connectez, votre adresse e-mail est envoyée au serveur, qui vous adresse un code à 6 chiffres par le service d'envoi **Resend** (Resend, Inc., États-Unis, sous-traitant, encadré par les clauses contractuelles types de la Commission européenne). Le serveur **ne garde pas votre adresse en clair** : il conserve son **empreinte** (HMAC-SHA-256 avec une clé secrète), qui sert à retrouver votre compte, et une **forme masquée** (ex. m•••••@gmail.com) affichée dans ⭐ Versions. Le code reçu n'est conservé que sous forme d'empreinte, 10 minutes au plus.
+
+**Ce que le serveur enregistre pour votre compte**, sans votre nom :
+- un identifiant aléatoire de compte, l'empreinte et la forme masquée de votre e-mail ;
+- l'**empreinte** du jeton de session de chacun de vos appareils — le jeton lui-même reste sur l'appareil, chiffré ;
+- vos **appareils principaux** (1 PC, 1 téléphone) : un identifiant aléatoire, le nom choisi par Ivass (ex. « PC Windows », « Android ») et la date de dernière vérification ;
+- l'**historique des activations** (connexions, appareils ajoutés, transferts, refus d'un appareil supplémentaire, changements d'abonnement), conservé 1 an ;
+- votre code de parrainage (IVASS-…) avec ses dates et son nombre d'utilisations, le lien avec votre parrain, vos filleuls validés et l'historique de vos récompenses ;
 - si vous avez un parrain : les **dates** (jour seulement) où vous avez utilisé Ivass AI, pour valider le parrainage ; aucun contenu, aucune question ;
 - si vous avez souscrit : l'identifiant de votre abonnement PayPal, la formule, son état et sa date de fin ;
-- pour limiter les abus, une empreinte de votre adresse IP, effacée au bout de 3 jours.
+- pour prévenir la fraude : une **empreinte de votre adresse IP** lors de l'inscription et de la déclaration d'un parrain (effacée au bout de **90 jours**), des compteurs d'essais (effacés au bout de 3 jours) et, en cas d'anomalie (jeton de session copié, licence demandée par plusieurs appareils, parrainages en rafale), un signalement que seul l'éditeur consulte.
+
+Les comptes créés avant le 1er novembre 2026 avec un code licence (IVL-…) restent sans adresse e-mail tant que vous n'en reliez pas une.
+
+**Décisions automatisées.** Aucune décision produisant des effets juridiques n'est prise uniquement par un traitement automatisé : un parrainage jugé suspect est mis en attente et **vérifié par l'éditeur** ; un appareil supplémentaire n'est pas bloqué mais vous propose un transfert ou une licence supplémentaire.
+
+**Supprimer votre compte.** ⭐ Versions › 👤 Compte › « Supprimer mon compte » arrête l'abonnement PayPal et efface immédiatement l'identité, les appareils, les sessions, le parrainage, l'historique et le journal de votre compte (sous réserve des données comptables ci-dessous).
 
 **Paiement.** Il est traité par **PayPal**, responsable de ses propres traitements (politique de confidentialité de PayPal). L'éditeur reçoit de PayPal l'état de l'abonnement et les montants ; il ne reçoit jamais vos coordonnées bancaires.
 
-**Pourquoi.** Exécuter le contrat (offre, licence, parrainage : article 6.1.b du RGPD), prévenir la fraude au parrainage (intérêt légitime : article 6.1.f) et tenir la comptabilité (obligation légale : article 6.1.c).
+**Pourquoi.** Exécuter le contrat (compte, version, licence, parrainage : article 6.1.b du RGPD), prévenir le partage de licence et la fraude au parrainage (intérêt légitime : article 6.1.f) et tenir la comptabilité (obligation légale : article 6.1.c).
 
 **Durée.** Les données du compte sont conservées tant que le compte sert, puis supprimées **3 ans** après la dernière utilisation, ou plus tôt sur demande. Les données comptables (montant, date, identifiant de transaction) sont conservées **10 ans**, comme l'exige la loi. Le serveur est hébergé par Cloudflare (voir « Hébergement et durée »).
 

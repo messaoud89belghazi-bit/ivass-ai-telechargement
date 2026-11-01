@@ -23,11 +23,11 @@ small { display:block; margin-top:18px; color:#7d8596; }
 (function () {
   var q = new URLSearchParams(location.search), m = document.getElementById('m');
   if (q.get('ok')) m.innerHTML = '<div class="ico">🎉</div><h1>Merci, votre paiement est validé</h1>' +
-    '<p>Revenez dans <b>Ivass AI</b> : votre offre s’active toute seule en moins d’une minute (⭐ Offres).</p>' +
-    '<p>Sur un autre appareil, entrez votre <b>code licence</b> (IVL-…) affiché dans ⭐ Offres.</p>' +
-    '<p>Vous pouvez fermer cette page.</p><small>Paiement traité par PayPal. Résiliable à tout moment depuis ⭐ Offres ou sur paypal.com. <a href="conditions/#cgv">Conditions de vente</a></small>';
+    '<p>Revenez dans <b>Ivass AI</b> : votre version s’active toute seule en moins d’une minute (⭐ Versions).</p>' +
+    '<p>Sur votre téléphone principal, connectez-vous avec la même adresse e-mail (⭐ Versions › 👤 Compte).</p>' +
+    '<p>Vous pouvez fermer cette page.</p><small>Paiement traité par PayPal. Résiliable à tout moment depuis ⭐ Versions ou sur paypal.com. <a href="conditions/#cgv">Conditions de vente</a></small>';
   else if (q.get('annule')) m.innerHTML = '<div class="ico">↩️</div><h1>Paiement annulé</h1>' +
-    '<p>Aucun montant n’a été prélevé. Ivass AI reste utilisable avec votre offre actuelle.</p>' +
+    '<p>Aucun montant n’a été prélevé. Ivass AI reste utilisable avec votre version actuelle.</p>' +
     '<p>Vous pouvez fermer cette page et revenir dans Ivass AI.</p><a class="btn" href="./">Retour à Ivass AI</a>';
 })();
 </script></body></html>

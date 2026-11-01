@@ -13,20 +13,17 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
-### 🧑‍💻 Nouveau : Ivass Dev
-- 🎓 **Académie** : 7 niveaux et 55 leçons pour devenir développeur professionnel (web, backend, desktop, mobile, DevOps, IA, architecture SaaS), expliquées par votre IA, avec quiz et relecture de code.
-- 📐 **Mode Architecte** : une idée devient un dossier de conception complet en 13 sections, exportable en Word ou PDF.
-- 📚 **Docs officielles** : réponses techniques qui citent MDN, react.dev, FastAPI, Docker… et Context7 en un clic.
-- 🧰 **Kits de démarrage** : Next.js, NestJS + PostgreSQL + Docker, FastAPI, Electron, Flutter, Expo, assistant RAG Ollama — avec tests, CI et README.
-- 🎯 **Missions** : votre IA travaille en autonomie sur un projet ; Ivass vous demande votre accord avant chaque commande et chaque modification.
+### ⭐ Nouveau : 6 versions, compte Ivass, 1 PC + 1 téléphone
+- 🌱 **Free** (0 €, sans compte) : 5 clés API, discussion avec toutes vos IA, bibliothèque, Bouclier, Académie (niveaux 0 et 1), 11 langues.
+- 🔹 **Basic** 2,99 € · ⭐ **Plus** 4,99 € · 💎 **Pro** 9,99 € · 🏢 **Enterprise** 19,99 € · 👑 **Ultimate** 29,99 € par mois : 10, 15, 25, 40 clés puis illimitées, et la matrice complète des permissions dans ⭐ Versions.
+- 👤 **Compte par e-mail** : un code à 6 chiffres, sans mot de passe ; Ivass ne garde pas votre adresse en clair.
+- 💻📱 **1 PC principal + 1 téléphone principal**, synchronisés ; un nouvel appareil se **transfère** en un clic (1 fois tous les 30 jours).
+- 🎁 **Parrainage** : votre code IVASS-XXXXX-XXXX, des récompenses qui montent avec vos filleuls (clés, jours Plus, Pro, Ultimate, badges).
+- 🔗 **Rattachements** : plus de 200 plateformes (IA, SaaS, cloud, API publiques, outils développeurs, automatisation) avec documentation, lien de création de clé et assistant de connexion.
+- Tant que les paiements ne sont pas ouverts, tout reste gratuit et illimité. Anciens abonnés : Pro garde Pro, Expert devient Ultimate, au même prix. [Conditions de vente](https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/conditions/)
 
-### ⭐ Nouveau : offres Gratuit, Pro et Expert
-- 🌱 **Gratuit** : 5 clés API, discussion, bibliothèque, apprentissage, Bouclier, synchronisation, 11 langues.
-- ⭐ **Pro** (4,99 €/mois) : 20 clés API, Mode Agent, Recherche autonome, Explorateur, Studio images, fichiers Word/PDF/Excel/PowerPoint…
-- 💎 **Expert** (9,99 €/mois) : 25 clés API, tout Pro + Conseil multi-agents, Réflexion profonde, Studio vidéo IA, 3D, images 4K/8K, MCP, projets GitHub…
-- 🔑 Plus de clés : 6-10 1,99 € · 11-15 3,49 € · 16-20 4,99 € · 21-25 6,99 € · 26-30 8,99 € · plus de 30 14,99 €/mois. Paiement PayPal, résiliable à tout moment.
-- 🎁 Parrainage : +1 clé par proche parrainé (jusqu'à +5), 1 mois Pro à 3 filleuls, 1 mois Expert à 10.
-- Tant que les paiements ne sont pas ouverts, tout reste gratuit et illimité. [Conditions de vente](https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/conditions/)
+### 🧑‍💻 Ivass Dev
+Académie de 55 leçons, Mode Architecte, docs officielles, kits de démarrage et missions autonomes, avec votre accord avant chaque commande.
 
 ### 📦 Nouveau : de vrais fichiers, pas du code
 Demandez un CV, une facture, un rapport, un budget ou une présentation : Ivass crée directement le fichier **Word, PDF, Excel, PowerPoint ou CSV**, ainsi que vos **images** et **vidéos**, prêts à ouvrir et à partager — sur PC comme sur téléphone.
