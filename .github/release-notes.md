@@ -37,3 +37,9 @@ Page de téléchargement avec toutes les explications : https://messaoud89belgha
 
 ### ⚖️ Mentions légales complétées
 - Éditeur et vendeur : **IVASS SERVICES**, SARL, SIRET 940 702 780 00013, 61 rue de Lyon, 75012 Paris — contact : **ivass.contact@gmail.com** (CGU, CGV, politique de confidentialité, page de téléchargement).
+
+### 📧 Comptes : e-mails de vérification et de mot de passe oublié
+- Envoi par **Brevo** (sans domaine : expéditeur ivass.contact@gmail.com, 300 e-mails/jour gratuits) ou **Resend** (avec votre domaine) — au choix dans `activer-comptes.bat`.
+- Tant que les comptes ne sont pas ouverts sur le serveur, plus de formulaire inutilisable : un message clair à la place.
+- Paiements pas encore ouverts : « Bientôt disponible » au lieu de boutons d'achat actifs.
+- Menu : les pastilles (20k, 15…) ne recouvrent plus les noms ; si un nom ne tient pas (police Windows, langue), le menu passe sur une colonne.

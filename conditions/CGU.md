@@ -63,4 +63,4 @@ Ces conditions sont soumises au droit français. Si vous êtes un consommateur, 
 
 ## 12. Contact
 
-Éditeur : Messaoud BELGHAZI — contact : **[ADRESSE E-MAIL DE CONTACT À COMPLÉTER]**
+Éditeur : **IVASS SERVICES**, SARL, SIRET 940 702 780 00013, 61 rue de Lyon, 75012 Paris — représentée par Messaoud BELGHAZI — contact : **ivass.contact@gmail.com**

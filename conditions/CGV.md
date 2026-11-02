@@ -4,7 +4,7 @@
 
 ## 1. Vendeur
 
-Les versions payantes d'Ivass AI sont vendues par **Messaoud BELGHAZI**, **[STATUT À COMPLÉTER, ex. : entrepreneur individuel (micro-entreprise)]**, SIRET **[À COMPLÉTER]**, **[ADRESSE POSTALE À COMPLÉTER]**, contact : **[ADRESSE E-MAIL DE CONTACT À COMPLÉTER]** (ci-après « l'éditeur »).
+Les versions payantes d'Ivass AI sont vendues par **IVASS SERVICES**, société à responsabilité limitée (SARL), SIRET **940 702 780 00013**, siège : **61 rue de Lyon, 75012 Paris**, représentée par Messaoud BELGHAZI, contact : **ivass.contact@gmail.com** (ci-après « l'éditeur »).
 
 ## 2. Ce que vous achetez
 
@@ -50,7 +50,7 @@ L'abonnement est **mensuel** et se **renouvelle automatiquement** chaque mois à
 
 ## 4. Compte, licence et appareils
 
-Votre version est attachée à votre **compte Ivass** : vous vous connectez avec votre adresse e-mail et un code à 6 chiffres reçu par e-mail (sans mot de passe). Le serveur délivre à chaque appareil une **licence signée** liée à cet appareil.
+Votre version est attachée à votre **compte Ivass** : vous le créez avec votre adresse e-mail (vérifiée par un code à 6 chiffres) et un mot de passe ; la double authentification et le déverrouillage biométrique sont proposés en option. Le serveur délivre à chaque appareil une **licence signée** liée à cet appareil.
 
 Un compte fonctionne sur **1 PC principal et 1 téléphone principal**, synchronisés automatiquement. Si vous vous connectez sur un deuxième PC (ou un deuxième téléphone), Ivass AI le détecte et vous propose :
 
@@ -71,7 +71,7 @@ Vous pouvez résilier **à tout moment** depuis ⭐ Versions (« Résilier l'abo
 
 ## 7. Droit de rétractation
 
-Vous disposez de **14 jours** à compter de votre première souscription pour vous rétracter, sans avoir à donner de motif. Écrivez à **[ADRESSE E-MAIL DE CONTACT À COMPLÉTER]** depuis l'adresse e-mail de votre compte Ivass : l'abonnement est résilié et **le premier mois vous est remboursé en totalité**, par PayPal, dans les 14 jours suivant votre demande.
+Vous disposez de **14 jours** à compter de votre première souscription pour vous rétracter, sans avoir à donner de motif. Écrivez à **ivass.contact@gmail.com** depuis l'adresse e-mail de votre compte Ivass : l'abonnement est résilié et **le premier mois vous est remboursé en totalité**, par PayPal, dans les 14 jours suivant votre demande.
 
 ## 8. Au-delà de la limite de clés API
 
@@ -111,7 +111,7 @@ Le paiement est traité par PayPal, selon sa propre politique de confidentialit�
 
 ## 12. Réclamations et médiation
 
-Pour toute réclamation, écrivez d'abord à **[ADRESSE E-MAIL DE CONTACT À COMPLÉTER]**. Si votre réclamation n'aboutit pas, vous pouvez recourir gratuitement au médiateur de la consommation : **[NOM ET COORDONNÉES DU MÉDIATEUR DE LA CONSOMMATION À COMPLÉTER]**.
+Pour toute réclamation, écrivez d'abord à **ivass.contact@gmail.com**. Si votre réclamation n'aboutit pas, vous pouvez recourir gratuitement au médiateur de la consommation : **[NOM ET COORDONNÉES DU MÉDIATEUR DE LA CONSOMMATION À COMPLÉTER]**.
 
 ## 13. Droit applicable
 
