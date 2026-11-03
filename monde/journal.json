@@ -1,11 +1,11 @@
 {
- "day": "2026-11-01",
- "started": "2026-11-02T12:34:23.292Z",
+ "day": "2026-11-02",
+ "started": "2026-11-03T12:00:20.539Z",
  "errors": [],
- "topic": "Retraite en France",
- "daily": 52,
- "count": 572,
- "parts": 21,
- "calls": 27,
- "ended": "2026-11-02T12:34:38.344Z"
+ "topic": "Conseil de prud'hommes",
+ "daily": 51,
+ "count": 623,
+ "parts": 22,
+ "calls": 2,
+ "ended": "2026-11-03T12:00:27.049Z"
 }
