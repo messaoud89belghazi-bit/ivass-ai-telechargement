@@ -88,6 +88,10 @@ Si vous vous y inscrivez vous-même (Paramètres › 🤝 Contribution, ou Régl
 
 Les **📣 Nouveautés** sont lues sur la page publique d’Ivass AI et sur le serveur de contributions, sans rien envoyer de vous. Un **🎁 pack à partager** est un fichier créé sur votre PC à partir de votre bibliothèque (jamais vos discussions ni votre historique), nettoyé avant export ; c’est vous qui choisissez à qui l’envoyer.
 
+### 📚 Savoir ouvert
+
+La copie du **Savoir ouvert** (Wikipédia, documentations officielles, livres du domaine public, jeux de données publiés sous licence libre) est **seulement téléchargée** depuis le serveur d’Ivass AI : aucune question, aucune recherche et aucune donnée personnelle n’est envoyée. Les recherches dans cette copie se font sur votre appareil. Chaque document garde sa source et sa licence d’origine (par exemple CC BY-SA 4.0 pour Wikipédia).
+
 ## 3 bis. Compte Ivass, versions payantes et parrainage
 
 **Sans compte, rien n'est envoyé.** Ivass Free fonctionne sans compte : Ivass AI demande seulement au serveur si les versions payantes sont ouvertes et quels sont leurs prix ; cette demande ne contient aucune donnée vous concernant.

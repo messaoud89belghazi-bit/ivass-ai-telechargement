@@ -13,7 +13,13 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
-### 🔐 Nouveau : un compte aussi sûr que celui des grandes plateformes d'IA
+### 📚 Nouveau : le Savoir ouvert, une grande base de connaissances libre
+- Ivass AI dispose d'une **base centrale de savoir libre** (objectif : plus de 5 Go de texte) : **Wikipédia** en français et en anglais, les **documentations officielles** de 57 langages et outils (JavaScript, Python, Node, React, SQL, Docker…), des **livres du domaine public** et des **jeux ouverts de questions-réponses**. Chaque document garde son **lien et sa licence**.
+- Chaque PC en garde une **copie partielle** (vous choisissez les collections et la place maximale : 0,5 à 50 Go). Ivass y cherche **hors ligne et sans clé d'API**, puis cite ses sources **[S1], [S2]…** dans la réponse.
+- 📚 Bibliothèque › **Savoir ouvert** : mise à jour de la copie (chaque paquet est vérifié par empreinte SHA-256), recherche directe, activation ou désactivation.
+- Rien de personnel n'est envoyé : la copie est seulement téléchargée.
+
+ que celui des grandes plateformes d'IA
 - **Adresse e-mail vérifiée** par un code à 6 chiffres, puis **mot de passe** (10 caractères minimum, jauge de robustesse, mots de passe courants refusés). Le mot de passe n'est **jamais envoyé** : il est étiré sur votre appareil (PBKDF2-SHA-256, 600 000 tours) et seul le résultat part au serveur.
 - **Double authentification (2FA)** : code à 6 chiffres de votre application d'authentification (Google Authenticator, Microsoft Authenticator, 2FAS…), QR code sur PC, lien direct sur téléphone, **10 codes de secours**.
 - **Appareils de confiance** : un nouvel appareil est confirmé par un code envoyé par e-mail ; vous voyez et retirez vos appareils de confiance, et déconnectez tous les autres appareils en un clic.
