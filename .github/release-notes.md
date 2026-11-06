@@ -13,7 +13,22 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
-### 📚 Nouveau : le Savoir ouvert, une grande base de connaissances libre
+### 🧠 Ivass répond mieux
+- **🔎 Recherche approfondie** (nouveau bouton, ou écrivez « fais une recherche sur… ») : Ivass prépare plusieurs recherches, lit des pages web, le Savoir ouvert et votre bibliothèque, rédige une réponse **sourcée [W1] [S1]**, puis **vérifie les faits** avant de vous l'afficher.
+- **Plus de hors-sujet** : une fiche de la bibliothèque n'est jointe à la question que si elle en parle vraiment.
+- **Réponses instantanées plus prudentes** : seulement pour la même question (ou une réponse que vous avez notée 👍), jamais quand une version ou un nombre change.
+- **Fini les boucles** : un passage qui se répète est coupé, retiré de l'écran et la réponse reprend sans répéter. Quand vous écrivez « ça ne marche toujours pas », Ivass cherche la cause et **change d'approche** au lieu de redonner la même solution. L'Agent ne refait plus trois fois la même action.
+
+### ⚙️ Paramètres réorganisés et 📍 localisation
+- Les réglages sont rangés par **rubriques** (Apparence, Réponses et intelligence, Connaissances, Recherche web, Localisation, Fonctionnement, Instructions), avec une **recherche** pour trouver un réglage.
+- **📍 Localisation** (désactivée par défaut) : votre ville choisie, détectée automatiquement (approximative) ou précise via Windows. Ivass s'en sert pour la météo sans préciser la ville, l'heure locale et « près de chez moi ». Seules la ville et l'heure locale sont données à l'IA.
+
+### 🛡 Sécurité
+- Moteur Electron mis à jour (version 44, maintenue) et exécutable verrouillé (fusibles : impossible de le détourner en Node.js ou d'y injecter du code au démarrage).
+- Seule la fenêtre d'Ivass AI peut appeler le cœur de l'application ; les liens ne s'ouvrent que s'ils sont web ou e-mail ; la fenêtre principale ne peut plus être redirigée vers une autre page locale.
+- Dépendance vulnérable corrigée (0 faille connue).
+
+, une grande base de connaissances libre
 - Ivass AI dispose d'une **base centrale de savoir libre** (objectif : plus de 5 Go de texte) : **Wikipédia** en français et en anglais, les **documentations officielles** de 57 langages et outils (JavaScript, Python, Node, React, SQL, Docker…), des **livres du domaine public** et des **jeux ouverts de questions-réponses**. Chaque document garde son **lien et sa licence**.
 - Chaque PC en garde une **copie partielle** (vous choisissez les collections et la place maximale : 0,5 à 50 Go). Ivass y cherche **hors ligne et sans clé d'API**, puis cite ses sources **[S1], [S2]…** dans la réponse.
 - 📚 Bibliothèque › **Savoir ouvert** : mise à jour de la copie (chaque paquet est vérifié par empreinte SHA-256), recherche directe, activation ou désactivation.

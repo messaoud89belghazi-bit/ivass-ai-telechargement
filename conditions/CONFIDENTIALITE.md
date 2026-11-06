@@ -88,6 +88,10 @@ Si vous vous y inscrivez vous-même (Paramètres › 🤝 Contribution, ou Régl
 
 Les **📣 Nouveautés** sont lues sur la page publique d’Ivass AI et sur le serveur de contributions, sans rien envoyer de vous. Un **🎁 pack à partager** est un fichier créé sur votre PC à partir de votre bibliothèque (jamais vos discussions ni votre historique), nettoyé avant export ; c’est vous qui choisissez à qui l’envoyer.
 
+### 📍 Localisation (facultative)
+
+La localisation est **désactivée par défaut**. Si vous l’activez (⚙️ Paramètres › Réglages › 📍 Localisation), Ivass AI garde **sur votre PC** la ville, la région, le pays, le fuseau horaire et des coordonnées arrondies à environ 1 km. Selon la méthode choisie : la ville que vous saisissez est recherchée chez Open-Meteo ; la détection approximative interroge GeoJS (ou, à défaut, ipapi.co), qui voient alors votre adresse IP ; la position précise vient du service de localisation de Windows, puis le nom de la ville est demandé à OpenStreetMap (Nominatim). L’IA ne reçoit que la ville, le pays et l’heure locale, jamais vos coordonnées. « Effacer ma position » supprime tout immédiatement.
+
 ### 📚 Savoir ouvert
 
 La copie du **Savoir ouvert** (Wikipédia, documentations officielles, livres du domaine public, jeux de données publiés sous licence libre) est **seulement téléchargée** depuis le serveur d’Ivass AI : aucune question, aucune recherche et aucune donnée personnelle n’est envoyée. Les recherches dans cette copie se font sur votre appareil. Chaque document garde sa source et sa licence d’origine (par exemple CC BY-SA 4.0 pour Wikipédia).
