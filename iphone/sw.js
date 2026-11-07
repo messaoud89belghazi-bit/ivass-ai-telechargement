@@ -5,7 +5,7 @@
  * VERSION est réécrit à chaque publication (outils/web.mjs) : c'est ce qui déclenche la mise à jour sur les iPhone.
  */
 'use strict';
-const VERSION = '1.10.35-mvy8ywlx';
+const VERSION = '1.10.38-mw522rtr';
 const CACHE = 'ivass-ai-' + VERSION;
 const SHELL = [
   './', 'index.html', 'app.css', 'web-version.js', 'pwa.js', 'native.js', 'i18n.js', 'i18n-boot.js', 'platforms.js', 'markdown.js', 'lib.js', 'encyclo.js', 'fichiers.js', 'sync.js',

@@ -1,6 +1,6 @@
 {
- "version": "1.10.35",
- "date": "2026-11-01",
+ "version": "1.10.38",
+ "date": "2026-11-07",
  "apk": "https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/Ivass-AI-Mobile.apk",
- "notes": "Ivass AI PC 3.21.2 / Mobile : mentions légales IVASS SERVICES, menu compact, conditions publiées avec la mise à jour"
+ "notes": "3.23.0 : intelligence (pertinence, boucles, recherche approfondie), sécurité (Electron 44, fusibles, IPC), réglages par rubriques, localisation"
 }

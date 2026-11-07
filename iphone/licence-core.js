@@ -211,7 +211,7 @@
   // ---------- Signature (ECDSA P-256 / SHA-256, WebCrypto : navigateur, Node 18+, Cloudflare) ----------
   const CHAMPS = ['v', 'compte', 'offre', 'palier', 'jusqua', 'bonus', 'proJusqua', 'expertJusqua', 'offerts', 'fonctions', 'createur', 'appareil', 'type', 'emis'];
   const canon = (l) => JSON.stringify(CHAMPS.map((k) => [k, l[k] === undefined ? null : l[k]]));
-  const subtle = () => (typeof crypto !== 'undefined' && crypto.subtle) || (typeof require === 'function' ? require('crypto').webcrypto.subtle : null);
+  const subtle = () => (globalThis.crypto && globalThis.crypto.subtle) || null;
   const b64 = { to: (buf) => { const b = new Uint8Array(buf); let s = ''; for (const x of b) s += String.fromCharCode(x); return btoa(s); }, from: (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0)) };
   const ALGO = { name: 'ECDSA', namedCurve: 'P-256' }, SIGN = { name: 'ECDSA', hash: 'SHA-256' };
 
@@ -240,7 +240,7 @@
   // ---------- Codes ----------
   // Sans 0/O/1/I pour la lecture. Licence (secret, ancien système), session d'appareil (secret), parrainage (public).
   const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const rnd = () => (typeof crypto !== 'undefined' && crypto.getRandomValues ? crypto : require('crypto').webcrypto);
+  const rnd = () => globalThis.crypto;
   const aleatoire = (n) => { const r = new Uint8Array(n); rnd().getRandomValues(r); return [...r].map((x) => ALPHA[x % ALPHA.length]).join(''); };
   const codeLicence = () => 'IVL-' + [0, 1, 2, 3].map(() => aleatoire(5)).join('-');
   const codeSession = () => 'IVS-' + [0, 1, 2, 3, 4, 5].map(() => aleatoire(5)).join('-');
@@ -268,7 +268,7 @@
   /** Le mot de passe ne quitte jamais l'appareil : il est étiré ici (PBKDF2-SHA-256) et seule la clé obtenue part au serveur,
       qui la scelle encore (HMAC avec un secret serveur). Une fuite de la base ne donne ni le mot de passe ni de quoi se connecter. */
   const MDP = { iterations: 600000, min: 10, max: 128 };
-  const octets = (n) => { const a = new Uint8Array(n); (globalThis.crypto || require('crypto').webcrypto).getRandomValues(a); return a; };
+  const octets = (n) => { const a = new Uint8Array(n); globalThis.crypto.getRandomValues(a); return a; };
   const nouveauSel = () => b64.to(octets(16));
   async function deriverCle(motDePasse, selB64, iterations = MDP.iterations) {
     const enc = new TextEncoder();

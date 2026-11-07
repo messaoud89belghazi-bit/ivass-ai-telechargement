@@ -119,6 +119,7 @@
       if (!r.ok) throw new Error('Serveur de synchronisation : HTTP ' + r.status);
       return JSON.parse(r.body || '{}');
     };
+    let horloge = 0;
     return {
       async list(prefix) { return ((await call('?prefixe=' + encodeURIComponent(prefix))).items || []).filter((x) => x.name.startsWith(prefix)); },
       async read(name) {
@@ -126,7 +127,8 @@
         if (!it) return null;
         try { return { updated: it.updated, value: await unseal(await sp(), it.data) }; } catch (_) { return null; }
       },
-      async write(name, value) { await call('/element/' + encodeURIComponent(name), 'PUT', { updated: Date.now(), data: await seal(await sp(), value) }); },
+      // horodatage strictement croissant : deux écritures dans la même milliseconde ne s'écrasent pas
+      async write(name, value) { horloge = Math.max(Date.now(), horloge + 1); await call('/element/' + encodeURIComponent(name), 'PUT', { updated: horloge, data: await seal(await sp(), value) }); },
       async remove(name) { await call('/element/' + encodeURIComponent(name), 'DELETE'); },
     };
   }

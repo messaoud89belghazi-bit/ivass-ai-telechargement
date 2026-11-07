@@ -318,13 +318,13 @@
         const list = [...(i ? [T('Tout {}', L.OFFRES[L.ORDRE[i - 1]].nom)] : []), ...m.avantages.map((x) => T(x)), ...m.ajoute.map((f) => `${L.FONCTIONS[f].icone} ${T(L.FONCTIONS[f].nom)}`)];
         h += `<div class="card offre-m ${cur ? 'cur' : ''}"><h3>${of.icone} Ivass ${of.nom}${buy ? ` — ${eur(of.prix)}${id === 'gratuit' ? '' : ' ' + T('/ mois')}` : ''}</h3>
           <p class="help">🔑 ${Number.isFinite(of.cles) ? T('{} clés API comprises', of.cles) : T('Clés API illimitées')}</p><p class="help">${list.map(esc).join(' · ')}</p>
-          ${cur ? `<p class="help">✓ ${T('Votre version')}</p>` : id !== 'gratuit' && buy ? `<button class="btn" data-buy="${id}" data-palier="${palier ? palier.id : ''}">${T('Choisir {} — {}/mois', of.nom, eur(prix))}</button>` : ''}</div>`;
+          ${cur ? `<p class="help">✓ ${T('Votre version')}</p>` : id !== 'gratuit' && buy ? (actif() ? `<button class="btn" data-buy="${id}" data-palier="${palier ? palier.id : ''}">${T('Choisir {} — {}/mois', of.nom, eur(prix))}</button>` : `<button class="btn" disabled>${T('Bientôt disponible')}</button>`) : ''}</div>`;
       });
       if (!buy) h += `<div class="card"><p class="help">${T('Sur iPhone, choisissez votre version sur le PC ou sur la page de téléchargement, puis connectez-vous ici avec la même adresse e-mail.')}</p></div>`;
       if (buy) {
         h += `<div class="card"><h3>🔑 ${T('Plus de clés API')}</h3><p class="help">${T('Au-delà des clés comprises dans votre version, le même palier pour tous, par mois :')} ${L.PALIERS.map((p) => `${Number.isFinite(p.max) ? p.min + '-' + p.max : T('plus de {}', p.min - 1)} : ${eur(p.prix)}`).join(' · ')}.</p>
           <div class="row"><input class="field" type="number" id="ofN" min="1" max="200" value="${Math.max(nCles + 1, 6)}" style="max-width:110px"><span id="ofQuote" class="help"></span></div>
-          <button class="btn" id="ofBuyN">${T('Payer avec PayPal')}</button></div>`;
+          ${actif() ? `<button class="btn" id="ofBuyN">${T('Payer avec PayPal')}</button>` : `<p class="help">${T('Paiement bientôt disponible')}</p>`}</div>`;
       }
 
       // parrainage

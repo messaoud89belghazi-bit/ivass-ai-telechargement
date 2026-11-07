@@ -111,7 +111,15 @@ Le paiement est traité par PayPal, selon sa propre politique de confidentialit�
 
 ## 12. Réclamations et médiation
 
-Pour toute réclamation, écrivez d'abord à **ivass.contact@gmail.com**. Si votre réclamation n'aboutit pas, vous pouvez recourir gratuitement au médiateur de la consommation : **[NOM ET COORDONNÉES DU MÉDIATEUR DE LA CONSOMMATION À COMPLÉTER]**.
+**Réclamation.** Pour toute réclamation, écrivez d'abord à **ivass.contact@gmail.com** (ou par courrier : IVASS SERVICES, 61 rue de Lyon, 75012 Paris), en indiquant l’adresse e-mail de votre compte et l’objet de votre demande.
+
+**Médiation de la consommation.** Si vous êtes un consommateur et que votre réclamation écrite n'a pas abouti, vous pouvez recourir **gratuitement** au médiateur de la consommation dont relève IVASS SERVICES, conformément aux articles L611-1 et suivants du Code de la consommation :
+
+- **Médiateur :** [MÉDIATEUR — NOM À COMPLÉTER]
+- **Adresse :** [MÉDIATEUR — ADRESSE À COMPLÉTER]
+- **Site internet (saisine en ligne) :** [MÉDIATEUR — SITE À COMPLÉTER]
+
+Vous devez le saisir dans un délai d'**un an** à compter de votre réclamation écrite auprès d'IVASS SERVICES. Le médiateur ne peut pas être saisi si vous n'avez pas d'abord tenté de régler le litige directement avec nous par une réclamation écrite. Le recours à la médiation est libre : vous gardez à tout moment le droit de saisir le tribunal compétent.
 
 ## 13. Droit applicable
 

@@ -1,8 +1,8 @@
-version: 3.23.0
+version: 3.24.0
 files:
-  - url: https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases/download/v3.23.0/Ivass-AI-Setup-3.23.0.exe
-    sha512: rztxjTANYBWqTdYJVyibJ6OlKHQIkAUZl0ms2l3o4uQSz2pq5hjzxbMsy2nJ9u94kNUqF4U+Al8AB5YhnjotBg==
-    size: 124937129
-path: https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases/download/v3.23.0/Ivass-AI-Setup-3.23.0.exe
-sha512: rztxjTANYBWqTdYJVyibJ6OlKHQIkAUZl0ms2l3o4uQSz2pq5hjzxbMsy2nJ9u94kNUqF4U+Al8AB5YhnjotBg==
-releaseDate: '2026-11-06T15:42:31.517Z'
+  - url: https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases/download/v3.24.0/Ivass-AI-Setup-3.24.0.exe
+    sha512: zpxtYiCLn+ZXjP5nGXUZm7lscxbjqZweLs/3XOh0NCA4UyfFmgDXwiIzwXVrUfsy/yaEFfdTNsBZxu3+8wa5lA==
+    size: 124940041
+path: https://github.com/messaoud89belghazi-bit/ivass-ai-telechargement/releases/download/v3.24.0/Ivass-AI-Setup-3.24.0.exe
+sha512: zpxtYiCLn+ZXjP5nGXUZm7lscxbjqZweLs/3XOh0NCA4UyfFmgDXwiIzwXVrUfsy/yaEFfdTNsBZxu3+8wa5lA==
+releaseDate: '2026-11-07T12:48:18.631Z'

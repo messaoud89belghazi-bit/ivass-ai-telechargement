@@ -13,7 +13,14 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
-### 🧠 Ivass répond mieux
+### 🏢 Nouveau : mode Entreprise et contrôle qualité IVASS-QA
+- Ivass travaille comme une **équipe complète d'experts** (CTO, architecte, développeur senior, cybersécurité, juriste, business, UX, cloud…) : il analyse les besoins explicites et cachés, les contraintes, les risques et les opportunités avant de répondre.
+- **Projets, logiciels, stratégies** : réponse en rubriques (Analyse, Diagnostic, Solution, Architecture, Plan d'exécution, Risques, Optimisations, Évolutions futures, Guide utilisateur, Étapes suivantes) ; pour une idée, quatre niveaux **MVP · Startup · Enterprise · Mondiale** ; la documentation utile (cahier des charges, guides, feuille de route…) est proposée.
+- **Question simple → réponse simple et juste** : pas de remplissage.
+- **🛡 IVASS-QA** : une seconde IA **relit vraiment** chaque réponse de projet, de code ou de stratégie (bugs, sécurité, RGPD, faisabilité, business) et ajoute en dessous ce qu'elle a vérifié, les problèmes trouvés **avec leurs corrections**, les hypothèses et le niveau de confiance.
+- Réglables dans ⚙️ Paramètres › Réglages › 💬 Réponses et intelligence (Automatique, Toujours complet ou Désactivé).
+
+
 - **🔎 Recherche approfondie** (nouveau bouton, ou écrivez « fais une recherche sur… ») : Ivass prépare plusieurs recherches, lit des pages web, le Savoir ouvert et votre bibliothèque, rédige une réponse **sourcée [W1] [S1]**, puis **vérifie les faits** avant de vous l'afficher.
 - **Plus de hors-sujet** : une fiche de la bibliothèque n'est jointe à la question que si elle en parle vraiment.
 - **Réponses instantanées plus prudentes** : seulement pour la même question (ou une réponse que vous avez notée 👍), jamais quand une version ou un nombre change.
