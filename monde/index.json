@@ -1,10 +1,10 @@
 {
  "format": "ivass-savoir",
  "version": 1,
- "at": "2026-11-07T11:09:06.717Z",
+ "at": "2026-11-08T11:21:30.605Z",
  "app": "apprentissage-quotidien",
- "count": 828,
- "hash": "0f0ab17e89ddf9742859425e23c2f276",
+ "count": 879,
+ "hash": "16abc5eb05dcf9210e7a963196b7b2bf",
  "parts": [
   {
    "file": "base-arts.json",
@@ -134,6 +134,11 @@
   {
    "file": "jour-2026-11-06.json",
    "hash": "d0ccd79fffeaf9a6349bbdd201d56806",
+   "count": 51
+  },
+  {
+   "file": "jour-2026-11-07.json",
+   "hash": "e9637e32583014a3a64ac1bd3bd05eba",
    "count": 51
   }
  ],
