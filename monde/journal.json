@@ -1,11 +1,11 @@
 {
- "day": "2026-11-08",
- "started": "2026-11-09T12:58:51.114Z",
+ "day": "2026-11-09",
+ "started": "2026-11-10T12:44:19.006Z",
  "errors": [],
- "topic": "Conjugaison",
- "daily": 49,
- "count": 928,
- "parts": 28,
- "calls": 27,
- "ended": "2026-11-09T12:59:06.111Z"
+ "topic": "Orthographe",
+ "daily": 50,
+ "count": 978,
+ "parts": 29,
+ "calls": 2,
+ "ended": "2026-11-10T12:44:22.489Z"
 }
