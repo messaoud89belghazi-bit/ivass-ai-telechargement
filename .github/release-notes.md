@@ -13,7 +13,31 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
-### 🏢 Nouveau : mode Entreprise et contrôle qualité IVASS-QA
+### 👆 Plus de fenêtre Windows Hello au démarrage (3.26.1)
+- La fenêtre « Sécurité Windows — Déverrouiller votre compte Ivass AI » ne s'ouvre **plus toute seule** à chaque lancement.
+- Si la protection biométrique est activée, les réglages sensibles du compte restent protégés : le code PIN n'est demandé **que si vous cliquez sur « 👆 Déverrouiller »** dans ⭐ Versions › 👤 Compte.
+- Pour ne plus jamais la voir : ⭐ Versions › 👤 Compte › 👆 Déverrouiller (une dernière fois) › 🔐 Sécurité › 👆 Biométrie → désactivé.
+
+### 🎼 Ivass se sert enfin de tout ce que vous avez rattaché et installé
+- **Plateformes rattachées consultées toutes seules selon le sujet**, sans avoir à les nommer : une erreur de code → Stack Overflow, npm & PyPI, GitHub ; une question scientifique ou d'IA → arXiv, OpenAlex ; un modèle ou un jeu de données → Hugging Face ; des statistiques → data.gouv.fr ; une définition, une personne, un lieu → Wikipédia ; vos sites web et dossiers rattachés pour les questions techniques. La meilleure réponse est **lue** (pas seulement le titre), nettoyée des consignes cachées et **citée [R1]**.
+- La **🔎 Recherche approfondie** interroge aussi toutes ces plateformes, en plus du web, du Savoir ouvert et de la bibliothèque.
+- **Vos outils installés** (Python, Node.js, Git, Docker, Go, Rust, .NET, Java…) sont connus d'Ivass : il propose du code et des commandes qui tournent sur **votre** PC, avec vos versions, et signale un outil absent (PHP…) avec sa commande d'installation.
+- **Catalogue des 201 intégrations** : une plateforme citée (Airtable, Asana, Stripe…) → Ivass donne sa vraie méthode d'authentification, sa documentation officielle et la façon de la relier, au lieu d'inventer.
+- Ivass connaît vos **rattachements** (Notion, Todoist, serveurs MCP…) et propose le mode 🤖 Agent pour agir dedans.
+- Réglable : ⚙️ Paramètres › Réglages › 📚 Connaissances.
+
+
+- Ivass ne doit plus jamais livrer un code qui **fait semblant** : un script qui affiche « diagnostic terminé, 0 problème » sans rien vérifier, une « simulation », un résultat écrit en dur, des modules ou des paramètres jamais utilisés.
+- **Contrôle automatique de chaque code livré** : analyse du code (actions réelles derrière chaque message, imports et paramètres inutilisés, fonctions vides qui annoncent un succès) et **vérification de la syntaxe sans exécuter le programme** (Python et JavaScript).
+- Un défaut trouvé déclenche **toujours** une correction, même si le contrôle qualité est désactivé : Ivass explique en clair ce qui n'allait pas, puis donne le **code corrigé complet** qui fait vraiment ce qu'il annonce, ou demande l'information qui lui manque (fichier à ouvrir, commande, message d'erreur).
+- Le contrôle qualité voit maintenant **la discussion récente** : il vérifie que la réponse traite le vrai problème (par exemple le fichier qui pose souci), pas un sujet voisin.
+
+
+- **L'historique des discussions passe en premier** : il garde toujours au moins un tiers de la hauteur, même sur un petit écran.
+- « ＋ Nouvelle discussion » tout en haut ; le menu des outils en grille d'icônes compacte (nom au survol), ou en liste par groupes (bouton ▤), qui ne déborde plus.
+- ⭐ Versions rejoint la rangée du bas ; les filtres tiennent sur une ligne ; 🧰 Outils & API n'a plus la même icône que la console.
+
+ et contrôle qualité IVASS-QA
 - Ivass travaille comme une **équipe complète d'experts** (CTO, architecte, développeur senior, cybersécurité, juriste, business, UX, cloud…) : il analyse les besoins explicites et cachés, les contraintes, les risques et les opportunités avant de répondre.
 - **Projets, logiciels, stratégies** : réponse en rubriques (Analyse, Diagnostic, Solution, Architecture, Plan d'exécution, Risques, Optimisations, Évolutions futures, Guide utilisateur, Étapes suivantes) ; pour une idée, quatre niveaux **MVP · Startup · Enterprise · Mondiale** ; la documentation utile (cahier des charges, guides, feuille de route…) est proposée.
 - **Question simple → réponse simple et juste** : pas de remplissage.
