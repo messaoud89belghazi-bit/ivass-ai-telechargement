@@ -96,6 +96,14 @@ La localisation est **désactivée par défaut**. Si vous l’activez (⚙️ Pa
 
 La copie du **Savoir ouvert** (Wikipédia, documentations officielles, livres du domaine public, jeux de données publiés sous licence libre) est **seulement téléchargée** depuis le serveur d’Ivass AI : aucune question, aucune recherche et aucune donnée personnelle n’est envoyée. Les recherches dans cette copie se font sur votre appareil. Chaque document garde sa source et sa licence d’origine (par exemple CC BY-SA 4.0 pour Wikipédia).
 
+### 🎨 Création d’images et de vidéos
+Quand vous demandez une image ou une vidéo, votre description (et l’image jointe, pour « anime cette image ») est envoyée **au générateur choisi** : Google (Gemini, Imagen, Gemini Omni Flash, Veo), OpenAI, Hugging Face, Alibaba Cloud (Wan) avec vos propres clés, ou Stable Diffusion / ComfyUI sur votre PC. Si aucun générateur n’est relié, le **générateur gratuit Pollinations.ai** peut recevoir votre description (sans compte, sans clé ; désactivable dans 🔌 Connecteurs › 🎨 Images et vidéos). Les images et vidéos créées sont enregistrées sur votre PC (Documents › Ivass AI Studio) ; Ivass AI ne les envoie nulle part.
+
+### 🔌 Connecteurs
+**Connexion express** : Ivass AI ouvre la page officielle de la plateforme dans votre navigateur ; vous vous y connectez vous-même (Google, Microsoft, GitHub ou e-mail). Pendant 5 minutes au plus, Ivass AI regarde le presse-papiers pour reconnaître la clé API que vous copiez ; il ne garde rien d’autre, enregistre la clé **chiffrée sur votre PC** puis l’efface du presse-papiers. Votre mot de passe n’est jamais saisi dans Ivass AI.
+**Mes plateformes IA** : chaque compte s’ouvre dans une fenêtre isolée (cookies de connexion gardés sur votre PC, effaçables avec « Se déconnecter ») ou dans un profil de votre navigateur Chrome / Edge (Ivass AI lit seulement le nom des profils pour vous les proposer). Ivass AI ne lit pas le contenu de ces pages, n’enregistre aucun mot de passe, n’agit jamais à votre place et n’apprend rien de ces fenêtres.
+**Plateformes reliées (centre de commande, synchronisation, automatisations)** : Ivass AI ne lit une plateforme reliée que si vous l’autorisez (droits par plateforme). La synchronisation vers la bibliothèque est désactivée par défaut ; les éléments copiés restent sur votre PC. Pour une analyse, les extraits lus sont envoyés à l’IA que vous avez choisie, comme pour une discussion. Un journal d’accès (date, plateforme, opération) est gardé sur votre PC et peut être exporté ; aucune action d’écriture n’est faite sans votre validation.
+
 ## 3 bis. Compte Ivass, versions payantes et parrainage
 
 **Sans compte, rien n'est envoyé.** Ivass Free fonctionne sans compte : Ivass AI demande seulement au serveur si les versions payantes sont ouvertes et quels sont leurs prix ; cette demande ne contient aucune donnée vous concernant.

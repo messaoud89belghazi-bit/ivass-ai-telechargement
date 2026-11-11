@@ -13,6 +13,56 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
+### 🎬 Clé Luma reconnue : vidéo Ray 2 jusqu’en 4K et image Photon (3.29)
+- Une clé **Luma** (`luma-…`) collée dans Ivass était confondue avec une clé de discussion et refusée par Together AI (« HTTP 401 »). Elle est maintenant reconnue comme une **clé de création** : vérifiée directement auprès de Luma, puis chiffrée sur votre PC.
+- **🎬 Vidéo Luma Ray 2** : 540p à **4K native**, 5 ou 9 secondes par plan, tous les formats (16:9, 9:16, 1:1…). Le directeur artistique la choisit quand vous demandez de la 4K. Une vidéo à partir d’une image locale passe automatiquement au moteur suivant.
+- **🖼 Image Luma Photon**, ajoutée aux moteurs d’images.
+- Clé à créer sur https://lumalabs.ai/dream-machine/api/keys (la génération Luma est facturée sur votre compte Luma).
+
+### 🧩 Skills : les compétences au format Agent Skills deviennent des ressources d’Ivass (3.29)
+Dans 🔌 Connecteurs, nouvel onglet **🧩 Skills** :
+- **Barre de recherche** : skills installées, catalogues de skills (par défaut le dépôt officiel `anthropics/skills`, ajoutez les vôtres) et dépôts publics GitHub.
+- **Installer** : adresse GitHub (un dépôt entier ou le dossier d’une skill ; s’il y en a plusieurs, vous choisissez), archive **.zip / .skill**, dossier, ou **SKILL.md collé**. Toute skill au format ouvert *Agent Skills* (SKILL.md avec nom et description, plus scripts, références et ressources) est compatible.
+- **Exploration autonome** : à l’installation, Ivass analyse chaque skill : langages, dépendances, outils nécessaires (présents ou non sur votre PC), références, ressources, **points de vigilance** (code téléchargé puis exécuté, suppressions massives, consignes de détournement), licence (les skills non libres sont signalées). L’IA résume ses capacités et une fiche est ajoutée à la bibliothèque.
+- **Utilisation par Ivass** : en discussion, Ivass voit toutes vos skills actives et charge automatiquement les instructions complètes de **celles qui servent la demande**. Il peut en utiliser plusieurs à la fois, ou celle que vous nommez. En mode Agent, l’outil **« competence »** lui permet de lire une skill, ses références et ses fichiers. **Rien n’est jamais exécuté à l’installation** : les scripts d’une skill passent par l’Agent et attendent votre approbation, comme toute commande.
+- Activer, désactiver, ouvrir le dossier, retirer : depuis chaque carte.
+
+### 🖼 Icône du Bureau et réponses vides corrigées (3.28.2)
+- **Icône du Bureau** : après une installation par-dessus une version précédente, le raccourci pouvait afficher une page blanche. Les raccourcis du Bureau et du menu Démarrer sont maintenant recréés avec une icône dédiée (fichier .ico séparé, toujours lisible), puis Windows recharge ses icônes.
+- **Réponses vides** : à une question simple (« donne-moi le lien de l’API Luma »), l’IA pouvait répondre par un bloc « action » vide (un appel d’outil qu’elle n’avait pas le droit de faire en discussion). Ivass le détecte et fait répondre l’IA directement, avec les liens officiels du catalogue (Luma, Odoo… sont maintenant reconnus même par leur nom court).
+
+### 🧪 Auto-correction honnête (3.28.1)
+- « ✓ Corrigé et fonctionnel » ne s’affiche plus pour un programme qui s’exécute seulement « sans erreur ». Avant de valider une correction, Ivass vérifie qu’elle règle le vrai problème. Il **refuse** la correction si elle fabrique le fichier manquant avec un contenu inventé, avale l’erreur (try/catch ou except vide, SilentlyContinue, 2>$null, exit 0), retire la partie qui échouait, ajoute une simulation ou un « TODO », ou si la sortie se limite à un message comme « Exécution… ». Il essaie alors une autre approche.
+- Fichier absent (par ex. « ivass_video_studio.py introuvable ») : Ivass ne l’invente plus. Il le dit clairement, garde votre code d’origine et propose **✍ Demander à Ivass d’écrire ce fichier** en décrivant ce qu’il doit faire.
+
+### 🧠 Écosystème des connecteurs : toutes vos plateformes, une seule intelligence (3.28)
+Dans 🔌 Connecteurs, quatre nouveaux onglets :
+- **🧠 Centre de commande** : une question (« Montre tous les projets en retard », « Résume l’activité du jour sur toutes mes plateformes »…) ; Ivass interroge **en parallèle** toutes les plateformes reliées et autorisées, lit les éléments utiles, ajoute votre bibliothèque, puis rédige une **analyse croisée sourcée** [C1] : réponse directe, apport de chaque plateforme, liens entre les sources, risques et opportunités, actions conseillées, ce qui manque. Rien n’est modifié sur vos plateformes. Aussi depuis une discussion : `/centre votre question`.
+- **🩺 État et droits** : santé de chaque connexion (vérifiée au démarrage puis toutes les 6 h, pannes signalées), reconnecter, désactiver, déconnecter ; **droits par plateforme** (consultable par l’IA, synchronisation, écriture — une écriture désactivée est refusée même en mode Agent) ; **synchronisation incrémentale** vers la bibliothèque (à la demande, chaque heure, toutes les 6 h ou chaque jour : seuls les éléments nouveaux ou modifiés sont relus) ; **journal d’accès** de chaque recherche, lecture et action, exportable en CSV pour un audit.
+- **⚡ Automatisations** : Déclencheur (chaque jour à une heure, nouveautés d’une synchronisation, ou manuel) → Analyse par l’IA → Décision → Exécution → Suivi. La note dans la bibliothèque et la notification Windows se font seules ; **toute action sur une plateforme attend votre validation** (file « À valider »). 💡 L’IA peut proposer des automatisations adaptées à vos plateformes.
+- **🛠 Créer un connecteur** : collez l’adresse d’une spécification **OpenAPI / Swagger** (ou choisissez le fichier) : Ivass lit l’adresse de l’API, l’authentification et les routes, crée et teste le connecteur, le rend interrogeable par le centre de commande et synchronisable route par route. Lecture seule.
+- **Catalogue** : 217 plateformes, avec les ERP (SAP, Odoo, NetSuite, Sage, Dynamics 365, Oracle), PostgreSQL, MySQL, SQL Server, Redis, Elasticsearch, Azure DevOps, Kubernetes, Adobe Commerce, BigCommerce.
+
+### 🌍 Publication du Savoir Ivass réparée (3.27.1)
+- Quand le jeton « Savoir » est refusé (expiré, sans droit d’écriture, ou limité à un autre dépôt), Ivass publie automatiquement avec le **jeton du fondateur** (celui de « 🚀 Publier »), sans rien écrire avec le jeton refusé.
+- Message précis : jeton expiré, droit « Contents » manquant ou dépôt non autorisé. Nouveau bouton **🔍 Vérifier les jetons** (avec la date d’expiration).
+
+### 🎨 Ivass crée vos images et vos vidéos dans la discussion (3.27)
+- Écrivez simplement « **génère une image** d’un phare au coucher du soleil, style aquarelle », « **crée une vidéo** TikTok de 30 secondes en 4K… », « fais un **logo** avec le texte “IVASS” » — ou joignez une photo et écrivez « **anime cette image** ». L’image ou la vidéo apparaît **dans la conversation**, avec 💾 Enregistrer, ↗ Ouvrir, 🔁 Nouvelle version, 🎬 En faire une vidéo, 🔍 Refaire en 4K.
+- **Directeur artistique** : Ivass comprend la demande en français (format 16:9, vertical 9:16, carré, affiche ; qualité HD, Full HD, 4K, 8K ; durée ; nombre d’images ; style ; cadrage ; mouvement de caméra ; lumière ; ambiance ; dialogue et son ; texte exact à écrire ; « sans personnes »…), puis écrit un prompt professionnel en anglais, adapté à chaque moteur. Le prompt utilisé est visible sous le résultat.
+- **Sans aucune clé** : un générateur d’images gratuit (Pollinations.ai) prend le relais — désactivable.
+- **Vidéos** : nouveau moteur **Google Gemini Omni Flash** (720p, 1080p et **4K** agrandis par Google, son et dialogues). Les modèles « Veo 3.1 Preview », **arrêtés par Google le 22 octobre 2026**, sont remplacés automatiquement (Omni Flash, Veo 3). Une vidéo plus longue qu’un moteur ne le permet est découpée en plans cohérents puis assemblée. Si un moteur refuse (quota, clé, modèle arrêté), Ivass passe au suivant tout seul.
+- **Aucun moteur vidéo relié** : Ivass compose un **diaporama animé** à partir d’images IA (mouvement de caméra lent, fondus) et le dit clairement.
+- **4K honnête** : quand un moteur ne produit pas la 4K, Ivass l’annonce et agrandit (Real-ESRGAN si installé, sinon FFmpeg).
+
+### 🔌 Nouvel outil « Connecteurs » dans la barre de menu
+- **Se connecter avec Google** : un clic ouvre la page officielle de Google ; vous créez la clé, vous la copiez, Ivass la **reconnaît toute seule**, la vérifie, la range chiffrée et l’efface du presse-papiers. Même chose pour OpenAI, Claude, Hugging Face, OpenRouter, Groq, Mistral, DeepSeek, Grok, Perplexity (connexion Google, Microsoft, GitHub ou e-mail).
+- **Mes plateformes IA** : ChatGPT, Gemini, Copilot, Claude, Perplexity, Le Chat, DeepSeek, Grok, Midjourney, Leonardo, Ideogram, Firefly, Canva, Runway, Kling, Pika, Luma, Hailuo, CapCut, Suno, ElevenLabs… **plusieurs comptes par plateforme**, chacun dans sa fenêtre isolée (connexion par e-mail) ou dans votre **profil Chrome / Edge** (connexion Google). Ivass n’enregistre aucun mot de passe et n’agit jamais à votre place dans ces pages.
+- **Images et vidéos** : générateurs disponibles, moteur préféré, création automatique dans la discussion.
+
+### 📥 Bibliothèque : beaucoup plus de formats
+- Importez maintenant des **PDF, Word, Excel, PowerPoint, OpenDocument**, du **code** (.py, .js, .ts, .java, .cs, .php, .sql, .go, .rs…), CSV, HTML, YAML… Les longs documents sont découpés en parties pour de meilleures réponses.
+
 ### 👆 Plus de fenêtre Windows Hello au démarrage (3.26.1)
 - La fenêtre « Sécurité Windows — Déverrouiller votre compte Ivass AI » ne s'ouvre **plus toute seule** à chaque lancement.
 - Si la protection biométrique est activée, les réglages sensibles du compte restent protégés : le code PIN n'est demandé **que si vous cliquez sur « 👆 Déverrouiller »** dans ⭐ Versions › 👤 Compte.
