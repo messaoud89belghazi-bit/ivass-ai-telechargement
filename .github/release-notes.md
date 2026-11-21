@@ -13,6 +13,76 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
+### 🧸 Le compagnon vous entend, vous reconnaît et vous appelle par votre prénom (3.38 · compagnon 2.2)
+- **🎙 Oreille par Ivass AI** : la voix captée par le compagnon est transcrite par le Whisper d'Ivass AI, avec votre clé **Groq** (gratuite) ou OpenAI. Il n'y a plus de service Python à installer. Le son n'est pas conservé. Sans clé Whisper ou quand Ivass AI est fermé, le compagnon se rabat sur son service local.
+- **Prénom et famille** dans 🧸 Compagnon › Réglages :
+  - votre prénom (par défaut « Messaoud » : c'en est fini de « Warda ») ;
+  - homme ou femme, pour les accords ;
+  - votre famille (par exemple « Nadia : épouse »).
+- **🩺 Diagnostic complet** : huit maillons sont testés pour de vrai, dont une vraie réponse d'IA. Pour chaque problème, il dit exactement quoi faire.
+  - Les maillons : dossier, installation, version, cerveau d'Ivass AI, réponse d'une IA, réglage du compagnon (adresse et jeton), prénom, oreille, compagnon lancé.
+  - La dernière erreur vue par le cerveau est aussi affichée.
+- **Reconnaissance des voix** (compagnon 2.2, onglet 👥 Voix de son panneau) :
+  - chaque personne lit 3 phrases, avec son accord ;
+  - seule une empreinte vocale (des nombres) est gardée sur le PC ;
+  - le compagnon s'adresse à Nadia par son prénom quand c'est elle qui parle ;
+  - une voix inconnue peut discuter mais ne peut ni faire agir le compagnon sur le PC, ni confirmer une action ;
+  - l'exigence (stricte, normale ou souple) se règle dans Ivass AI.
+- **Pannes expliquées** (compagnon 2.2) : « Ivass AI est fermé », « jeton refusé : cliquez sur Brancher », « aucune IA active » remplacent « cerveau hors ligne ».
+
+### 📊 Mesure d'utilisation respectueuse et transparence (3.37)
+- **Deux nouvelles catégories facultatives** dans ⚙ Paramètres › Contribution. Elles sont décochées par défaut, et rien n'est compté sans votre accord.
+  - **📊 Utilisation des fonctions** : une fois par jour, des compteurs (écrans d'Ivass ouverts, boutons utilisés, enchaînements entre écrans, allers-retours rapides qui signalent un écran déroutant, nombre et durée des sessions, temps de démarrage et de réponse). Ivass ne compte jamais le texte d'un bouton, ce que vous tapez, les titres de vos discussions, ni rien en dehors d'Ivass.
+  - **🖥 Informations techniques** : système et sa version, processeur, mémoire arrondie, taille d'écran, langue, version d'Ivass. Jamais le nom de l'ordinateur ni un numéro de série. Ces informations ne sont envoyées qu'une fois par changement.
+- **📜 Charte de transparence**, sous les catégories : ce qui peut être collecté, ce qui ne l'est jamais, pourquoi, comment c'est protégé, comment le retirer.
+- **⤓ Exporter mes données** : un fichier JSON avec votre accord, ce qui attend et ce qui est déjà parti (droits d'accès et de portabilité).
+- **Retrait de l'accord** : quand vous décochez une catégorie, ce qui attendait et les compteurs du jour sont effacés aussitôt.
+- **Tableau de bord du créateur** : nouvelles fiches **📊 Utilisation** (fonctions les plus et les moins utilisées, jamais ouvertes, écrans quittés aussitôt, parcours fréquents, sessions, performances) et **🖥 Compatibilité des appareils** (systèmes, écrans, mémoire, processeurs, langues, versions). Les chiffres sont regroupés et anonymes, et l'usage interdit est rappelé sur la fiche.
+- **Politique de confidentialité, version 4** : les deux catégories, l'usage interdit (ni surveillance, ni profilage, ni publicité, ni revente, aucun lien avec le compte) et l'export.
+- **Serveur de contributions** : il accepte les deux nouvelles catégories après sa mise à jour (`deployer-serveur.bat`). D'ici là, Ivass garde ces données sur le PC sans bloquer les autres envois.
+
+### 🗂 Liste des discussions corrigée, registre des incidents RGPD (3.36.2)
+- **Liste des discussions** : avec beaucoup de discussions, les titres se chevauchaient, une erreur introduite en 3.36. Chaque titre garde maintenant sa hauteur et la liste défile normalement.
+- **Édition Développeur** : la marque « 🛠 Développeur » s'affiche de nouveau sous « Ivass AI ». Elle avait disparu avec le sous-titre retiré en 3.36.
+- **🚨 Incidents RGPD** (console fondateur) : registre des violations de données personnelles, obligatoire même sans notification (RGPD art. 33.5).
+  - **Déclarer un incident** : date de découverte et de survenue, nature, systèmes concernés, catégories de données, nombre de personnes et d'enregistrements, gravité (critique, élevée, moyenne, faible).
+  - **Risque proposé** : faible, moyen ou élevé, à confirmer. Ivass en déduit les obligations : notifier la CNIL sauf si le risque est improbable, et informer les personnes concernées si le risque est élevé.
+  - **Compte à rebours de 72 h** pour la CNIL, à partir de la découverte. Un retard est signalé.
+  - **Chronologie datée** : confinement, investigation, décision de notification (motivée obligatoirement), CNIL notifiée (avec la référence), personnes informées, actions correctives (avec responsable, échéance et validation), rapport et cause racine.
+  - **Clôture** : elle est refusée tant qu'une obligation manque.
+  - **Brouillons** : notification à la CNIL et message aux personnes concernées, à relire puis à reporter. Un bouton ouvre la page de notification de la CNIL.
+  - **Registre infalsifiable** : on ne peut qu'y ajouter des entrées, et chacune porte l'empreinte de la précédente, donc toute modification se voit.
+  - **Revue annuelle** : nombre d'incidents, notifications faites et hors délai, délai moyen.
+  - Ce registre n'existe que dans l'édition Développeur.
+
+### 🛡 Jamais de version plus ancienne (3.36.1)
+- **Console fondateur** : un candidat dont le numéro n'est pas plus récent que la version déjà publiée (par exemple Mobile 1.10.37 alors que la 1.10.39 est distribuée) est rangé dans « 🗄 Dépassés ». Il affiche un avertissement et n'a plus de bouton ✅ Approuver. Jusqu'ici, la console comparait les dates, et non les numéros de version.
+- **Publication** : la publication est bloquée si la version n'est pas plus récente que celle en ligne. Un téléphone déjà à jour refuserait d'installer une version plus ancienne.
+
+### 🪄 Fusion photo, codes repliés, menu allégé (3.36 · mobile 1.10)
+- **🪄 Fusion** (Studio › Fusion sur PC, menu › Fusion photo sur le téléphone) : insérer une personne, un animal ou un objet dans la photo d'un lieu.
+  - **Détourage** :
+    - par IA avec vos clés : **Photoroom**, **BiRefNet** (via fal.ai) ou **Ideogram** ;
+    - ou sur l'appareil, pour un sujet pris sur un fond uni ou simple ;
+    - une gomme et un pinceau « Restaurer » corrigent les contours.
+  - **Taille selon la perspective** : la ligne d'horizon correspond à la hauteur des yeux du photographe. Avec la taille réelle du sujet (1,75 m par défaut) et la hauteur de l'appareil photo, Ivass calcule la bonne taille à chaque endroit de l'image : plus loin, plus petit.
+  - **Réalisme** :
+    - le sens de la lumière est mesuré dans la photo du lieu, et l'ombre portée part du côté opposé ;
+    - une ombre de contact est ajoutée sous les pieds ;
+    - les couleurs sont accordées au lieu ;
+    - le grain et la netteté sont assortis à ceux de l'appareil.
+  - **Sur le téléphone** : le bouton 📷 ouvre directement l'appareil photo (pour photographier le lieu ou le sujet), et le montage est enregistré dans les fichiers.
+  - Le détourage sur l'appareil ne quitte jamais l'appareil. Avec un détourage IA, seule la photo du sujet part, vers la plateforme choisie.
+- **Codes longs repliés** : un code de plus de 16 lignes n'affiche que ses 12 premières lignes. Le bouton **▾ Plus · N lignes de plus**, en bas à gauche du code, le déroule, et **▴ Moins** le replie. Sur PC et sur téléphone.
+- **Barre latérale** :
+  - **＋ Nouveau projet** remplace « Nouvelle discussion » ;
+  - le sous-titre « Création de logiciels » est retiré ;
+  - seuls quatre outils restent affichés (Discussions, Recherche, Studio, Ivass Dev), les autres sont rangés dans **⋯ Plus** ;
+  - la liste des discussions est resserrée : on voit davantage de titres.
+- **Police** : le texte passe en **Times New Roman** sur PC et sur téléphone. Le code reste en police à chasse fixe.
+- **Téléphone, clés d'API** : les clés Google « AQ. » sont acceptées. Pour une clé de forme inconnue, Ivass propose de choisir sa plateforme, comme sur le PC.
+- **Bouclier** : les clés « AQ. » collées dans un texte sont repérées et masquées, comme les « AIza ».
+
 ### 🧸 Compagnon Ivass, toutes les clés d'IA, Flux et Ideogram, console plus lisible (3.35)
 - **Clés Google AI Studio « AQ. »** : depuis 2026, Google délivre des clés qui commencent par « AQ. » au lieu de « AIza ». Ivass ne reconnaissait que l'ancien format et refusait donc ces clés. Les deux formats sont maintenant acceptés.
 - **Clé d'un format inconnu** : au lieu d'un refus, Ivass propose la liste des plateformes (discussion, images, vidéo). Vous choisissez, puis Ivass vérifie la clé auprès de cette plateforme. La clé ne revient jamais dans la page : elle est gardée 15 minutes en mémoire, puis oubliée.

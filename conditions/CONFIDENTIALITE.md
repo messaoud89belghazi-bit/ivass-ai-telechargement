@@ -1,6 +1,6 @@
 # Politique de confidentialité d'Ivass AI
 
-*Version 3 — en vigueur au 1er novembre 2026*
+*Version 4 — en vigueur au 21 novembre 2026 (ajout des catégories facultatives « Utilisation des fonctions » et « Informations techniques », et de l’export de vos données)*
 
 ## 1. Qui est responsable ?
 
@@ -33,8 +33,18 @@ La base légale est votre **consentement** (article 6.1.a du RGPD). Vous pouvez 
 | 💬 Conversations nettoyées | Vos questions et les réponses d'Ivass |
 | 🧭 Méthodes, solutions et résultats | Le plan de réflexion, les étapes de l'agent, les essais de correction, la solution trouvée et si elle a réussi |
 | 🐞 Erreurs et corrections | Les plantages d'Ivass, les erreurs des IA, les corrections automatiques de code (erreur, cause, code corrigé) |
+| 📊 Utilisation des fonctions | Une fois par jour, des compteurs : écrans d'Ivass ouverts, boutons utilisés (leur identifiant technique, jamais leur texte ni ce que vous tapez), enchaînements entre écrans, nombre et durée des sessions, temps de démarrage et de réponse. Rien en dehors d'Ivass |
+| 🖥 Informations techniques | Système et version, type de processeur, mémoire arrondie, taille d'écran, langue, version d'Ivass, pour tester la compatibilité. Jamais le nom de l'ordinateur ni un numéro de série |
 
 Vous pouvez aussi envoyer vous-même une idée ou un bug avec le bouton prévu : c'est alors un envoi volontaire, ponctuel.
+
+### Usage interdit
+
+Ces données servent uniquement à améliorer Ivass AI, corriger les bugs, accélérer le logiciel et le rendre plus fiable. Elles ne sont jamais utilisées pour vous surveiller, établir un profil, faire de la publicité, être revendues ou suivre votre vie privée. Elles ne sont pas reliées à votre compte Ivass.
+
+### Exporter vos données
+
+⚙ Paramètres › Contribution › **⤓ Exporter mes données** produit un fichier (JSON) avec votre accord, ce qui attend sur votre ordinateur et ce qui est déjà parti (droits d'accès et à la portabilité, articles 15 et 20 du RGPD).
 
 ### Ce qui n'est jamais envoyé
 
