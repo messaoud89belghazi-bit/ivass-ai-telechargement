@@ -407,3 +407,12 @@ a.tag, button.tag { display: inline-flex; align-items: center; min-height: 44px;
 .chip { min-height: 44px; }
 #modes .mode, #libToggle { min-height: 44px; }
 #sendBtn, #attachBtn { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+
+/* 1.10 : codes longs repliés — premières lignes visibles, « ▾ Plus » en bas à gauche */
+.code.code-long:not(.code-ouvert) pre { position: relative; overflow: hidden; }
+.code.code-long:not(.code-ouvert) pre code { display: block; max-height: calc(13px * 1.6 * 12); max-height: 12lh; overflow: hidden; }
+.code.code-long:not(.code-ouvert) pre::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 40px; background: linear-gradient(to bottom, transparent, var(--code)); pointer-events: none; }
+.code-plus { display: block; width: 100%; margin: 0; padding: 9px 12px; border: 0; border-top: 1px solid var(--border); background: var(--panel2); color: var(--accent2); font: inherit; font-size: 13.5px; font-weight: 600; text-align: left; }
+/* 1.10 : police de l'interface Times New Roman, comme sur le PC (le code reste en chasse fixe) */
+body, button, input, textarea, select { font-family: "Times New Roman", Times, "Liberation Serif", "Noto Serif", serif; }
+.code pre code, .bubble code, .dv-code, .code-box { font-family: ui-monospace, "JetBrains Mono", Consolas, monospace; }

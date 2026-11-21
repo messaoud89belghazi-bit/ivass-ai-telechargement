@@ -15,6 +15,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icones/icone-192.png">
   <title>Ivass AI</title>
   <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="fusion.css">
 </head>
 <body>
   <!-- ===== Accueil (premier lancement) ===== -->
@@ -46,7 +47,7 @@
         <div id="convTitle">Nouvelle discussion</div>
         <div id="convSub" class="sub">—</div>
       </div>
-      <button class="icon" id="newBtn" aria-label="Nouvelle discussion">✎</button>
+      <button class="icon" id="newBtn" aria-label="Nouveau projet" title="Nouveau projet">✎</button>
     </header>
 
     <div id="updateBar" class="update-bar hidden"></div>
@@ -89,6 +90,7 @@
     <div id="convList" class="conv-list"></div>
     <nav class="drawer-nav">
       <button data-open="library">📚 Bibliothèque</button>
+      <button data-open="fusion">🪄 Fusion photo</button>
       <button data-open="dev">🧑‍💻 Ivass Dev</button>
       <button data-open="rattach">🔗 Rattachements</button>
       <button data-open="settings">⚙️ Réglages</button>
@@ -133,6 +135,8 @@
   <script src="livrables-ui.js"></script>
   <script src="integrations-core.js"></script>
   <script src="rattachements.js"></script>
+  <script src="fusion-core.js"></script>
+  <script src="fusion-ui.js"></script>
   <script src="app.js"></script>
   <script src="pwa.js"></script>
 </body>

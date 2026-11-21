@@ -133,11 +133,13 @@
     }
 
     /** Ajout rapide : reconnaît la plateforme d'une clé, la vérifie et choisit le meilleur modèle. */
-    async function addKey(raw, existing = []) {
+    async function addKey(raw, existing = [], choix) {
       const d = P.detectKey(raw);
       if (!d.key) throw new Error('Collez une clé API.');
-      const tries = d.sure ? [d.sure] : d.candidates;
-      if (!tries.length) throw new Error('Clé non reconnue. Ajoutez-la avec « Fournisseur personnalisé » (URL compatible OpenAI).');
+      // 1.10 · 3.35 : format inconnu → l'utilisateur choisit la plateforme, la clé est vérifiée auprès d'elle
+      const force = choix ? P.PLATFORMS.find((x) => x.id === choix) : null;
+      const tries = force ? [force] : d.sure ? [d.sure] : d.candidates;
+      if (!tries.length) throw Object.assign(new Error('Format de clé inconnu : choisissez la plateforme qui vous l’a donnée, Ivass la vérifiera auprès d’elle.'), { choisir: true });
       let lastErr;
       for (const pl of tries) {
         const prov = { id: pl.id + '-' + Math.random().toString(36).slice(2, 7), platform: pl.id, name: pl.name, type: pl.type, baseUrl: pl.baseUrl, priority: pl.priority || 5, enabled: true };

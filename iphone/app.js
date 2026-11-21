@@ -122,6 +122,8 @@
       else if (h === '#') e.preventDefault();
       return;
     }
+    const cp = e.target.closest('.code-plus');
+    if (cp) { window.ivassBasculerCode(cp); return; }
     const cc = e.target.closest('.copy-code');
     if (cc) { N.copy(cc.closest('.code').querySelector('code').textContent); cc.textContent = 'Copié ✓'; setTimeout(() => { cc.textContent = 'Copier'; }, 1400); }
   });
@@ -345,6 +347,22 @@
     if (!DV) return;
     const draw = () => openPanel('🧑‍💻 Ivass Dev', DV.html(), (r) => DV.mount(r, draw));
     draw();
+  }
+
+  // ----- 🪄 Fusion photo (1.10) : insérer une personne ou un objet dans la photo d'un lieu, sur le téléphone -----
+  function openFusion() {
+    if (!window.FusionUI || !window.FusionCore) return N.toast('Fusion indisponible.');
+    openPanel('🪄 Fusion photo', window.FusionUI.html(), (r) => {
+      window.FusionUI.monter(r, {
+        toast: (m) => N.toast(m),
+        enregistrer: async (b64, nom) => {
+          const bin = atob(b64); const u8 = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+          const f = await N.files.save(nom, u8, 'image/png');
+          N.toast(`Montage enregistré : ${f.name} (${N.files.where()})`);
+        },
+      });
+    });
   }
 
   // ----- ⭐ Versions -----
@@ -759,7 +777,7 @@
   $('#menuBtn').onclick = openDrawer;
   $('#scrim').onclick = closeDrawer;
   $('#newBtn').onclick = newConv;
-  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, dev: openDev, rattach: openRattach, settings: () => openSettings(), offres: openOffres, sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
+  $$('.drawer-nav button').forEach((b) => { b.onclick = () => { closeDrawer(); ({ library: openLibrary, fusion: openFusion, dev: openDev, rattach: openRattach, settings: () => openSettings(), offres: openOffres, sync: openSync, share: openShare, news: openNews })[b.dataset.open](); }; });
 
   // ---------------- Panneaux ----------------
   let panelRefresh = null;
@@ -844,6 +862,7 @@
         <p class="help">Claude, Gemini, ChatGPT, Groq, Mistral, OpenRouter, DeepSeek, xAI, Perplexity, Hugging Face, Cerebras… Les clés restent chiffrées sur ce téléphone et ne sont jamais synchronisées (vous pouvez aussi les recevoir du PC : ☰ → 📱 Synchronisation PC).</p>
         <div class="row"><input class="field" id="keyF" placeholder="Collez votre clé ici" autocomplete="off" autocapitalize="off" spellcheck="false"><button class="btn primary" id="keyAdd">Ajouter</button></div>
         <div id="keyMsg" class="help"></div>
+        <div class="row hidden" id="keyChoixRow"><select class="field" id="keyChoix"><option value="">— Plateforme de cette clé —</option>${(window.Platforms.PLATFORMS || []).filter((x) => x.baseUrl).map((x) => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></div>
         <div class="row" style="margin-top:6px">${[['Gemini (gratuit)', 'https://aistudio.google.com/app/apikey'], ['Groq (gratuit)', 'https://console.groq.com/keys'], ['OpenRouter', 'https://openrouter.ai/keys'], ['Claude', 'https://console.anthropic.com/settings/keys']].map(([n, u]) => `<a class="tag" href="${u}">${n} ↗</a>`).join('')}</div>
       </div>
       <div class="card"><h3>🤖 Mes IA <span class="muted" style="font-weight:400;font-size:13px">— la première active répond ; les autres prennent le relais en cas de panne</span></h3>
@@ -893,11 +912,11 @@
         msg.className = 'help'; msg.textContent = 'Vérification de la clé…'; $('#keyAdd', r).disabled = true;
         try {
           limiteCles(); // ⭐
-          const { provider, key } = await core.addKey(raw, P);
+          const { provider, key } = await core.addKey(raw, P, $('#keyChoix', r).value || undefined);
           if (!N.secretSet('key:' + provider.id, key)) throw new Error('Impossible d’enregistrer la clé.');
           P.push(provider); saveSettings();
           N.toast(`${provider.name} ajouté ✓`); openSettings();
-        } catch (e) { msg.className = 'help ko'; msg.textContent = e.message; $('#keyAdd', r).disabled = false; }
+        } catch (e) { msg.className = 'help ko'; msg.textContent = e.message; $('#keyAdd', r).disabled = false; if (e.choisir || $('#keyChoix', r).value) $('#keyChoixRow', r).classList.remove('hidden'); }
       };
       $('#cuAdd', r).onclick = () => {
         const url = $('#cuUrl', r).value.trim().replace(/\/+$/, ''), model = $('#cuModel', r).value.trim();

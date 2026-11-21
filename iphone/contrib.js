@@ -18,7 +18,7 @@
   const LIMITS = { question: 8000, answer: 12000, text: 4000 };
   const MAX_QUEUE = 2 * 1024 * 1024, MAX_PACKET = 200 * 1024;
   const SECRETS = [
-    /sk-ant-[A-Za-z0-9_-]{20,}/g, /sk-(?!ant-|or-)(?:proj-|svcacct-)?[A-Za-z0-9_-]{32,}/g, /sk-or-[A-Za-z0-9_-]{20,}/g, /AIza[0-9A-Za-z_-]{35}/g,
+    /sk-ant-[A-Za-z0-9_-]{20,}/g, /sk-(?!ant-|or-)(?:proj-|svcacct-)?[A-Za-z0-9_-]{32,}/g, /sk-or-[A-Za-z0-9_-]{20,}/g, /AIza[0-9A-Za-z_-]{35}/g, /\bAQ\.[0-9A-Za-z_-]{40,}/g,
     /\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36}\b|github_pat_[A-Za-z0-9_]{50,}/g, /\bAKIA[0-9A-Z]{16}\b/g, /\b[sr]k_live_[0-9a-zA-Z]{20,}\b/g,
     /\bxox[baprs]-[0-9A-Za-z-]{10,}/g, /\bgsk_[A-Za-z0-9]{20,}/g, /\bhf_[A-Za-z0-9]{20,}/g, /\bxai-[A-Za-z0-9]{20,}/g, /\bnvapi-[A-Za-z0-9_-]{20,}/g,
     /-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY-----[\s\S]*?(?:-----END[^-]*-----|$)/g,

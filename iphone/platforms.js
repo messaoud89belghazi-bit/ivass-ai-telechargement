@@ -16,7 +16,7 @@ const PLATFORMS = [
     prefer: [/:free$/, /claude/, /gpt/, /gemini/], keyUrl: 'https://openrouter.ai/keys' },
   { id: 'openai', name: 'OpenAI (ChatGPT)', type: 'openai', baseUrl: 'https://api.openai.com/v1', key: /^sk-(proj|svcacct|admin)-|^sk-[A-Za-z0-9]{40,}$/, priority: 2,
     prefer: [/^gpt-5(\.\d)?$/, /^gpt-5/, /^gpt-4\.1$/, /^gpt-4o$/, /^o\d/, /^gpt-4/], keyUrl: 'https://platform.openai.com/api-keys' },
-  { id: 'gemini', name: 'Google Gemini', type: 'gemini', baseUrl: 'https://generativelanguage.googleapis.com', key: /^AIza[0-9A-Za-z_-]{30,}$/, priority: 2,
+  { id: 'gemini', name: 'Google Gemini', type: 'gemini', baseUrl: 'https://generativelanguage.googleapis.com', key: /^(AIza[0-9A-Za-z_-]{30,}|AQ\.[0-9A-Za-z_-]{40,})$/, priority: 2,
     // Flash d'abord : une clé gratuite n'a souvent AUCUN quota pour les modèles « Pro » (erreur « limit: 0 »)
     prefer: [/^gemini-\d+(\.\d+)?-flash$/, /^gemini-flash-latest$/, /^gemini-\d+(\.\d+)?-flash-lite$/, /^gemini-.*flash(?!.*(lite|thinking))/, /^gemini-\d+(\.\d+)?-pro$/, /^gemini-.*-pro/, /^gemini/],
     free: 'Gratuit avec un compte Google (limites par minute et par jour)', keyUrl: 'https://aistudio.google.com/app/apikey' },

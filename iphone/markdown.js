@@ -86,6 +86,21 @@
     return html;
   }
 
+  const CODE_LIGNES_VUES = 12, CODE_LIGNES_MAX = 16;
+  // Un code déroulé le reste quand la discussion est réaffichée (fin de réponse, changement d'onglet…)
+  const OUVERTS = new Set();
+  const cleCode = (code) => code.length + ':' + code.slice(0, 160);
+  /** Dérouler / replier un code long (bouton « ▾ Plus » en bas à gauche du bloc). */
+  window.ivassBasculerCode = function (btn) {
+    const bloc = btn && btn.closest('.code'); if (!bloc) return false;
+    const ouvert = bloc.classList.toggle('code-ouvert');
+    const c = bloc.querySelector('code'); if (c) { const k = cleCode(c.textContent); if (ouvert) OUVERTS.add(k); else OUVERTS.delete(k); }
+    const n = +bloc.dataset.lignes || 0;
+    btn.setAttribute('aria-expanded', String(ouvert));
+    btn.textContent = ouvert ? '▴ Moins' : `▾ Plus · ${Math.max(0, n - CODE_LIGNES_VUES)} lignes de plus`;
+    if (!ouvert) bloc.scrollIntoView({ block: 'nearest' });
+    return true;
+  };
   window.renderMarkdown = function (src, opts = {}) {
     const blocks = [];
     src = String(src || '').replace(/\r\n/g, '\n');
@@ -96,11 +111,16 @@
       if (c) { lang = c[1]; file = c[2].trim(); }
       lang = (lang.split(/\s/)[0] || '').toLowerCase();
       const runnable = !opts.noRun && (!file || lang === 'html') && RUNNABLE.includes(lang);
+      // 3.36 : un code long n'affiche que ses premières lignes ; « ▾ Plus » (en bas à gauche) le déroule
+      const nbL = code.replace(/\n$/, '').split('\n').length;
+      const long = nbL > CODE_LIGNES_MAX;
+      const ouvert = long && OUVERTS.has(cleCode(code.replace(/\n$/, '')));
       blocks.push(
-        `<div class="code" data-lang="${esc(lang)}"><div class="code-h"><span>${file ? '📄 ' + esc(file) : esc(lang || 'texte')}</span><span class="code-btns">` +
+        `<div class="code${long ? ' code-long' : ''}${ouvert ? ' code-ouvert' : ''}" data-lang="${esc(lang)}"${long ? ` data-lignes="${nbL}"` : ''}><div class="code-h"><span>${file ? '📄 ' + esc(file) : esc(lang || 'texte')}</span><span class="code-btns">` +
         (runnable ? `<button class="run-code" type="button">${lang === 'html' ? '👁 Aperçu' : '▶ Exécuter'}</button>` : '') +
         `<button class="copy-code" type="button">Copier</button></span></div>` +
-        `<pre><code>${esc(code.replace(/\n$/, ''))}</code></pre></div>`
+        `<pre><code>${esc(code.replace(/\n$/, ''))}</code></pre>` +
+        (long ? `<button class="code-plus" type="button" aria-expanded="${ouvert}">${ouvert ? '▴ Moins' : `▾ Plus · ${nbL - CODE_LIGNES_VUES} lignes de plus`}</button>` : '') + `</div>`
       );
       return `\n\u0000${blocks.length - 1}\u0000\n`;
     });

@@ -5,11 +5,11 @@
  * VERSION est réécrit à chaque publication (outils/web.mjs) : c'est ce qui déclenche la mise à jour sur les iPhone.
  */
 'use strict';
-const VERSION = '1.10.39-mwcm4ume';
+const VERSION = '1.10.40-mwqd3tsk';
 const CACHE = 'ivass-ai-' + VERSION;
 const SHELL = [
   './', 'index.html', 'app.css', 'web-version.js', 'pwa.js', 'native.js', 'i18n.js', 'i18n-boot.js', 'platforms.js', 'markdown.js', 'lib.js', 'encyclo.js', 'fichiers.js', 'sync.js',
-  'nacl-fast.min.js', 'contrib.js', 'core.js', 'licence-core.js', 'offres.js', 'dev-core.js', 'dev-kits.js', 'dev.js', 'livrables-core.js', 'livrables-ui.js', 'integrations-core.js', 'rattachements.js', 'app.js', 'config.json', 'manifest.webmanifest',
+  'nacl-fast.min.js', 'contrib.js', 'core.js', 'licence-core.js', 'offres.js', 'dev-core.js', 'dev-kits.js', 'dev.js', 'livrables-core.js', 'livrables-ui.js', 'integrations-core.js', 'rattachements.js', 'fusion-core.js', 'fusion-ui.js', 'fusion.css', 'app.js', 'config.json', 'manifest.webmanifest',
   'emblem.png', 'wordmark.png', 'icon.png', 'qr.png', 'icones/apple-touch-icon.png', 'icones/icone-192.png',
   'fonts/cinzel-latin-400-normal.woff2', 'fonts/cinzel-latin-600-normal.woff2',
   'legal/CGU.md', 'legal/CGV.md', 'legal/CONFIDENTIALITE.md', 'legal/MOBILE.md',
