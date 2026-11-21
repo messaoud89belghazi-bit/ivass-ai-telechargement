@@ -13,6 +13,11 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
+### 🔐 Nouvelle clé de chiffrement des contributions (3.38.1)
+- Les contributions que vous acceptez d'envoyer (toujours facultatives, désactivées par défaut) sont maintenant chiffrées avec une **nouvelle clé**, sur PC comme sur mobile.
+- Rien ne change pour vous : aucun réglage à faire, et rien n'est envoyé sans votre accord.
+- Ce qui attendait d'être envoyé sur votre appareil part chiffré avec la nouvelle clé.
+
 ### 🧸 Le compagnon vous entend, vous reconnaît et vous appelle par votre prénom (3.38 · compagnon 2.2)
 - **🎙 Oreille par Ivass AI** : la voix captée par le compagnon est transcrite par le Whisper d'Ivass AI, avec votre clé **Groq** (gratuite) ou OpenAI. Il n'y a plus de service Python à installer. Le son n'est pas conservé. Sans clé Whisper ou quand Ivass AI est fermé, le compagnon se rabat sur son service local.
 - **Prénom et famille** dans 🧸 Compagnon › Réglages :
