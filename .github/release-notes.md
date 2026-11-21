@@ -13,6 +13,78 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
+### 🧸 Compagnon Ivass, toutes les clés d'IA, Flux et Ideogram, console plus lisible (3.35)
+- **Clés Google AI Studio « AQ. »** : depuis 2026, Google délivre des clés qui commencent par « AQ. » au lieu de « AIza ». Ivass ne reconnaissait que l'ancien format et refusait donc ces clés. Les deux formats sont maintenant acceptés.
+- **Clé d'un format inconnu** : au lieu d'un refus, Ivass propose la liste des plateformes (discussion, images, vidéo). Vous choisissez, puis Ivass vérifie la clé auprès de cette plateforme. La clé ne revient jamais dans la page : elle est gardée 15 minutes en mémoire, puis oubliée.
+- **Nouveaux moteurs d'images** :
+  - **Black Forest Labs (Flux 1.1 Pro)** : la clé est vérifiée dès l'ajout.
+  - **Ideogram 3** : Ideogram n'offre pas de vérification gratuite, donc la clé est contrôlée à la première image. Les images signalées non sûres par Ideogram sont écartées.
+  - Les deux entrent dans le choix automatique du moteur d'images.
+- **🧸 Compagnon** : nouvel écran pour relier votre compagnon de bureau Ivass-Compagnon-3D (version 2.1 ou plus récente).
+  - Mise en place : choisir son dossier, Brancher, Lancer.
+  - Réglages :
+    - taille en centimètres (2 cm par défaut, de 1 à 12) ;
+    - écoute : mot d'éveil, permanente, bouton ou coupée ;
+    - autonomie, voix et port.
+  - Utilisation : l'éduquer (les leçons vont dans la bibliothèque d'Ivass AI), lui parler et lui faire faire des gestes.
+  - Fonctionnement : le compagnon pense avec les IA et les clés d'Ivass AI par un serveur local, protégé par un jeton privé et un contrôle de l'hôte, qui n'écoute que sur 127.0.0.1. Ses actions risquées demandent toujours confirmation. Le téléphone ne peut pas piloter le compagnon du PC.
+- **Console fondateur** : les longues listes sont rangées.
+  - Candidats : filtres (en cours, à vérifier, approuvés, publiés, refusés, dépassés), recherche par version et pages de 8. Les fichiers sont repliés.
+  - Journaux : recherche et « Afficher plus ».
+  - Les filtres et les onglets restent visibles en haut.
+- **Audit de sécurité** :
+  - « Ouvrir » un fichier ne lance plus jamais un programme ni un script : il est montré dans l'Explorateur. Les chemins relatifs sont refusés.
+  - Une fenêtre de plateforme n'ouvre plus que des liens http(s), jamais un protocole Windows (file:, ms-msdt:, search-ms:…).
+  - Les jetons chiffrés ne sont plus jamais envoyés à la page.
+
+### 🔐 Corrections issues de l'audit : secrets, état des IA, preuve d'exécution (3.34)
+- **Clés d'API** : une clé n'est plus jamais écrite sur le disque sans chiffrement. Quand le chiffrement de Windows était indisponible, Ivass enregistrait la clé en Base64, qui est un simple encodage lisible. Désormais, dans ce cas, la clé reste en mémoire jusqu'à la fermeture et doit être ressaisie ensuite. Les anciennes clés encodées sont chiffrées au premier démarrage, ou retirées du disque.
+- **État des IA** : une IA locale (Ollama, LM Studio…) n'est plus affichée « disponible » quand son serveur est arrêté ou sans modèle : le serveur est interrogé à chaque affichage. Pour une clé au repos, Ivass distingue **crédits épuisés** (recharger le compte : attendre ne rend pas de crédits), **limite temporaire** (nouvel essai automatique à l'heure indiquée) et **clé refusée** (à remplacer). L'heure du contrôle est affichée.
+- **Mise à jour** : le bandeau dit « téléchargée, pas encore installée » et rappelle la version que vous utilisez.
+- **Exécution de code** :
+  - une commande de lancement (« python main.py ») s'exécute maintenant à côté des fichiers du même message : elle lance le vrai programme ;
+  - après chaque exécution, Ivass affiche la **preuve** : fichier exécuté, taille, empreinte SHA-256, code de sortie ;
+  - si le lancement a **réécrit le programme** du message, le résultat est marqué « Non vérifié » au lieu de « Terminé » ;
+  - un code **sensible** (suppression massive, code téléchargé puis exécuté, registre ou tâches planifiées, droits administrateur) demande confirmation à chaque fois, même après « ne plus poser la question ».
+
+### 📚 Approfondir un sujet : jusqu'à 10 000 articles au lieu de 40 (3.33)
+Dans 📚 Bibliothèque › 🌍 Encyclopédies libres, « Approfondir un sujet » était plafonné à 40 articles.
+- **Nouveau choix à côté du champ** : 40, 200, 1 000, 5 000 ou **10 000 articles (maximum)**. 10 000 est le plafond réel de Wikipédia pour un sujet : sa recherche ne renvoie jamais davantage. Pour apprendre plus, lancez plusieurs sujets : chacun peut apporter jusqu'à 10 000 fiches.
+- **Enregistrement au fil de l'eau** : les fiches entrent dans la bibliothèque pendant le téléchargement. Bouton **⏹ Arrêter** : ce qui est déjà appris est gardé. En cas de coupure, Ivass réessaie, puis garde ce qu'il a reçu.
+- **Pas de doublon** : relancer un sujet n'ajoute que les articles nouveaux ; le compteur indique combien étaient déjà dans la bibliothèque.
+- Si Wikipédia a moins d'articles que demandé sur le sujet, Ivass s'arrête et le dit.
+- Avant un gros téléchargement (1 000 articles et plus), Ivass annonce la durée et la place estimées. Les premiers articles sont les plus proches du sujet ; les derniers s'en éloignent.
+
+### 🔎 Trouver et installer d'autres IA open source (3.32)
+Dans ⚙ Paramètres › **🦙 IA locales gratuites**, nouvelle barre de recherche « Trouver d'autres IA open source » :
+- **Types** : 🎬 vidéo, 🖼 image, 🎵 musique, 🗣 voix, 💬 discussion, 🧑‍💻 code, 👁 vision.
+- **Catalogue intégré** (licence, taille, carte graphique conseillée, page officielle) et **recherche en direct sur Hugging Face**, les modèles les plus téléchargés d'abord. Les licences non libres et les modèles à accès restreint sont signalés.
+- **Discussion, code, vision** : installation en un clic par Ollama, y compris les modèles GGUF trouvés sur Hugging Face.
+- **🎬 Vidéo locale** : **Wan 2.2 TI2V 5B** (Apache-2.0, texte → vidéo et image → vidéo) s'installe en un clic dans ComfyUI : 3 fichiers, environ 18 Go, rangés dans les bons dossiers. Espace disque vérifié avant, téléchargement **repris où il s'est arrêté** en cas de coupure ou de pause. C'est le modèle qu'Ivass pilote directement pour créer des vidéos gratuitement sur votre carte graphique.
+- Les autres modèles vidéo ouverts (Wan 14B, LTX-Video, HunyuanVideo, CogVideoX, Mochi, AnimateDiff) sont présentés avec leur page officielle : ils s'utilisent dans Ivass avec votre propre workflow ComfyUI. Les modèles de musique et de voix sont listés pour information : ils ne sont pas encore reliés à Ivass.
+- ComfyUI doit être installé (comfy.org). Ivass cherche son dossier tout seul ; sinon, bouton « 📁 Dossier ComfyUI ».
+
+### 🧭 Ivass ne promet plus ce qu'il ne sait pas faire, et vérifie ce qu'il écrit (3.31)
+- **Règles de réalité** (discussion et mode Agent) : Ivass ne doit plus inventer d'images Docker, d'adresses de flux ou d'API, de prix ni de fonctions « déjà en place ». Les données d'exemple portent la mention « EXEMPLE FICTIF », un code jamais exécuté n'est plus annoncé « prêt à l'emploi », et aucun mot de passe n'est écrit en clair dans une commande.
+- **Registre des capacités réelles** : à chaque réponse, Ivass reçoit l'état calculé de ce PC (IA reliées, moteurs d'images et de vidéos, outils installés, plateformes, skills, veilles) classé en *disponible*, *avec limites*, *à configurer*, *pas disponible*. Tapez **/capacites** dans la discussion pour voir ce tableau.
+- **« Améliore-toi », « deviens meilleur que… »** : au lieu d'inventer un « système d'auto-amélioration », Ivass explique en clair qu'il ne peut ni se réentraîner ni se reprogrammer, puis propose les réglages qui améliorent vraiment ses résultats sur votre PC. Cette demande n'est plus confiée par erreur au profil « Marketing ».
+- **🔎 Vérification automatique** : après une réponse contenant du code, Ivass teste en ligne les adresses et les images Docker qu'il a écrites. Celles qui n'existent pas sont signalées sous la réponse, ainsi qu'un mot de passe en clair dans une commande. Si tout répond, rien n'est ajouté.
+- **🔧 Correction automatique** : une correction coupée ou mal fermée (une « } » qui ferme une « ( ») est maintenant refusée avant de remplacer votre code ; Ivass redemande une version complète, et garde votre code si elle est encore abîmée. Un message du type « Module requis non installé : feedparser » propose le bouton **📦 Installer** au lieu de réécrire le programme.
+
+### 🎬 Vraies vidéos même en mode Agent, et toutes les grandes plateformes de création (3.30)
+- **« Crée une vidéo de… » en mode 🤖 Agent** : l'Agent écrivait une page HTML animée et répondait qu'il ne pouvait pas produire de vidéo. Désormais, une demande de vidéo ou d'image lance **la vraie création** (fichier MP4 / PNG), en discussion comme en mode Agent. L'Agent dispose aussi de l'outil **creer_media** pour créer une vidéo ou une image au milieu d'une tâche. Il ne remplace plus jamais une vidéo par du code.
+- **Nouvelles plateformes**, reconnues automatiquement dans ⚙ Paramètres › Ajout rapide (clé vérifiée, puis chiffrée sur votre PC) :
+  - **Runway** (`key_…`) : vidéo **Gen-4.5** (5 ou 10 s), **image → vidéo** Gen-4 Turbo, images Gen-4 ;
+  - **Replicate** (`r8_…`) : vidéo **MiniMax Hailuo** (texte ou image → vidéo), images **FLUX** ;
+  - **fal.ai** (`identifiant:secret`) : vidéo **Hailuo 02** (6 ou 10 s, texte ou image → vidéo), images **FLUX** ;
+  - **Stability AI** (`sk-…`) : images **Stable Image Core** (la clé est vérifiée chez Stability avant les autres détections).
+- Le directeur artistique les intègre dans son choix (durée, format, agrandissement 4K par FFmpeg) et passe au moteur suivant si l'un refuse.
+- Dans 🎨 Studio, Luma apparaît désormais comme disponible quand sa clé est enregistrée.
+
+### 🎬 Nouvelles clés Luma « luma-api-… » acceptées (3.29.1)
+- Luma a lancé une nouvelle API (**Luma Agents**, clés `luma-api-…` créées sur https://platform.lumalabs.ai). Ivass vérifiait ces clés auprès de l’ancienne API Dream Machine, qui répondait « HTTP 403 — Not authenticated ». Il reconnaît maintenant les deux sortes de clés et utilise la bonne API pour chacune.
+- Avec une clé `luma-api-…` : **vidéo Ray 3.2** (jusqu’au 1080p, 5 ou 10 s, **image → vidéo** à partir d’une image de votre PC ; la 4K est obtenue par agrandissement FFmpeg) et **images Uni-1**.
+
 ### 🎬 Clé Luma reconnue : vidéo Ray 2 jusqu’en 4K et image Photon (3.29)
 - Une clé **Luma** (`luma-…`) collée dans Ivass était confondue avec une clé de discussion et refusée par Together AI (« HTTP 401 »). Elle est maintenant reconnue comme une **clé de création** : vérifiée directement auprès de Luma, puis chiffrée sur votre PC.
 - **🎬 Vidéo Luma Ray 2** : 540p à **4K native**, 5 ou 9 secondes par plan, tous les formats (16:9, 9:16, 1:1…). Le directeur artistique la choisit quand vous demandez de la 4K. Une vidéo à partir d’une image locale passe automatiquement au moteur suivant.
