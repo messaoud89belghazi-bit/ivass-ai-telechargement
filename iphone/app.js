@@ -1271,6 +1271,13 @@
     .then(remoteConfig)
     .finally(() => { if (S.settings.sync.auto) syncNow(false); flushSoon(15000); setTimeout(() => checkUpdate(false), 4000); setTimeout(() => receiveSavoir(false).catch(() => {}), 8000); setTimeout(() => { if (S.settings.monde !== false && S.config.pageUrl) receivePack('monde', 'monde.json', 'monde', false).catch(() => {}); }, 12000); });
   setInterval(() => checkUpdate(false), 6 * 3600e3);
+  // 1.10 : Android garde Ivass en arrière-plan et y fige les minuteries — sans ceci, une mise à jour n'était vue
+  // qu'après un redémarrage complet de l'application. On vérifie aussi à chaque retour sur Ivass (au plus toutes les 30 min).
+  let dernierControleMaj = Date.now();
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || Date.now() - dernierControleMaj < 30 * 60e3) return;
+    dernierControleMaj = Date.now(); checkUpdate(false);
+  });
   // ⭐ offres : licence vérifiée hors ligne, contrôle auprès du serveur toutes les 6 h
   const offresCheck = (force) => OF.init().then(() => OF.refresh(force)).then(() => OF.noterTransition(nCles())).catch(() => {});
   setTimeout(() => offresCheck(false), 9000);
