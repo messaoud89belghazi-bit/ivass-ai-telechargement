@@ -28,6 +28,7 @@
     { id: 'com', nom: 'Communication', icone: '💬' },
     { id: 'crm', nom: 'CRM, marketing et support', icone: '📈' },
     { id: 'paiement', nom: 'Paiement et commerce', icone: '💳' },
+    { id: 'erp', nom: 'ERP et gestion', icone: '🏭' },
     { id: 'publiques', nom: 'API publiques', icone: '🌍' },
   ];
   const AUTH = {
@@ -263,6 +264,23 @@
     ['tmdb', 'TMDB (films et séries)', 'publiques', 'bearer', 'https://developer.themoviedb.org/docs', 'https://www.themoviedb.org/settings/api', { tags: 'films series cinema' }],
     ['spotify', 'Spotify Web API', 'publiques', 'oauth2', 'https://developer.spotify.com/documentation/web-api', 'https://developer.spotify.com/dashboard', { tags: 'musique' }],
     ['newsapi', 'NewsAPI', 'publiques', 'apikey', 'https://newsapi.org/docs', 'https://newsapi.org/register', { gratuit: true, tags: 'actualites presse' }],
+    // ---------------------------------------------------------------- 3.28 : ERP, données, DevOps (écosystème des connecteurs)
+    ['sap', 'SAP (S/4HANA, Business One)', 'erp', 'oauth2', 'https://api.sap.com', 'https://api.sap.com', { tags: 'erp entreprise s4hana odata' }],
+    ['odoo', 'Odoo', 'erp', 'apikey', 'https://www.odoo.com/documentation/latest/developer/reference/external_api.html', 'https://www.odoo.com/documentation/latest/developer/reference/external_api.html', { tags: 'erp crm gestion facturation open source' }],
+    ['netsuite', 'Oracle NetSuite', 'erp', 'oauth2', 'https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/chapter_1540391670.html', '', { tags: 'erp comptabilite oracle' }],
+    ['sage', 'Sage (Business Cloud, Intacct)', 'erp', 'oauth2', 'https://developer.sage.com', 'https://developer.sage.com', { tags: 'erp comptabilite paie' }],
+    ['dynamics365', 'Microsoft Dynamics 365 (ERP et CRM)', 'erp', 'oauth2', 'https://learn.microsoft.com/dynamics365/', 'https://portal.azure.com', { tags: 'erp crm microsoft dataverse' }],
+    ['oracle-erp', 'Oracle Fusion Cloud ERP', 'erp', 'basic', 'https://docs.oracle.com/en/cloud/saas/financials/', '', { tags: 'erp finance oracle' }],
+    ['oracle-cloud', 'Oracle Cloud Infrastructure', 'cloud', 'apikey', 'https://docs.oracle.com/iaas/api/', 'https://cloud.oracle.com', { tags: 'oci cloud oracle' }],
+    ['azure-devops', 'Azure DevOps', 'dev', 'basic', 'https://learn.microsoft.com/rest/api/azure/devops/', 'https://dev.azure.com', { tags: 'tickets ci cd microsoft boards repos' }],
+    ['kubernetes', 'Kubernetes', 'dev', 'bearer', 'https://kubernetes.io/docs/reference/kubernetes-api/', '', { tags: 'conteneurs cluster k8s' }],
+    ['postgresql', 'PostgreSQL (votre serveur)', 'donnees', 'basic', 'https://www.postgresql.org/docs/current/', '', { tags: 'postgres sql base donnees' }],
+    ['mysql', 'MySQL / MariaDB (votre serveur)', 'donnees', 'basic', 'https://dev.mysql.com/doc/', '', { tags: 'sql base donnees mariadb' }],
+    ['sqlserver', 'Microsoft SQL Server', 'donnees', 'basic', 'https://learn.microsoft.com/sql/sql-server/', '', { tags: 'sql base donnees microsoft' }],
+    ['redis', 'Redis', 'donnees', 'basic', 'https://redis.io/docs/latest/', '', { tags: 'cache cle valeur' }],
+    ['elasticsearch', 'Elasticsearch', 'donnees', 'apikey', 'https://www.elastic.co/docs/api/doc/elasticsearch/', 'https://cloud.elastic.co', { tags: 'recherche index logs' }],
+    ['magento', 'Adobe Commerce (Magento)', 'paiement', 'bearer', 'https://developer.adobe.com/commerce/webapi/rest/', '', { tags: 'boutique e-commerce' }],
+    ['bigcommerce', 'BigCommerce', 'paiement', 'apikey', 'https://developer.bigcommerce.com/docs/rest-management', 'https://login.bigcommerce.com', { tags: 'boutique e-commerce' }],
     ['publicapis', 'Public APIs (index de 1 400 API)', 'publiques', 'aucune', 'https://github.com/public-apis/public-apis', '', { gratuit: true, tags: 'liste api gratuites' }],
   ];
 
