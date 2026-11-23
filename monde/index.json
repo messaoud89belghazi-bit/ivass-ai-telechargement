@@ -1,89 +1,89 @@
 {
  "format": "ivass-savoir",
  "version": 1,
- "at": "2026-11-22T12:40:02.722Z",
+ "at": "2026-11-23T14:50:02.270Z",
  "app": "apprentissage-quotidien",
- "count": 1559,
- "hash": "17fb0870cca0ef433272fa7882f8b268",
+ "count": 1610,
+ "hash": "22a71650fb2bcd55ad57faf73d5d29cb",
  "parts": [
   {
    "file": "base-arts.json",
-   "hash": "f65f8b1f7e7763aa837456fcb8b1d4c2",
+   "hash": "f59672b43bd24a3a50b4ca492f987b37",
    "count": 24
   },
   {
    "file": "base-cuisine.json",
-   "hash": "511396e5b359cd82c5b74b8419bd6d30",
+   "hash": "a3ddc67c4abadd68341cb13021841e2e",
    "count": 19
   },
   {
    "file": "base-droit.json",
-   "hash": "96dde94f62a2f451904f6bab48fe44a1",
+   "hash": "bb6806e602cd2af7043a662561d5d2ee",
    "count": 21
   },
   {
    "file": "base-economie.json",
-   "hash": "c1b78d8790d9e68e9ddd011d13c020b1",
+   "hash": "b6a59623e94359e41dcfc0003a0a0961",
    "count": 25
   },
   {
    "file": "base-geographie.json",
-   "hash": "51ee94bc1472ee4ee0ec6b2c112d9a72",
+   "hash": "6e11861894cb765f09941aacde88b9c9",
    "count": 25
   },
   {
    "file": "base-histoire.json",
-   "hash": "1930f6610b1f506731c424f57a8aa17c",
+   "hash": "0d4ca7cfe4f427f06da2d74ce306b1f6",
    "count": 25
   },
   {
    "file": "base-langue.json",
-   "hash": "25310eef982b8005cef15334e1d0911e",
+   "hash": "603d4e90c31aef1ac1b0bd494fb1f074",
    "count": 18
   },
   {
    "file": "base-maths.json",
-   "hash": "4eee03b2a6fcf05c62de58a45e27de2c",
+   "hash": "23f257c09e5ac728fe8e4fcedd70b072",
    "count": 20
   },
   {
    "file": "base-nature.json",
-   "hash": "153b0896e24978ea697b02ee17706c47",
+   "hash": "83971aa360208a6ee8aa36ff44e71778",
    "count": 19
   },
   {
    "file": "base-numerique.json",
-   "hash": "c36204f853acd223417188b19c078610",
+   "hash": "263ba640ae62ac48d891b5af7cce8bb0",
    "count": 25
   },
   {
    "file": "base-philosophie.json",
-   "hash": "c2cb4d7f0bb07c3309072ec0be183322",
+   "hash": "252ff48f2be396ebc32273378c7a8bc7",
    "count": 21
   },
   {
    "file": "base-pratique.json",
-   "hash": "7cd17dc32d6665c3b99d9bc0f347c39b",
+   "hash": "b800f34d2b915a1ea62366db731eb290",
    "count": 15
   },
   {
    "file": "base-sante.json",
-   "hash": "c08841370825cfa28dfcc9fa8f50bbb6",
+   "hash": "8e1550137390e1f81f00affbc44ce50e",
    "count": 24
   },
   {
    "file": "base-sciences.json",
-   "hash": "f7fc160f1e91bf63d30337235233b7d8",
+   "hash": "ebb0ad84205e2a8266f201d9ccf12891",
    "count": 25
   },
   {
    "file": "base-sport.json",
-   "hash": "ca2548cdc958698f5b6d1359233636bd",
+   "hash": "b55ee2443f084c3e96a2854cb0825fda",
    "count": 20
   },
   {
    "file": "base-technique.json",
-   "hash": "b65a46cd40a4725c525d10fba7b5c00a",
+   "hash": "b7a974c6e4f18c456c88fbd9d42c2e85",
    "count": 19
   },
   {
@@ -210,6 +210,11 @@
    "file": "jour-2026-11-21.json",
    "hash": "c4aa0d244f51fd1763454693c05a6edd",
    "count": 52
+  },
+  {
+   "file": "jour-2026-11-22.json",
+   "hash": "a8b8bee6f06ff03227908892109b0d64",
+   "count": 51
   }
  ],
  "licence": "Textes issus de Wikipédia, licence CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/deed.fr) ; source et lien conservés dans chaque fiche."
