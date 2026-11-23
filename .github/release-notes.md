@@ -13,6 +13,91 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
+### 🚀 Nouveau : le Centre IA (3.41)
+Un nouvel espace **🚀 Centre IA** (menu « Travailler »), avec cinq onglets :
+- **🌐 Hub IA universel** :
+  - la même demande part en même temps vers 6 modèles au plus (GPT, Claude, Gemini, Mistral, Llama, modèles locaux…) ;
+  - les réponses s’affichent côte à côte, en direct, avec le temps de réponse ;
+  - un modèle en panne affiche sa vraie erreur au lieu d’être remplacé en silence, pour que la comparaison reste honnête ;
+  - **🔀 Fusionner** rédige la meilleure réponse à partir de toutes les autres ;
+  - **🧭 Choisir le meilleur modèle** reconnaît le type de tâche (code, maths, rédaction, traduction, résumé, analyse, créatif, recherche) et propose le meilleur modèle ;
+  - Ivass apprend de vos 👍 / 👎 et tient compte de la fiabilité de chaque modèle.
+- **🤖 Agents et équipes** :
+  - créez vos propres agents (nom, rôle, instructions, modèle préféré, créativité) et essayez-les tout de suite ;
+  - ils siègent aussi au 🏛 Conseil ;
+  - les **équipes** font travailler plusieurs agents à la suite : chacun reçoit le travail des précédents, puis un coordinateur livre le résultat final.
+- **⚙ Centre d’automatisation** :
+  - des scénarios sans programmation, faits d’un déclencheur et d’étapes ;
+  - déclencheurs : à la demande, chaque jour à une heure (jours au choix), toutes les N minutes, au démarrage, ou à l’arrivée d’un nouveau fichier dans un dossier ;
+  - étapes : demander à une IA, confier la tâche à un de vos agents, écrire le résultat dans un fichier, recevoir une notification Windows ;
+  - variables {{date}}, {{precedent}}, {{contenu_fichier}}…, et un historique de chaque exécution ;
+  - une automatisation ne peut jamais lancer de programme et n’écrit que dans le dossier que vous avez choisi.
+- **🛍 Marketplace** :
+  - agents prêts à l’emploi (juriste, commercial, développeur, correcteur, marketing, expert fibre FTTH), une équipe « article de blog », des automatisations (veille quotidienne, résumé des nouveaux documents, bilan du soir) et des modèles de prompts, installables en un clic ;
+  - partagez vos créations avec un fichier **.ivassmod**. Il ne contient que des données, jamais de programme ; Ivass vérifie son empreinte à l’installation et en retire les chemins de votre PC.
+- **🔐 Coffre** :
+  - **permissions** : pour chaque fournisseur, choisissez où il a le droit de servir (discussions, Hub, agents, automatisations) ;
+  - **sauvegarde automatique** quotidienne de vos clés chiffrées (les 15 dernières sont gardées), restaurable sans créer de doublon ;
+  - **sauvegarde portable**, protégée par votre phrase secrète, pour changer de PC ;
+  - historique de toutes les modifications, sans aucune clé visible.
+
+### 🔑 Clés API et comptes multiples (3.40)
+- **Correction** : l’erreur « api.listeChoixCle is not a function » est réglée. Quand Ivass ne reconnaît pas une clé, il vous propose bien de choisir sa plateforme. C’était le cas pour beaucoup de clés, dans le Studio comme dans ⚙ Paramètres.
+- **Plusieurs comptes par plateforme** : bouton **＋ Comptes** sur chaque plateforme. Vous pouvez connecter un nouveau compte, changer de compte en un clic (« Utiliser »), en renommer un, le tester, le déconnecter, et synchroniser tous les comptes. Une nouvelle clé collée dans l’ajout rapide devient un compte de plus au lieu d’effacer l’ancienne.
+- **📊 Centre de contrôle** :
+  - utilisation par service (appels, erreurs, limites) ;
+  - quotas restants quand la plateforme les communique (ElevenLabs) ;
+  - alertes de quota et de sécurité (clé refusée, peut-être expirée ou révoquée) ;
+  - historique complet, sans aucune clé visible ;
+  - vérification automatique une fois par jour.
+- **🖥 Carte graphique** : Ivass détecte votre carte et vous dit ce que votre PC peut générer en local (images, vidéos) avec ComfyUI ou Stable Diffusion.
+- **🆕 Modèle le plus récent** : quand Google ou OpenAI publient un nouveau modèle d’image, Ivass le détecte avec votre clé et le propose en premier.
+- **🎬 Montage** :
+  - barre de projets avec ＋ pour passer d’un projet à l’autre ;
+  - fenêtre de titre avec 12 polices, 9 styles (cinématique, bande-annonce, néon, machine à écrire, bas de titre, générique…), fonds, contours et animations ;
+  - format de sortie affiché sur l’écran (4K, 8K, MP4) et repères cinéma 2,39:1 ;
+  - spectre sonore pour l’audio et égaliseur 3 bandes (identique à l’export) ;
+  - sommaire complet du montage.
+- **✨ Retouche** : ouvrez ou glissez vos images directement, choisissez dans la bibliothèque, et appliquez en un clic 12 rendus professionnels (aperçus calculés sur votre image) et 9 formats de publication (Instagram, Story, YouTube, LinkedIn, Facebook, affiche A4, 4K, 8K).
+- **Saisie** : les fenêtres « renommer » fonctionnent partout dans Ivass.
+
+### 🗣 Clés ElevenLabs reconnues (3.39.1)
+- Collez votre clé ElevenLabs (elle commence par « sk_ ») dans le bouton 🔑 API ou l’Ajout rapide : Ivass la reconnaît et la vérifie tout seul.
+- Une clé limitée à certaines permissions est acceptée ; vérifiez qu’elle autorise « Text to Speech » et « Voices ».
+
+### 🎨 Studio créatif professionnel (3.39)
+- **🎬 Montage, l’atelier principal** : chutier, moniteur avec timecode, inspecteur et timeline multipiste (vidéo, titres, voix, musique, effets).
+  - Couper, rogner, déplacer, magnétisme, ripple, roulement, glissement, coulissement, multisélection, liens son/image, verrou, muet, solo et volume par piste.
+  - Annuler / rétablir, sauvegarde automatique et points de reprise.
+  - Transformations, recadrage, couleurs, transitions, images clés, titres et sous-titres (import / export SRT, transcription d’une voix).
+  - Voix off au micro (écoutée avant d’être posée), voix de synthèse OpenAI ou ElevenLabs, musique qui baisse sous la voix.
+  - Le MP4 est fabriqué avec le même dessin et le même mixage que l’aperçu, puis vérifié (durée, taille, images/s, son).
+  - Les anciens montages à scènes s’ouvrent directement dedans.
+- **📚 Bibliothèque** à la place de la « galerie de la session » : tout est gardé d’une fois sur l’autre et partagé par tous les ateliers.
+  - Recherche, filtres, favoris, collections, versions, détail (origine, prompt, utilisations).
+  - Bouton **🗑 Supprimer** sur chaque carte, corbeille récupérable 30 jours ; un média utilisé dans un projet n’est jamais effacé sans confirmation.
+  - Glisser-déposer et « Envoyer vers… » (Retouche, Fusion, Montage, Vidéo IA, 3D).
+- **🔑 Bouton API** dans l’en-tête du Studio : ajouter, tester, remplacer ou retirer vos clés (affichées masquées), avec l’état de chaque service. Le fournisseur et le modèle actifs sont affichés dans l’en-tête.
+- **Choix du générateur** : Ivass vous demande avant d’essayer un autre générateur, car votre prompt partirait vers un autre service.
+- **🪄 Fusion** :
+  - le sujet se déplace dans toutes les directions, à toutes les tailles de fenêtre ;
+  - l’aperçu reste visible pendant que vous faites défiler les réglages ;
+  - plusieurs calques (ordre, verrou, opacité, modes de fusion), position X/Y, rotation, miroirs, perspective simulée ;
+  - annuler, projet modifiable (.ivfusion), PNG transparent.
+- **✨ Retouche** : annuler / rétablir, avant / après, inspection à 100 % et plus (grille des pixels), redresser, niveaux, préréglages, et « Nouvelle version » qui garde l’original.
+- **🏭 Campagnes d’images** jusqu’à 100 000 images :
+  - essai pilote et estimation avant de lancer, budget ou plafond, pause et reprise ;
+  - jamais deux fois la même image après une coupure ;
+  - résultats par pages et manifeste CSV.
+- **🎥 Vidéo IA** : prises comparées côte à côte, points d’entrée et de sortie, envoi direct dans le Montage.
+- **🧊 3D** : vidéos tournantes jusqu’à **1 heure**, avec estimation, essai de 3 s, rotation au choix, rendu par segments d’une minute et reprise après une fermeture.
+- **🖱 Clic droit** : chaque page (et chaque atelier du Studio) propose ses propres actions, en plus de copier, coller et corriger.
+
+### 🛠 Tableau de bord du créateur : fin de l'erreur « HTTP 500 » (3.38.2)
+- Le serveur des contributions met à niveau sa base tout seul. Il ajoute les colonnes qui manquaient à une base créée par une ancienne version, sans rien effacer.
+- Les contributions se téléchargent par pages d'environ 6 Mo au lieu d'un seul bloc, pour ne plus dépasser la mémoire du serveur.
+- En cas de panne, le créateur (et lui seul) voit la cause exacte. Si les statistiques du serveur sont indisponibles, la lecture des contributions continue quand même.
+
 ### 🔐 Nouvelle clé de chiffrement des contributions (3.38.1)
 - Les contributions que vous acceptez d'envoyer (toujours facultatives, désactivées par défaut) sont maintenant chiffrées avec une **nouvelle clé**, sur PC comme sur mobile.
 - Rien ne change pour vous : aucun réglage à faire, et rien n'est envoyé sans votre accord.
