@@ -1,2 +1,2 @@
 /* Numéro de la version iPhone / web. Réécrit à chaque publication (outils/web.mjs). */
-window.IVASS_WEB_VERSION = '1.10.42';
+window.IVASS_WEB_VERSION = '1.10.44';

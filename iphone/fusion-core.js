@@ -291,7 +291,110 @@
     return { x0, y0, w, h };
   }
 
-  const API = { couleursBord, distance, detourer, flouAlpha, appliquerMasque, cadre, analyser, hauteurPerspective, placementInitial, harmoniser, ajouterGrain, parametresOmbre, composer };
+  // ------------------------------------------------------------------ 3.39 : calques, coordonnées, perspective simulée
+  /**
+   * Zone réellement occupée par l'image dans un <canvas> affiché avec « object-fit: contain » :
+   * l'élément peut être plus large (ou plus haut) que l'image dessinée → sans ce calcul, la souris tombe à côté.
+   * rect = getBoundingClientRect() ; cw, ch = taille interne du canvas. Rend { left, top, width, height, k } (k = pixels image par pixel écran).
+   */
+  function zoneAffichee(rect, cw, ch) {
+    const k = Math.min(rect.width / Math.max(1, cw), rect.height / Math.max(1, ch));
+    const width = cw * k, height = ch * k;
+    return { left: rect.left + (rect.width - width) / 2, top: rect.top + (rect.height - height) / 2, width, height, k: 1 / Math.max(1e-9, k) };
+  }
+  /** Coordonnées écran → coordonnées de l'image (justes à tout zoom, toute taille de fenêtre et tout défilement). */
+  function versImage(clientX, clientY, rect, cw, ch) {
+    const z = zoneAffichee(rect, cw, ch);
+    return { x: (clientX - z.left) * z.k, y: (clientY - z.top) * z.k, k: z.k };
+  }
+  /**
+   * Hauteur d'un calque : selon la perspective tant que les pieds sont sous l'horizon ; au-dessus (sujet en hauteur,
+   * en l'air, sur un balcon…) la règle ne s'applique plus → la hauteur actuelle est gardée. Le placement reste libre.
+   */
+  function hauteurCalque(c, horizonY, hauteurCamera) {
+    if (!c.auto || c.piedY <= horizonY + 4) return c.h;
+    return hauteurPerspective({ piedY: c.piedY, horizonY, hauteurReelle: c.hReelle || 1.75, hauteurCamera });
+  }
+  const MODES = ['source-over', 'multiply', 'screen', 'overlay', 'soft-light', 'hard-light', 'darken', 'lighten', 'color-dodge', 'color-burn', 'luminosity'];
+  /**
+   * Matrice d'un calque plat : position (x, piedY), hauteur h, rotation (degrés, autour du pied), miroirs, et perspective
+   * SIMULÉE (inclY : pivote autour de l'axe vertical → la largeur se réduit et un côté fuit ; inclX : bascule avant/arrière).
+   * Ce n'est pas de la vraie 3D : l'image reste plate. Rend { a, b, c, d, e, f } pour ctx.setTransform ou ctx.transform.
+   */
+  function matriceCalque(c) {
+    const rad = ((c.rotation || 0) * Math.PI) / 180;
+    const ry = (Math.max(-75, Math.min(75, c.inclY || 0)) * Math.PI) / 180, rx = (Math.max(-75, Math.min(75, c.inclX || 0)) * Math.PI) / 180;
+    const sx = (c.miroir ? -1 : 1) * Math.cos(ry), sy = (c.miroirV ? -1 : 1) * Math.cos(rx);
+    const kx = Math.sin(ry) * 0.25, ky = Math.sin(rx) * 0.25; // cisaillement léger : un bord paraît plus proche
+    const cos = Math.cos(rad), sin = Math.sin(rad);
+    // M = T(x, piedY) · R(rot) · [sx, ky; kx, sy]
+    const a0 = sx, b0 = kx, c0 = ky, d0 = sy;
+    return { a: cos * a0 - sin * b0, b: sin * a0 + cos * b0, c: cos * c0 - sin * d0, d: sin * c0 + cos * d0, e: c.x, f: c.piedY };
+  }
+  /** Le point (px, py) de l'image est-il sur le calque ? (test inverse de la matrice, rectangle −w/2..w/2 × −h..0) */
+  function toucheCalque(c, px, py) {
+    if (!c || !c.sujetFinal) return false;
+    const m = matriceCalque(c), det = m.a * m.d - m.b * m.c; if (Math.abs(det) < 1e-9) return false;
+    const dx = px - m.e, dy = py - m.f;
+    const u = (m.d * dx - m.c * dy) / det, v = (-m.b * dx + m.a * dy) / det;
+    const w = (c.h * c.sujetFinal.width) / c.sujetFinal.height;
+    return u >= -w / 2 && u <= w / 2 && v >= -c.h && v <= 0;
+  }
+  /**
+   * Composition à plusieurs calques (ordre = ordre du tableau, le dernier est devant).
+   * o = { scene, calques: [{ sujetFinal, x, piedY, h, rotation, miroir, miroirV, inclX, inclY, opacite, mode, ombre, flou, visible }],
+   *       sceneStats, horizonY, montrerHorizon, transparent, selection }
+   */
+  function composerCalques(ctx, o) {
+    const W = ctx.canvas.width, H = ctx.canvas.height;
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
+    if (o.scene && !o.transparent) ctx.drawImage(o.scene, 0, 0, W, H);
+    const cadres = [];
+    for (const c of o.calques || []) {
+      if (!c.sujetFinal || c.visible === false) { cadres.push(null); continue; }
+      const sj = c.sujetFinal, h = c.h, w = (h * sj.width) / sj.height;
+      if (c.ombre > 0 && !o.transparent) {
+        const pm = parametresOmbre(o.sceneStats, c.ombre);
+        const sil = document.createElement('canvas'); sil.width = sj.width; sil.height = sj.height;
+        const c2 = sil.getContext('2d'); c2.drawImage(sj, 0, 0); c2.globalCompositeOperation = 'source-in'; c2.fillStyle = '#000'; c2.fillRect(0, 0, sil.width, sil.height);
+        ctx.save(); ctx.globalAlpha = pm.opacite * (c.opacite == null ? 1 : c.opacite); ctx.filter = `blur(${(pm.flou * h) / 400}px)`;
+        ctx.translate(c.x, c.piedY); ctx.transform(1, 0, -pm.inclinaison, pm.ecrasement, 0, 0);
+        if (c.miroir) ctx.scale(-1, 1);
+        ctx.drawImage(sil, -w / 2, -h, w, h); ctx.restore();
+        ctx.save();
+        const rx = w * 0.42, ry = Math.max(2, h * 0.025);
+        const gr = ctx.createRadialGradient(c.x, c.piedY, 0, c.x, c.piedY, rx);
+        gr.addColorStop(0, `rgba(0,0,0,${pm.contact * (c.opacite == null ? 1 : c.opacite)})`); gr.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.translate(c.x, c.piedY); ctx.scale(1, ry / rx); ctx.translate(-c.x, -c.piedY);
+        ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(c.x, c.piedY, rx, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+      }
+      const m = matriceCalque(c);
+      ctx.save();
+      ctx.globalAlpha = c.opacite == null ? 1 : Math.max(0, Math.min(1, c.opacite));
+      ctx.globalCompositeOperation = MODES.includes(c.mode) ? c.mode : 'source-over';
+      if (c.flou > 0.05) ctx.filter = `blur(${c.flou}px)`;
+      ctx.transform(m.a, m.b, m.c, m.d, m.e, m.f);
+      ctx.drawImage(sj, -w / 2, -h, w, h);
+      ctx.restore();
+      // boîte englobante (pour la sélection)
+      const coins = [[-w / 2, -h], [w / 2, -h], [w / 2, 0], [-w / 2, 0]].map(([u, v]) => [m.a * u + m.c * v + m.e, m.b * u + m.d * v + m.f]);
+      const xs = coins.map((p) => p[0]), ys = coins.map((p) => p[1]);
+      cadres.push({ x0: Math.min(...xs), y0: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys), coins });
+    }
+    if (o.selection != null && cadres[o.selection]) {
+      const cd = cadres[o.selection];
+      ctx.save(); ctx.lineWidth = Math.max(1.5, W / 700); ctx.strokeStyle = 'rgba(80,160,255,.95)'; ctx.setLineDash([8, 6]);
+      ctx.beginPath(); cd.coins.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); ctx.stroke(); ctx.restore();
+    }
+    if (o.montrerHorizon && o.horizonY != null && !o.transparent) {
+      ctx.save(); ctx.setLineDash([10, 8]); ctx.lineWidth = Math.max(1, W / 900); ctx.strokeStyle = 'rgba(255,170,60,.9)';
+      ctx.beginPath(); ctx.moveTo(0, o.horizonY); ctx.lineTo(W, o.horizonY); ctx.stroke(); ctx.restore();
+    }
+    ctx.restore();
+    return cadres;
+  }
+
+  const API = { couleursBord, distance, detourer, flouAlpha, appliquerMasque, cadre, analyser, hauteurPerspective, placementInitial, harmoniser, ajouterGrain, parametresOmbre, composer, zoneAffichee, versImage, hauteurCalque, matriceCalque, toucheCalque, composerCalques, MODES };
   if (typeof module !== 'undefined' && module.exports) module.exports = API;
   if (racine) racine.FusionCore = API;
 })(typeof window !== 'undefined' ? window : null);

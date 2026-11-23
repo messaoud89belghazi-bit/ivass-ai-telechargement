@@ -24,8 +24,22 @@
   background: repeating-conic-gradient(rgba(128,128,128,.28) 0 25%, transparent 0 50%) 0 0 / 16px 16px; }
 .fu-apercu-sujet canvas { display: block; width: 100%; height: auto; max-height: 260px; object-fit: contain; touch-action: none; }
 .fu-vide { position: absolute; inset: 0; display: grid; place-items: center; padding: 10px; text-align: center; font-size: 13px; color: var(--muted); }
-.fu-scene { position: relative; min-width: 0; }
-.fu-scene canvas { display: block; width: 100%; height: auto; max-height: calc(100vh - 220px); object-fit: contain; border-radius: 12px; border: 1px solid var(--border); background: var(--panel2); touch-action: none; cursor: grab; }
+.fu-scene { position: relative; min-width: 0; align-self: stretch; }
+/* 3.39 : l'aperçu reste visible pendant qu'on fait défiler les réglages */
+.fu-scene-colle { position: sticky; top: 8px; }
+.fu-scene canvas { display: block; width: 100%; height: auto; max-height: calc(100vh - 190px); object-fit: contain; outline: none; border-radius: 12px; border: 1px solid var(--border); background: var(--panel2); touch-action: none; cursor: grab; }
 .fu-scene canvas:active { cursor: grabbing; }
 .fu-vide-scene { min-height: 200px; }
 .fu-scene .fu-aide { margin-top: 6px; }
+/* 3.39 : calques et inspecteur */
+.fu-calques { display: flex; flex-direction: column; gap: 3px; max-height: 190px; overflow: auto; }
+.fu-calque { display: flex; align-items: center; gap: 4px; padding: 3px 6px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel2); cursor: pointer; font-size: 13px; }
+.fu-calque.actif { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.fu-calque-nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fu-mini { border: 0; background: transparent; cursor: pointer; font-size: 14px; padding: 2px 4px; color: var(--text); }
+.fu-grille { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.fu-grille label { display: flex; flex-direction: column; gap: 2px; font-size: 12.5px; color: var(--muted); }
+.fu-grille input, .fu-ligne select[data-fu="iMode"] { padding: 5px 6px; border-radius: 6px; border: 1px solid var(--border); background: var(--panel2); color: var(--text); min-width: 0; }
+.fu-scene canvas:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+@media (min-width: 861px) { .fu-cote { max-height: calc(100vh - 130px); overflow: auto; padding-right: 4px; } }
+@media (max-width: 860px) { .fu-scene { position: sticky; top: 0; z-index: 3; background: var(--panel); padding-bottom: 4px; } .fu-scene canvas { max-height: 42vh; } .fu-scene .fu-aide { display: none; } }
