@@ -143,14 +143,14 @@ Réponds UNIQUEMENT avec un tableau JSON, sans texte autour :
 "bonne" est l'indice (0 à 3) de la bonne réponse ; varie sa position d'une question à l'autre.${LANGUE(lang)}`;
   }
   /** Lit le quiz renvoyé par l'IA (tolère le texte autour et les blocs ```json). */
-  function lireQuiz(text) {
+  function lireQuiz(text, max = 10) {
     const s = String(text || ''); const a = s.indexOf('['), b = s.lastIndexOf(']');
     if (a < 0 || b <= a) throw new Error('L’IA n’a pas renvoyé de quiz lisible. Réessayez.');
     let arr; try { arr = JSON.parse(s.slice(a, b + 1)); } catch (_) { throw new Error('L’IA n’a pas renvoyé de quiz lisible. Réessayez.'); }
     const out = (Array.isArray(arr) ? arr : []).filter((x) => x && typeof x.q === 'string' && Array.isArray(x.choix) && x.choix.length >= 2 && Number.isInteger(Number(x.bonne)) && Number(x.bonne) >= 0 && Number(x.bonne) < x.choix.length)
       .map((x) => ({ q: String(x.q).slice(0, 500), choix: x.choix.slice(0, 6).map((c) => String(c).slice(0, 300)), bonne: Number(x.bonne), explication: String(x.explication || '').slice(0, 800) }));
     if (!out.length) throw new Error('L’IA n’a pas renvoyé de quiz lisible. Réessayez.');
-    return out.slice(0, 10);
+    return out.slice(0, max);
   }
   function promptRelecture(code, id, lang) {
     const l = id && LECONS[id];
