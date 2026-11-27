@@ -13,6 +13,75 @@ Développé par **Messaoud BELGHAZI**.
 
 Page de téléchargement avec toutes les explications : https://messaoud89belghazi-bit.github.io/ivass-ai-telechargement/
 
+### 🧭 Ivass répond lui-même, oriente vers le bon modèle et s’améliore tout seul (3.44)
+- **Moteur de réponse** : à chaque message, Ivass reconnaît le besoin (calcul, conversion, date, définition, fait précis, actualité, mode d’emploi, création, code, analyse, conversation, vos fichiers).
+  - Il répond **seul, sans IA** quand c’est possible :
+    - **calcul exact** ;
+    - **conversions** d’unités ;
+    - **date et heure** ;
+    - **🌐 Web direct** : il cherche sur le Web en arrière-plan, lit les pages, extrait les phrases qui répondent et les cite [W1] [W2], avec un indice de confiance.
+  - Le bouton « 🤖 Demander à l’IA » reste toujours là.
+- **🎯 Orchestrateur** : quand une IA est nécessaire, la tâche part vers le modèle le mieux classé pour CE type de tâche (affinités, vos votes, fiabilité mesurée), avec ce que le Web a trouvé.
+- **📈 Apprentissage** (🚀 Centre IA) : chaque réponse est mesurée.
+  - Vos 👍 / 👎 et « Demander à l’IA » ajustent tout seuls les seuils de confiance par type de question et le classement des modèles.
+  - Le tableau de bord explique ce qui marche, ce qui échoue et pourquoi, et permet de tester le moteur.
+- **🛰 Réseau** (🚀 Centre IA) : chaque fournisseur d’IA peut passer par son propre proxy (entreprise, VPN, proxy loué), dans une session réseau séparée, avec un test de l’adresse de sortie.
+- **🔔 Notifications** :
+  - elles sont maintenant petites, en haut à droite, sur 2 lignes au plus, 3 à la fois au plus, et se ferment d’un clic ;
+  - la veille et les autres tâches de fond ne s’affichent plus par-dessus votre travail : elles vont dans le centre 🔔 (historique, et mode « toutes / importantes / silence »).
+- **🎨 Studio** :
+  - toutes les plateformes d’images sont sélectionnables ; une plateforme sans clé propose « 🔑 Ajouter la clé » ;
+  - dans la discussion, des crédits épuisés chez un service n’arrêtent plus la création : Ivass essaie les autres, jusqu’au générateur gratuit.
+
+### 🎙 Nouveau : le Studio Audio ElevenLabs (3.43)
+Un nouvel onglet **🎙 Audio IA** dans le 🎨 Studio créatif, qui fonctionne avec **votre** clé ElevenLabs. En haut de l’onglet : vos crédits restants et leur date de renouvellement.
+- **🗣 Voix off** :
+  - toutes les voix et tous les modèles de votre compte (Multilingual v2, Eleven v3, Flash…) ;
+  - des **émotions** en un clic avec Eleven v3 : chuchoter, rire, soupirer, enthousiaste, triste… ;
+  - 6 styles d’interprétation et des réglages fins ;
+  - des **sous-titres SRT** synchronisés au mot près.
+- **🎭 Dialogue et podcast** : un script « NOM : réplique », une voix par personnage, et le modèle v3 joue l’échange. L’IA peut aussi écrire le script.
+- **📚 Livre audio** :
+  - le manuscrit est découpé en chapitres, avec un MP3 par chapitre et le livre complet ;
+  - la voix reste cohérente d’un morceau à l’autre ;
+  - le coût est estimé avant de lancer, et vous pouvez arrêter à tout moment.
+- **💥 Effets et ambiances** : les sons et les ambiances en boucle parfaite sont générés avec Sound Effects v3.
+- **🎵 Musique** : jusqu’à 10 minutes, instrumentale ou chantée, avec Music v2.5.
+- **🔄 Transformer un son** :
+  - isoler la voix (sans musique ni bruit) ;
+  - changer la voix en gardant l’interprétation ;
+  - transcrire (Scribe v2), avec plusieurs orateurs et des sous-titres.
+- **🌍 Doublage** : une vidéo ou un son est traduit et redoublé avec les voix d’origine. Ivass suit le traitement (même après un redémarrage) et range l’audio et les sous-titres.
+- **🧬 Cloner ma voix** : le clone est créé dans votre compte, uniquement après votre confirmation (case jamais pré-cochée) qu’il s’agit de votre voix ou que vous avez l’autorisation écrite de la personne.
+- **🎨 Créer une voix** : une voix nouvelle est créée sur description, avec 3 essais à écouter ; vous gardez celle qui vous plaît.
+- **📇 Voix et personnages** :
+  - la bibliothèque de voix ElevenLabs (recherche, écoute, ajout à votre compte) ;
+  - vos **personnages** (nom, voix, style) sont proposés partout et reconnus automatiquement dans les scripts.
+- Tout ce que vous créez arrive dans la 📚 bibliothèque du Studio (collection « 🎙 Studio Audio »), où le 🎬 Montage le retrouve. Les voix ElevenLabs du Montage proposent aussi Eleven v3 et Flash.
+
+### 🖥 Nouveau : l’Académie « Systèmes et Technologie » (3.42)
+Un nouvel onglet **🖥 Systèmes et Technologie** dans 🧑‍💻 Ivass Dev, à côté de l’Académie Développeur :
+- **🗺 Parcours** :
+  - 10 modules et 74 leçons expliquées par votre IA, chacune avec son quiz et la documentation officielle : fondamentaux, ingénierie du matériel, cartes graphiques et IA, stockage, Windows / Linux / macOS, réparation et diagnostic, réseaux et fibre, sécurité du matériel, veille, conseil matériel ;
+  - **7 niveaux** avec points d’expérience : Débutant, Utilisateur avancé, Technicien, Spécialiste systèmes, Expert matériel, Ingénieur infrastructure, Architecte technologique ;
+  - **6 parcours personnalisés** : dépanneur, administrateur systèmes, ingénieur réseaux, station IA, conseiller vendeur, architecte. Les modules se remettent dans l’ordre le plus utile pour votre objectif.
+- **🧪 Labs et simulations** : 17 laboratoires guidés par l’IA, dont des simulations de panne (l’IA joue un PC en panne, vous menez le diagnostic), l’assemblage d’un ordinateur virtuel et un jeu de rôle de conseil client.
+- **🏅 Attestations** :
+  - 5 attestations Systèmes et, nouveauté, 5 attestations pour l’Académie Développeur ;
+  - l’examen est préparé par l’IA mais **corrigé par Ivass** : les bonnes réponses ne sont jamais envoyées à l’écran avant la fin ;
+  - réussite à 80 % : vous obtenez une attestation imprimable avec un code de vérification ;
+  - ce sont des attestations de réussite Ivass, pas des certifications officielles (c’est écrit dessus).
+- **🩺 Mon PC** :
+  - la vraie fiche de votre PC et un diagnostic des goulots selon votre usage (bureautique, jeu, montage, IA locale, développement) ;
+  - un **banc d’essai réel** (processeur, mémoire, disque) avec historique, et des conseils d’évolution par l’IA ;
+  - un compositeur de configuration selon un budget, et un comparateur de produits.
+- **🧩 Compatibilité** : vérification instantanée, sans IA, du socket, de la génération de mémoire, des formats, des dimensions et de la puissance d’alimentation nécessaire.
+- **📖 Encyclopédie** : 36 notions expliquées (VRAM, socket, NVMe, TPM, VLAN, GPON…), chacune avec une explication détaillée à la demande.
+- **📡 Veille** : 8 sujets (processeurs, cartes graphiques, portables, smartphones, systèmes, matériel IA…). Ivass fait une vraie recherche web et rédige une synthèse **avec les sources citées**.
+- **Améliorations du Centre IA** :
+  - les automatisations ont une nouvelle étape « 🔎 Recherche web avec sources » ;
+  - la Marketplace propose « Veille matériel et systèmes » (chaque lundi, automatiquement) et un agent « Expert matériel ».
+
 ### 🚀 Nouveau : le Centre IA (3.41)
 Un nouvel espace **🚀 Centre IA** (menu « Travailler »), avec cinq onglets :
 - **🌐 Hub IA universel** :
